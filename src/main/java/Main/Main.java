@@ -10,6 +10,7 @@ import model.ListinoProdotti;
 public class Main {
 
     public static void main(String[] args) {
+        /// Ciao Stefano
 
 //        CategorieProdottiManager cpm = new CategorieProdottiManager();
 // cpm.get(1);
