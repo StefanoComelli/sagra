@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.ListinoProdotti" table="listinoProdotti" catalog="sagra">
+        <id name="id" type="java.lang.Integer">
+            <column name="idProdotto" />
+            <generator class="identity" />
+        </id>
+        <property name="descrizione" type="string">
+            <column name="descrizione" length="65535" not-null="true" />
+        </property>
+        <property name="nomeProdotto" type="string">
+            <column name="nomeProdotto" length="65535" not-null="true" />
+        </property>
+        <property name="prezzoUnitario" type="float">
+            <column name="prezzounitario" not-null="true" />
+        </property> 
+        <many-to-one name="categoriaProdotto" class="model.CategorieProdotti" fetch="select" lazy="false">
+            <column name="idCategoriaProdotto"  not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.StatiOrdine" table="statiOrdine" catalog="sagra">
+        <id name="id" type="java.lang.Integer">
+            <column name="idStatoOrdine" />
+            <generator class="identity" />
+        </id>
+        <property name="ordineSequenziale" type="integer">
+            <column name="ordineSequenziale" not-null="true" />
+        </property>
+        <property name="descrizione" type="string">
+            <column name="descrizione" length="65535" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>

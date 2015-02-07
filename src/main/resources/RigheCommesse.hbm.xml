@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.RigheCommesse" table="righeCommesse" catalog="sagra">
+        <id name="id" type="java.lang.Integer">
+            <column name="idRiga" />
+            <generator class="identity" />
+        </id>
+        <many-to-one name="commessa" class="model.Commesse" fetch="select" lazy="false">
+            <column name="idCommessa"  not-null="true" />
+        </many-to-one>
+        <many-to-one name="prodotto" class="model.ListinoProdotti" fetch="select" lazy="false">
+            <column name="idProdotto"  not-null="true" />
+        </many-to-one>
+        <property name="varianti" type="string">
+            <column name="varianti" length="65535" not-null="true" />
+        </property>
+        <property name="prezzoListino" type="float">
+            <column name="prezzoListino" not-null="true" />
+        </property> 
+        <property name="scontoApplicato" type="float">
+            <column name="scontoApplicato" not-null="true" />
+        </property> 
+    </class>
+</hibernate-mapping>

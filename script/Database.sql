@@ -1,0 +1,243 @@
+CREATE DATABASE  IF NOT EXISTS `sagra` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `sagra`;
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
+--
+-- Host: localhost    Database: sagra
+-- ------------------------------------------------------
+-- Server version	5.6.22-log
+
+/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
+/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
+/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
+/*!40101 SET NAMES utf8 */;
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `categorieprodotti`
+--
+
+DROP TABLE IF EXISTS `categorieprodotti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `categorieprodotti` (
+  `idCategoriaProdotto` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `descrizione` text NOT NULL,
+  PRIMARY KEY (`idCategoriaProdotto`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `categorieprodotti`
+--
+
+LOCK TABLES `categorieprodotti` WRITE;
+/*!40000 ALTER TABLE `categorieprodotti` DISABLE KEYS */;
+INSERT INTO `categorieprodotti` VALUES (1,'Primi piatti'),(2,'Secondi Piatti'),(3,'Contorni'),(4,'Bevande'),(5,'Bar');
+/*!40000 ALTER TABLE `categorieprodotti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `commesse`
+--
+
+DROP TABLE IF EXISTS `commesse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `commesse` (
+  `idCommessa` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
+  `idCassa` int(10) unsigned NOT NULL,
+  `idOperatore` int(11) NOT NULL,
+  `totalePagato` decimal(10,2) unsigned NOT NULL COMMENT 'Totale commessa',
+  `totaleContanti` decimal(10,2) unsigned NOT NULL COMMENT 'Totale contanti',
+  `totaleResto` decimal(10,2) unsigned NOT NULL COMMENT 'Resto',
+  `scontoApplicato` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto totale applicato',
+  `nomeCliente` text NOT NULL COMMENT 'Nome del cliente',
+  `tavoloClente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
+  `note` varchar(80) NOT NULL,
+  PRIMARY KEY (`idCommessa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `commesse`
+--
+
+LOCK TABLES `commesse` WRITE;
+/*!40000 ALTER TABLE `commesse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `commesse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `listinoprodotti`
+--
+
+DROP TABLE IF EXISTS `listinoprodotti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `listinoprodotti` (
+  `idProdotto` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'chiave primaria tabella',
+  `idCategoriaProdotto` int(10) unsigned NOT NULL,
+  `nomeProdotto` tinytext NOT NULL COMMENT 'Nome identificativo del prodotto',
+  `descrizione` tinytext NOT NULL COMMENT 'Descrizione estesa del prodotto',
+  `prezzoUnitario` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`idProdotto`)
+) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `listinoprodotti`
+--
+
+LOCK TABLES `listinoprodotti` WRITE;
+/*!40000 ALTER TABLE `listinoprodotti` DISABLE KEYS */;
+INSERT INTO `listinoprodotti` VALUES (1000,1,'Penne all\'arrabbiata','',5.00),(1001,1,'Bigoli in salsa','',4.50),(1002,1,'Bigoli al sugo d\'anitra','',5.00),(1003,1,'Gnocchi al ragù','',4.00),(2000,2,'Grigliata mista','Grigliata di 2 ossetti, una salciccia, una fetta di pancetta e 2 fette di pokenta',8.30),(2001,2,'Ossetti','Grigliata di 3 ossetti con 2 fette di polenta',8.00);
+/*!40000 ALTER TABLE `listinoprodotti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `logordini`
+--
+
+DROP TABLE IF EXISTS `logordini`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logordini` (
+  `idRigaLog` int(11) NOT NULL AUTO_INCREMENT,
+  `idOrdine` int(11) NOT NULL,
+  `idStatoOrdine` int(11) NOT NULL,
+  `dataOra` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`idRigaLog`,`idOrdine`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `logordini`
+--
+
+LOCK TABLES `logordini` WRITE;
+/*!40000 ALTER TABLE `logordini` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logordini` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `prodottigiornaliera`
+--
+
+DROP TABLE IF EXISTS `prodottigiornaliera`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `prodottigiornaliera` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria tabella',
+  `data` date DEFAULT NULL,
+  `idProdotto` int(10) unsigned DEFAULT NULL COMMENT 'identifica il prodotto nella tabella listino',
+  `disponibilita` int(10) unsigned NOT NULL COMMENT 'quantità disponibile all''inizio dell''esercizio',
+  `quantitaVenduta` int(10) unsigned NOT NULL COMMENT 'quantità venduta fino al momento nel giorno scelto',
+  `quantitaWarning` int(10) unsigned NOT NULL COMMENT 'Quantità al di sotto della quale visualizzare un warning',
+  `scontoGiorno` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto da applicare nel giorno selezionato',
+  `sospensione` tinyint(1) NOT NULL COMMENT 'Sospensione momentanea della vendita',
+  `motivoSospensione` text NOT NULL COMMENT 'Motivo della sospensione',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `prodottigiornaliera`
+--
+
+LOCK TABLES `prodottigiornaliera` WRITE;
+/*!40000 ALTER TABLE `prodottigiornaliera` DISABLE KEYS */;
+/*!40000 ALTER TABLE `prodottigiornaliera` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `righecommesse`
+--
+
+DROP TABLE IF EXISTS `righecommesse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `righecommesse` (
+  `idRiga` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
+  `idCommessa` int(11) NOT NULL COMMENT 'Chiave primaria',
+  `idProdotto` int(11) DEFAULT NULL COMMENT 'Identifica il prodotto venduto',
+  `varianti` text NOT NULL COMMENT 'Varianti applicate alla riga',
+  `prezzoListino` decimal(10,2) NOT NULL COMMENT 'Prezzo listino applicato',
+  `scontoApplicato` decimal(10,2) NOT NULL COMMENT 'Sconto applicato',
+  PRIMARY KEY (`idRiga`,`idCommessa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `righecommesse`
+--
+
+LOCK TABLES `righecommesse` WRITE;
+/*!40000 ALTER TABLE `righecommesse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `righecommesse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sconti`
+--
+
+DROP TABLE IF EXISTS `sconti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `sconti` (
+  `idSconto` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
+  `descrizione` text NOT NULL COMMENT 'Descrizione dello sconto',
+  `sconto` decimal(5,2) NOT NULL COMMENT 'Sconto da applicare',
+  PRIMARY KEY (`idSconto`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sconti`
+--
+
+LOCK TABLES `sconti` WRITE;
+/*!40000 ALTER TABLE `sconti` DISABLE KEYS */;
+INSERT INTO `sconti` VALUES (1,'Sconto operatori sagra',100.00),(2,'Sconto venerdi\'',10.00),(3,'Sconto Lunedi\'',10.00);
+/*!40000 ALTER TABLE `sconti` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `statiordine`
+--
+
+DROP TABLE IF EXISTS `statiordine`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `statiordine` (
+  `idStatoOrdine` int(11) NOT NULL AUTO_INCREMENT,
+  `ordineSequenziale` int(11) NOT NULL,
+  `descrizione` tinytext NOT NULL,
+  PRIMARY KEY (`idStatoOrdine`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `statiordine`
+--
+
+LOCK TABLES `statiordine` WRITE;
+/*!40000 ALTER TABLE `statiordine` DISABLE KEYS */;
+INSERT INTO `statiordine` VALUES (1,1,'Emissione commessa'),(2,10,'Preso in carico'),(3,20,'Consegnato');
+/*!40000 ALTER TABLE `statiordine` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
+/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2015-02-05 21:19:29
