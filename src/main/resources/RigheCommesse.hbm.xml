@@ -4,13 +4,14 @@
  
 <hibernate-mapping>
     <class name="model.RigheCommesse" table="righeCommesse" catalog="sagra">
-        <id name="id" type="java.lang.Integer">
-            <column name="idRiga" />
-            <generator class="identity" />
-        </id>
-        <many-to-one name="commessa" class="model.Commesse" fetch="select" lazy="false">
-            <column name="idCommessa"  not-null="true" />
-        </many-to-one>
+        <composite-id class="keys.RigheCommesseKey" name="id">
+            <key-property name="idCommessa" type="long">
+                <column name="idCommessa"/>
+            </key-property> 
+            <key-property name="idRiga" type="long">
+                <column name="idRiga"/>
+            </key-property>
+        </composite-id>
         <many-to-one name="prodotto" class="model.ListinoProdotti" fetch="select" lazy="false">
             <column name="idProdotto"  not-null="true" />
         </many-to-one>

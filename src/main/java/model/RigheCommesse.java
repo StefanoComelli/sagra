@@ -1,34 +1,20 @@
 package model;
 
 import abstr.AbstractData;
+import keys.RigheCommesseKey;
 import org.jboss.logging.Logger;
 
 /**
  *
  * @author Stefano
  */
-public class RigheCommesse extends AbstractData<Integer> {
+public class RigheCommesse extends AbstractData<RigheCommesseKey> {
 
     private static final Logger LOGGER = Logger.getLogger(RigheCommesse.class);
-    private Commesse commessa;
-    private ListinoProdotti prodotto;   
+    private ListinoProdotti prodotto;
     private String varianti;
     private float prezzoListino;
     private float scontoApplicato;
-
-    /**
-     * @return the commessa
-     */
-    public Commesse getCommessa() {
-        return commessa;
-    }
-
-    /**
-     * @param commessa the commessa to set
-     */
-    public void setCommessa(Commesse commessa) {
-        this.commessa = commessa;
-    }
 
     /**
      * @return the prodotto
