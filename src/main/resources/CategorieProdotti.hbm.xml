@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.CategorieProdotti" table="categorieProdotti" catalog="sagra">
+    <class name="model.CategorieProdotti" table="categorieprodotti" catalog="sagra">
         <id name="id" type="java.lang.Integer">
             <column name="idCategoriaProdotto" />
             <generator class="identity" />
@@ -11,7 +11,7 @@
         <property name="descrizione" type="string">
             <column name="descrizione" length="65535" not-null="true" />
         </property>
-        <set name="prodotti" table="ListinoProdotti" 
+        <set name="prodotti" table="listinoprodotti" 
                   inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="idCategoriaProdotto" not-null="true" />

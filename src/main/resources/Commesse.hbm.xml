@@ -35,7 +35,7 @@
         <property name="note" type="string">
             <column name="note" length="80" not-null="true" />
         </property>
-        <set name="righeCommesse" table="righeCommesse" 
+        <set name="righeCommesse" table="righecommesse" 
              inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="idCommessa" not-null="true" />
