@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.ProdottiGiornaliera" table="prodottigiornaliera" catalog="sagra">
+        <composite-id class="keys.ProdottiGiornalieraKey" name="id">
+            <key-property name="idGiorno" type="long">
+                <column name="idGiorno"/>
+            </key-property> 
+            <key-property name="idProdotto" type="long">
+                <column name="idProdotto"/>
+            </key-property>
+        </composite-id>
+        <property name="disponibilita" type="integer">
+            <column name="disponibilita"   not-null="true" />
+        </property>
+        <property name="quantitaVenduta" type="integer">
+            <column name="quantitaVenduta"   not-null="true" />
+        </property>
+        <property name="quantitaWarning" type="integer">
+            <column name="quantitaWarning"   not-null="true" />
+        </property>
+        <property name="scontoGiorno" type="float">
+            <column name="scontoGiorno"   not-null="true" />
+        </property>
+        <property name="sospensione" type="integer">
+            <column name="sospensione" not-null="true" />
+        </property>
+        <property name="motivoSospensione" type="string">
+            <column name="motivoSospensione" length="65535" not-null="true" />
+        </property>
+    </class>
+</hibernate-mapping>
