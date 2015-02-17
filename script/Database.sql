@@ -273,7 +273,6 @@ CREATE TABLE `variantiprodotti` (
   `idVariante` int(11) NOT NULL,
   `variante` text NOT NULL,
   `idCategoriaProdotto` int(11) NOT NULL,
-  `variantiprodotticol` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`idVariante`),
   KEY `idxCategoriaProdotto` (`idCategoriaProdotto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -297,4 +296,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-17 21:39:37
+-- Dump completed on 2015-02-17 22:31:58
