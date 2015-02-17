@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.RigheCommesse" table="righeCommesse" catalog="sagra">
+    <class name="model.RigheCommesse" table="righecommesse" catalog="sagra">
         <composite-id class="keys.RigheCommesseKey" name="id">
             <key-property name="idCommessa" type="long">
                 <column name="idCommessa"/>

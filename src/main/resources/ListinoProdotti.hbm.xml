@@ -3,7 +3,7 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.ListinoProdotti" table="listinoProdotti" catalog="sagra">
+    <class name="model.ListinoProdotti" table="listinoprodotti" catalog="sagra">
         <id name="id" type="java.lang.Integer">
             <column name="idProdotto" />
             <generator class="identity" />
