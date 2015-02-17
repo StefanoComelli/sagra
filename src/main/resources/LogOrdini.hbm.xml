@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.LogOrdini" table="logOrdini" catalog="sagra">
+        <composite-id class="keys.LogOrdiniKey" name="id">
+            <key-property name="idRigaLog" type="long">
+                <column name="idRigaLog"/>
+            </key-property> 
+            <key-property name="idOrdine" type="long">
+                <column name="idOrdine"/>
+            </key-property>
+        </composite-id>
+        <property name="dataOra" type="date">
+            <column name="DataOra" not-null="true" />
+        </property>
+        <many-to-one name="statoOrdine" class="model.StatiOrdine" fetch="select" lazy="false">
+            <column name="idStatoOrdine"  not-null="true" />
+        </many-to-one>
+
+    </class>
+</hibernate-mapping>

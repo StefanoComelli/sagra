@@ -9,10 +9,13 @@
             <generator class="identity" />
         </id>
         <property name="descrizione" type="string">
-            <column name="descrizione" length="65535" not-null="true" />
+            <column name="descrizione"  length="65535" not-null="true" />
+        </property>
+        <property name="ordineSequenziale" type="integer">
+            <column name="ordineSequenziale" not-null="true" />
         </property>
         <set name="prodotti" table="ListinoProdotti" 
-                  inverse="true" lazy="false" fetch="select">
+             inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="idCategoriaProdotto" not-null="true" />
             </key>

@@ -6,7 +6,8 @@ import java.io.Serializable;
  *
  * @author Stefano
  */
-public class RigheCommesseKey  implements Serializable{
+public class RigheCommesseKey implements Serializable {
+
     private int idCommessa;
     private int idRiga;
 

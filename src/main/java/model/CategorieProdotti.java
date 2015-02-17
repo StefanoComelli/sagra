@@ -13,6 +13,7 @@ public class CategorieProdotti extends AbstractData<Integer> {
     private static final Logger LOGGER = Logger.getLogger(CategorieProdotti.class);
     private String descrizione;
     private Set<ListinoProdotti> prodotti;
+    private int ordineSequenziale;
 
     /**
      * @return the descrizione
@@ -41,5 +42,21 @@ public class CategorieProdotti extends AbstractData<Integer> {
     public void setProdotti(Set<ListinoProdotti> prodotti) {
         this.prodotti = prodotti;
     }
+
+    /**
+     * @return the ordineSequenziale
+     */
+    public int getOrdineSequenziale() {
+        return ordineSequenziale;
+    }
+
+    /**
+     * @param ordineSequenziale the ordineSequenziale to set
+     */
+    public void setOrdineSequenziale(int ordineSequenziale) {
+        this.ordineSequenziale = ordineSequenziale;
+    }
+
+   
 
 }

@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.Varianti" table="varianti" catalog="sagra">
+        <id name="id" type="java.lang.Integer">
+            <column name="idVariante" />
+            <generator class="identity" />
+        </id>
+        <property name="variante" type="string">
+            <column name="variante" length="65535" not-null="true" />
+        </property>
+        <many-to-one name="categoriaProdotto" class="model.CategorieProdotti" fetch="select" lazy="false">
+            <column name="idCategoriaProdotto"  not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

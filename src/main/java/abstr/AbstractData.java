@@ -28,8 +28,8 @@ public abstract class AbstractData<PrimaryKey extends Serializable> extends Abst
     }
 
     /**
-     * 
-     * @param As 
+     *
+     * @param As
      */
     public void copyValue(AbstractData As) {
     }
