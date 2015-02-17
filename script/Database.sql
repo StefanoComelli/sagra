@@ -27,7 +27,9 @@ DROP TABLE IF EXISTS `categorieprodotti`;
 CREATE TABLE `categorieprodotti` (
   `idCategoriaProdotto` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `descrizione` text NOT NULL,
-  PRIMARY KEY (`idCategoriaProdotto`)
+  `ordineSequenziale` int(11) DEFAULT NULL,
+  PRIMARY KEY (`idCategoriaProdotto`),
+  KEY `idxOrdineSequenziale` (`ordineSequenziale`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -37,7 +39,7 @@ CREATE TABLE `categorieprodotti` (
 
 LOCK TABLES `categorieprodotti` WRITE;
 /*!40000 ALTER TABLE `categorieprodotti` DISABLE KEYS */;
-INSERT INTO `categorieprodotti` VALUES (1,'Primi piatti'),(2,'Secondi Piatti'),(3,'Contorni'),(4,'Bevande'),(5,'Bar');
+INSERT INTO `categorieprodotti` VALUES (1,'Primi piatti',10),(2,'Secondi Piatti',20),(3,'Contorni',30),(4,'Bevande',40),(5,'Bar',5);
 /*!40000 ALTER TABLE `categorieprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -59,7 +61,9 @@ CREATE TABLE `commesse` (
   `nomeCliente` text NOT NULL COMMENT 'Nome del cliente',
   `tavoloClente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
   `note` varchar(80) NOT NULL,
-  PRIMARY KEY (`idCommessa`)
+  PRIMARY KEY (`idCommessa`),
+  KEY `idx_commesse_idCassa` (`idCassa`),
+  KEY `idx_commesse_idOperatore` (`idOperatore`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -70,6 +74,31 @@ CREATE TABLE `commesse` (
 LOCK TABLES `commesse` WRITE;
 /*!40000 ALTER TABLE `commesse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `commesse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `giorni`
+--
+
+DROP TABLE IF EXISTS `giorni`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `giorni` (
+  `idGiorno` int(11) NOT NULL,
+  `data` date DEFAULT NULL,
+  `scontoGiorno` decimal(10,2) DEFAULT NULL,
+  PRIMARY KEY (`idGiorno`),
+  UNIQUE KEY `idxData` (`data`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `giorni`
+--
+
+LOCK TABLES `giorni` WRITE;
+/*!40000 ALTER TABLE `giorni` DISABLE KEYS */;
+/*!40000 ALTER TABLE `giorni` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -85,7 +114,8 @@ CREATE TABLE `listinoprodotti` (
   `nomeProdotto` tinytext NOT NULL COMMENT 'Nome identificativo del prodotto',
   `descrizione` tinytext NOT NULL COMMENT 'Descrizione estesa del prodotto',
   `prezzoUnitario` decimal(10,2) NOT NULL,
-  PRIMARY KEY (`idProdotto`)
+  PRIMARY KEY (`idProdotto`),
+  KEY `idxCategoriaProdotto` (`idCategoriaProdotto`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -132,8 +162,7 @@ DROP TABLE IF EXISTS `prodottigiornaliera`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `prodottigiornaliera` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria tabella',
-  `data` date DEFAULT NULL,
+  `idGiorno` int(10) DEFAULT NULL,
   `idProdotto` int(10) unsigned DEFAULT NULL COMMENT 'identifica il prodotto nella tabella listino',
   `disponibilita` int(10) unsigned NOT NULL COMMENT 'quantità disponibile all''inizio dell''esercizio',
   `quantitaVenduta` int(10) unsigned NOT NULL COMMENT 'quantità venduta fino al momento nel giorno scelto',
@@ -141,7 +170,7 @@ CREATE TABLE `prodottigiornaliera` (
   `scontoGiorno` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto da applicare nel giorno selezionato',
   `sospensione` tinyint(1) NOT NULL COMMENT 'Sospensione momentanea della vendita',
   `motivoSospensione` text NOT NULL COMMENT 'Motivo della sospensione',
-  PRIMARY KEY (`id`)
+  UNIQUE KEY `PrimaryKey` (`idGiorno`,`idProdotto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -168,7 +197,8 @@ CREATE TABLE `righecommesse` (
   `varianti` text NOT NULL COMMENT 'Varianti applicate alla riga',
   `prezzoListino` decimal(10,2) NOT NULL COMMENT 'Prezzo listino applicato',
   `scontoApplicato` decimal(10,2) NOT NULL COMMENT 'Sconto applicato',
-  PRIMARY KEY (`idRiga`,`idCommessa`)
+  PRIMARY KEY (`idRiga`,`idCommessa`),
+  KEY `idx_righecommesse_idProdotto` (`idProdotto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -217,7 +247,8 @@ CREATE TABLE `statiordine` (
   `idStatoOrdine` int(11) NOT NULL AUTO_INCREMENT,
   `ordineSequenziale` int(11) NOT NULL,
   `descrizione` tinytext NOT NULL,
-  PRIMARY KEY (`idStatoOrdine`)
+  PRIMARY KEY (`idStatoOrdine`),
+  KEY `idx_statiordine_ordineSequenziale` (`ordineSequenziale`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,6 +261,32 @@ LOCK TABLES `statiordine` WRITE;
 INSERT INTO `statiordine` VALUES (1,1,'Emissione commessa'),(2,10,'Preso in carico'),(3,20,'Consegnato');
 /*!40000 ALTER TABLE `statiordine` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `variantiprodotti`
+--
+
+DROP TABLE IF EXISTS `variantiprodotti`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `variantiprodotti` (
+  `idVariante` int(11) NOT NULL,
+  `variante` text NOT NULL,
+  `idCategoriaProdotto` int(11) NOT NULL,
+  `variantiprodotticol` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idVariante`),
+  KEY `idxCategoriaProdotto` (`idCategoriaProdotto`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `variantiprodotti`
+--
+
+LOCK TABLES `variantiprodotti` WRITE;
+/*!40000 ALTER TABLE `variantiprodotti` DISABLE KEYS */;
+/*!40000 ALTER TABLE `variantiprodotti` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -240,4 +297,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-05 21:19:29
+-- Dump completed on 2015-02-17 21:39:37
