@@ -52,6 +52,7 @@ DROP TABLE IF EXISTS `commesse`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `commesse` (
   `idCommessa` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
+  `idGiorno` int(10) NOT NULL,
   `idCassa` int(10) unsigned NOT NULL,
   `idOperatore` int(11) NOT NULL,
   `totalePagato` decimal(10,2) unsigned NOT NULL COMMENT 'Totale commessa',
@@ -63,7 +64,8 @@ CREATE TABLE `commesse` (
   `note` varchar(80) NOT NULL,
   PRIMARY KEY (`idCommessa`),
   KEY `idx_commesse_idCassa` (`idCassa`),
-  KEY `idx_commesse_idOperatore` (`idOperatore`)
+  KEY `idx_commesse_idOperatore` (`idOperatore`),
+  KEY `idx_commesse_giorno` (`idGiorno`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -297,4 +299,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-21 23:13:34
+-- Dump completed on 2015-02-23 21:43:13
