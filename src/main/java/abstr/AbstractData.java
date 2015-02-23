@@ -8,7 +8,7 @@ import org.jboss.logging.Logger;
  * @author Stefano
  * @param <PrimaryKey>
  */
-public abstract class AbstractData<PrimaryKey extends Serializable> extends AbstractPrimaryKey {
+public abstract class AbstractData<PrimaryKey extends Serializable> extends AbstractPrimaryKey<PrimaryKey> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractData.class);
 

@@ -11,6 +11,9 @@
         <property name="idCassa" type="integer">
             <column name="idCassa"  not-null="true" />
         </property>
+        <property name="idGiorno" type="integer">
+            <column name="idGiorno"  not-null="true" />
+        </property>
         <property name="idOperatore" type="integer">
             <column name="idOperatore"  not-null="true" />
         </property>

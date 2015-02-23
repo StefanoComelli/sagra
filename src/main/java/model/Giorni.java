@@ -2,6 +2,7 @@ package model;
 
 import abstr.AbstractData;
 import java.util.Date;
+import java.util.Set;
 import org.jboss.logging.Logger;
 
 /**
@@ -12,7 +13,9 @@ public class Giorni extends AbstractData<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger(Giorni.class);
     private Date data;
-    private double scontoData;
+    private float scontoGiorno;
+
+    private Set<ProdottiGiornaliera> prodottiGiornaliera;
 
     /**
      * @return the data
@@ -29,17 +32,31 @@ public class Giorni extends AbstractData<Integer> {
     }
 
     /**
-     * @return the scontoData
+     * @return the scontoGiorno
      */
-    public double getScontoData() {
-        return scontoData;
+    public float getScontoGiorno() {
+        return scontoGiorno;
     }
 
     /**
-     * @param scontoData the scontoData to set
+     * @param scontoGiorno the scontoGiorno to set
      */
-    public void setScontoData(double scontoData) {
-        this.scontoData = scontoData;
+    public void setScontoGiorno(float scontoGiorno) {
+        this.scontoGiorno = scontoGiorno;
+    }
+
+    /**
+     * @return the prodottiGiornaliera
+     */
+    public Set<ProdottiGiornaliera> getProdottiGiornaliera() {
+        return prodottiGiornaliera;
+    }
+
+    /**
+     * @param prodottiGiornaliera the prodottiGiornaliera to set
+     */
+    public void setProdottiGiornaliera(Set<ProdottiGiornaliera> prodottiGiornaliera) {
+        this.prodottiGiornaliera = prodottiGiornaliera;
     }
 
 }

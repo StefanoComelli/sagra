@@ -18,6 +18,5 @@
         <many-to-one name="statoOrdine" class="model.StatiOrdine" fetch="select" lazy="false">
             <column name="idStatoOrdine"  not-null="true" />
         </many-to-one>
-
     </class>
 </hibernate-mapping>

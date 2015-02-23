@@ -8,10 +8,10 @@
             <column name="idSconto" />
             <generator class="identity" />
         </id>
-         <property name="descrizione" type="string">
+        <property name="descrizione" type="string">
             <column name="descrizione" length="65535" not-null="true" />
         </property>
-       <property name="sconto" type="float">
+        <property name="sconto" type="float">
             <column name="sconto" not-null="true" />
         </property>
     </class>

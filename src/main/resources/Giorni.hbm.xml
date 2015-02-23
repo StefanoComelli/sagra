@@ -3,51 +3,23 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.Commesse" table="commesse" catalog="sagra">
+    <class name="model.Giorni" table="giorni" catalog="sagra">
         <id name="id" type="java.lang.Integer">
-            <column name="idCommessa" />
+            <column name="idGiorno" />
             <generator class="identity" />
         </id>
-        <property name="idCassa" type="integer">
-            <column name="idCassa"  not-null="true" />
+        <property name="data" type="date">
+            <column name="data"  not-null="true" />
         </property>
-        <property name="idOperatore" type="integer">
-            <column name="idOperatore"  not-null="true" />
-        </property>
-        <property name="totalePagato" type="float">
-            <column name="totalePagato" not-null="true" />
+        <property name="scontoGiorno" type="float">
+            <column name="scontoGiorno" not-null="true" />
         </property> 
-        <property name="totaleContanti" type="float">
-            <column name="totaleContanti" not-null="true" />
-        </property> 
-        <property name="totaleResto" type="float">
-            <column name="totaleResto" not-null="true" />
-        </property> 
-        <property name="scontoApplicato" type="float">
-            <column name="scontoApplicato" not-null="true" />
-        </property> 
-        <property name="nomeCliente" type="string">
-            <column name="nomeCliente" length="65535" not-null="true" />
-        </property>
-        <property name="tavoloCliente" type="string">
-            <column name="tavoloCliente" length="65535" not-null="true" />
-        </property>
-        <property name="note" type="string">
-            <column name="note" length="80" not-null="true" />
-        </property>
-        <set name="righeCommesse" table="righeCommesse" 
-             inverse="true" lazy="false" fetch="select">
+        <set name="prodottiGiornaliera" table="prodottigiornaliera" 
+             inverse="true" lazy="true" fetch="select">
             <key>
-                <column name="idCommessa" not-null="true" />
+                <column name="idGiorno" not-null="true" />
             </key>
-            <one-to-many class="model.RigheCommesse" />
-        </set>
-        <set name="logOrdine" table="logOrdini" 
-             inverse="true" lazy="false" fetch="select">
-            <key>
-                <column name="idOrdine" not-null="true" />
-            </key>
-            <one-to-many class="model.LogOrdini" />
+            <one-to-many class="model.ProdottiGiornaliera" />
         </set>
     </class>
 </hibernate-mapping>

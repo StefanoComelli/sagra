@@ -1,4 +1,3 @@
-
 package keys;
 
 import java.io.Serializable;
@@ -7,8 +6,8 @@ import java.io.Serializable;
  *
  * @author Stefano
  */
-public class LogOrdiniKey  implements Serializable {
-   
+public class LogOrdiniKey implements Serializable {
+
     private int idRigaLog;
     private int idOrdine;
 

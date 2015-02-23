@@ -22,7 +22,8 @@ public class Commesse extends AbstractData<Integer> {
     private String note;
     private Set<RigheCommesse> righeCommesse;
     private Set<LogOrdini> logOrdine;
-    
+    private int idGiorno;
+
     /**
      * @return the idCassa
      */
@@ -175,6 +176,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setLogOrdine(Set<LogOrdini> logOrdine) {
         this.logOrdine = logOrdine;
+    }
+
+    /**
+     * @return the idGiorno
+     */
+    public int getIdGiorno() {
+        return idGiorno;
+    }
+
+    /**
+     * @param idGiorno the idGiorno to set
+     */
+    public void setIdGiorno(int idGiorno) {
+        this.idGiorno = idGiorno;
     }
 
 }

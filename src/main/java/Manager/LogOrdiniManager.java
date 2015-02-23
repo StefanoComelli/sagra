@@ -10,8 +10,8 @@ import org.jboss.logging.Logger;
  * @author Stefano
  */
 public class LogOrdiniManager extends AbstractManager<LogOrdini, LogOrdiniKey> {
- 
-      private static final Logger LOGGER = Logger.getLogger(LogOrdiniManager.class);
+
+    private static final Logger LOGGER = Logger.getLogger(LogOrdiniManager.class);
 
     /**
      * CategorieProdottiManager
