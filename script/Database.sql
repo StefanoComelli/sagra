@@ -55,6 +55,7 @@ CREATE TABLE `commesse` (
   `idGiorno` int(10) NOT NULL,
   `idCassa` int(10) unsigned NOT NULL,
   `idOperatore` int(11) NOT NULL,
+  `idStatoOrdine` int(10) NOT NULL,
   `totalePagato` decimal(10,2) unsigned NOT NULL COMMENT 'Totale commessa',
   `totaleContanti` decimal(10,2) unsigned NOT NULL COMMENT 'Totale contanti',
   `totaleResto` decimal(10,2) unsigned NOT NULL COMMENT 'Resto',
@@ -65,7 +66,8 @@ CREATE TABLE `commesse` (
   PRIMARY KEY (`idCommessa`),
   KEY `idx_commesse_idCassa` (`idCassa`),
   KEY `idx_commesse_idOperatore` (`idOperatore`),
-  KEY `idx_commesse_giorno` (`idGiorno`)
+  KEY `idx_commesse_giorno` (`idGiorno`),
+  KEY `idx_stato_ordine` (`idStatoOrdine`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -158,6 +160,30 @@ LOCK TABLES `logordini` WRITE;
 UNLOCK TABLES;
 
 --
+-- Table structure for table `operatori`
+--
+
+DROP TABLE IF EXISTS `operatori`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operatori` (
+  `idOperatore` int(11) NOT NULL,
+  `operatore` tinytext NOT NULL,
+  PRIMARY KEY (`idOperatore`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `operatori`
+--
+
+LOCK TABLES `operatori` WRITE;
+/*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
+INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto');
+/*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `prodottigiornaliera`
 --
 
@@ -165,15 +191,15 @@ DROP TABLE IF EXISTS `prodottigiornaliera`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `prodottigiornaliera` (
-  `idGiorno` int(10) DEFAULT NULL,
-  `idProdotto` int(10) unsigned DEFAULT NULL COMMENT 'identifica il prodotto nella tabella listino',
+  `idGiorno` int(10) NOT NULL,
+  `idProdotto` int(10) unsigned NOT NULL COMMENT 'identifica il prodotto nella tabella listino',
   `disponibilita` int(10) unsigned NOT NULL COMMENT 'quantità disponibile all''inizio dell''esercizio',
   `quantitaVenduta` int(10) unsigned NOT NULL COMMENT 'quantità venduta fino al momento nel giorno scelto',
   `quantitaWarning` int(10) unsigned NOT NULL COMMENT 'Quantità al di sotto della quale visualizzare un warning',
   `scontoGiorno` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto da applicare nel giorno selezionato',
   `sospensione` tinyint(1) NOT NULL COMMENT 'Sospensione momentanea della vendita',
-  `motivoSospensione` text NOT NULL COMMENT 'Motivo della sospensione',
-  UNIQUE KEY `PrimaryKey` (`idGiorno`,`idProdotto`)
+  `motivoSospensione` text COMMENT 'Motivo della sospensione',
+  PRIMARY KEY (`idGiorno`,`idProdotto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -183,6 +209,7 @@ CREATE TABLE `prodottigiornaliera` (
 
 LOCK TABLES `prodottigiornaliera` WRITE;
 /*!40000 ALTER TABLE `prodottigiornaliera` DISABLE KEYS */;
+INSERT INTO `prodottigiornaliera` VALUES (1,1001,100,0,0,0.00,0,' ');
 /*!40000 ALTER TABLE `prodottigiornaliera` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -289,6 +316,45 @@ LOCK TABLES `variantiprodotti` WRITE;
 /*!40000 ALTER TABLE `variantiprodotti` DISABLE KEYS */;
 /*!40000 ALTER TABLE `variantiprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `vistalistinoreale`
+--
+
+DROP TABLE IF EXISTS `vistalistinoreale`;
+/*!50001 DROP VIEW IF EXISTS `vistalistinoreale`*/;
+SET @saved_cs_client     = @@character_set_client;
+SET character_set_client = utf8;
+/*!50001 CREATE TABLE `vistalistinoreale` (
+  `idProdotto` tinyint NOT NULL,
+  `idCategoriaProdotto` tinyint NOT NULL,
+  `idGiorno` tinyint NOT NULL,
+  `nomeProdotto` tinyint NOT NULL,
+  `prezzoUnitario` tinyint NOT NULL,
+  `disponibilita` tinyint NOT NULL,
+  `quantitaVenduta` tinyint NOT NULL,
+  `quantitaWarning` tinyint NOT NULL
+) ENGINE=MyISAM */;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `vistalistinoreale`
+--
+
+/*!50001 DROP TABLE IF EXISTS `vistalistinoreale`*/;
+/*!50001 DROP VIEW IF EXISTS `vistalistinoreale`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8 */;
+/*!50001 SET character_set_results     = utf8 */;
+/*!50001 SET collation_connection      = utf8_general_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `vistalistinoreale` AS select `l`.`idProdotto` AS `idProdotto`,`l`.`idCategoriaProdotto` AS `idCategoriaProdotto`,`g`.`idGiorno` AS `idGiorno`,`l`.`nomeProdotto` AS `nomeProdotto`,`l`.`prezzoUnitario` AS `prezzoUnitario`,`g`.`disponibilita` AS `disponibilita`,`g`.`quantitaVenduta` AS `quantitaVenduta`,`g`.`quantitaWarning` AS `quantitaWarning` from (`listinoprodotti` `l` join `prodottigiornaliera` `g` on((`l`.`idProdotto` = `g`.`idProdotto`))) where (`g`.`sospensione` = 0) */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -299,4 +365,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-28  9:06:34
+-- Dump completed on 2015-02-28 12:03:13
