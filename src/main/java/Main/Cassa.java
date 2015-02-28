@@ -1,11 +1,8 @@
 package Main;
 
 import Manager.GiorniManager;
-import Manager.ProdottiGiornalieraManager;
 import java.util.Date;
-import java.util.List;
 import model.Giorni;
-import model.ProdottiGiornaliera;
 import org.jboss.logging.Logger;
 
 /**
@@ -17,7 +14,7 @@ public class Cassa {
     private static final Logger LOGGER = Logger.getLogger(Cassa.class);
     private Date data;
     private Giorni giorno;
-    private List<ProdottiGiornaliera> prodottiGiornaliera;
+    private Listino listino;
 
     /**
      *
@@ -29,8 +26,8 @@ public class Cassa {
         GiorniManager giorniMgr = new GiorniManager();
         this.giorno = giorniMgr.getByDate(data);
 
-        ProdottiGiornalieraManager prodottiGiornalieraMgr = new ProdottiGiornalieraManager();
-        this.prodottiGiornaliera = prodottiGiornalieraMgr.getByDate(getIdGiorno());
+        listino = new Listino(this.giorno);
+
     }
 
     /**
@@ -62,24 +59,24 @@ public class Cassa {
     }
 
     /**
-     * @return the prodottiGiornaliera
-     */
-    public List<ProdottiGiornaliera> getProdottiGiornaliera() {
-        return prodottiGiornaliera;
-    }
-
-    /**
-     * @param prodottiGiornaliera the prodottiGiornaliera to set
-     */
-    public void setProdottiGiornaliera(List<ProdottiGiornaliera> prodottiGiornaliera) {
-        this.prodottiGiornaliera = prodottiGiornaliera;
-    }
-
-    /**
      *
      * @return
      */
     private Integer getIdGiorno() {
         return getGiorno().getId();
+    }
+
+    /**
+     * @return the listino
+     */
+    public Listino getListino() {
+        return listino;
+    }
+
+    /**
+     * @param listino the listino to set
+     */
+    public void setListino(Listino listino) {
+        this.listino = listino;
     }
 }
