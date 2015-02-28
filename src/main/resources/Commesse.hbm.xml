@@ -17,6 +17,9 @@
         <property name="idOperatore" type="integer">
             <column name="idOperatore"  not-null="true" />
         </property>
+       <property name="idStatoOrdine" type="integer">
+            <column name="idStatoOrdine"  not-null="true" />
+        </property>
         <property name="totalePagato" type="float">
             <column name="totalePagato" not-null="true" />
         </property> 

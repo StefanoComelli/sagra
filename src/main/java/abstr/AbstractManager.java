@@ -27,7 +27,7 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
     public static SessionFactory getFactory() {
         return factory;
     }
-    private Class<Pojo> pojoClass;
+    protected Class<Pojo> pojoClass;
 
     /**
      * AbstractManager
@@ -107,7 +107,7 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
 
         try {
             tx = session.beginTransaction();
-            pojo = (Pojo) session.get(pojoClass, primaryKey);
+            pojo = (Pojo) session.get(getPojoClass(), primaryKey);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -166,5 +166,19 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
         } finally {
             session.close();
         }
+    }
+
+    /**
+     * @return the pojoClass
+     */
+    public Class<Pojo> getPojoClass() {
+        return pojoClass;
+    }
+
+    /**
+     * @param pojoClass the pojoClass to set
+     */
+    public void setPojoClass(Class<Pojo> pojoClass) {
+        this.pojoClass = pojoClass;
     }
 }

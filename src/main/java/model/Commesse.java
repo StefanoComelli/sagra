@@ -23,6 +23,7 @@ public class Commesse extends AbstractData<Integer> {
     private Set<RigheCommesse> righeCommesse;
     private Set<LogOrdini> logOrdine;
     private int idGiorno;
+    int idStatoOrdine;
 
     /**
      * @return the idCassa
@@ -190,6 +191,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setIdGiorno(int idGiorno) {
         this.idGiorno = idGiorno;
+    }
+
+    /**
+     * @return the idStato
+     */
+    public int getIdStatoOrdine() {
+        return idStatoOrdine;
+    }
+
+    /**
+     * @param idStatoOrdine
+     */
+    public void setIdStatoOrdine(int idStatoOrdine) {
+        this.idStatoOrdine = idStatoOrdine;
     }
 
 }

@@ -2,6 +2,7 @@ package Main;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import model.Operatori;
 
 /**
  *
@@ -18,6 +19,8 @@ public class Main {
         GregorianCalendar gData = new GregorianCalendar(2015, Calendar.MAY, 29);
         gData.setLenient(false);
 
-        Cassa cassa = new Cassa(gData.getTime());
+        Operatori operatore= new Operatori();
+        
+        Cassa cassa = new Cassa(gData.getTime(),operatore);
     }
 }
