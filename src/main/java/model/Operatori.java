@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
 import abstr.AbstractData;
@@ -30,5 +25,5 @@ public class Operatori extends AbstractData<Integer> {
     public void setOperatore(String operatore) {
         this.operatore = operatore;
     }
-    
+
 }

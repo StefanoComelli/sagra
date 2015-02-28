@@ -1,12 +1,16 @@
-package Main;
+package beans;
 
 import Manager.GiorniManager;
 import Manager.ListinoRealeManager;
+import Manager.ScontiManager;
+import Manager.VariantiManager;
 import java.util.Date;
 import java.util.List;
 import model.Giorni;
 import model.ListinoReale;
 import model.Operatori;
+import model.Sconti;
+import model.Varianti;
 import org.jboss.logging.Logger;
 
 /**
@@ -19,22 +23,29 @@ public class Cassa {
     private Date data;
     private Giorni giorno;
     private List<ListinoReale> listino;
-    Operatori operatore;
-
-    protected ListinoRealeManager listinoMgr;
+    private Operatori operatore;
+    private List<Varianti> varianti;
+    private ListinoRealeManager listinoMgr;
+    List<Sconti> sconti;
 
     /**
-     * 
+     *
      * @param data
-     * @param operatore 
+     * @param operatore
      */
     public Cassa(Date data, Operatori operatore) {
         this.data = data;
-        this.operatore=operatore;
-        
+        this.operatore = operatore;
+
         GiorniManager giorniMgr = new GiorniManager();
         this.giorno = giorniMgr.getByDate(data);
         listinoMgr = new ListinoRealeManager();
+
+        VariantiManager variantiMgr = new VariantiManager();
+        varianti = variantiMgr.getAll();
+        ScontiManager scontiMgr = new ScontiManager();
+        sconti = scontiMgr.getAll();
+
         Refresh();
 
     }
@@ -85,14 +96,14 @@ public class Cassa {
     /**
      * @return the listino
      */
-    public  List<ListinoReale> getListino() {
+    public List<ListinoReale> getListino() {
         return listino;
     }
 
     /**
      * @param listino the listino to set
      */
-    public void setListino( List<ListinoReale> listino) {
+    public void setListino(List<ListinoReale> listino) {
         this.listino = listino;
     }
 
@@ -122,5 +133,33 @@ public class Cassa {
      */
     public void setOperatore(Operatori operatore) {
         this.operatore = operatore;
+    }
+
+    /**
+     * @return the varianti
+     */
+    public List<Varianti> getVarianti() {
+        return varianti;
+    }
+
+    /**
+     * @param varianti the varianti to set
+     */
+    public void setVarianti(List<Varianti> varianti) {
+        this.varianti = varianti;
+    }
+
+    /**
+     * @return the sconti
+     */
+    public List<Sconti> getSconti() {
+        return sconti;
+    }
+
+    /**
+     * @param sconti the sconti to set
+     */
+    public void setSconti(List<Sconti> sconti) {
+        this.sconti = sconti;
     }
 }

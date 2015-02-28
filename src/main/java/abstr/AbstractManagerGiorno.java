@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package abstr;
 
 import static abstr.AbstractManager.getFactory;
@@ -25,6 +20,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
 
     private static final Logger LOGGER = Logger.getLogger(AbstractManager.class);
 
+    /**
+     *
+     * @param pojoClass
+     */
     protected AbstractManagerGiorno(Class<Pojo> pojoClass) {
         super(pojoClass);
     }

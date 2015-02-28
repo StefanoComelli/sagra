@@ -1,7 +1,10 @@
-package Main;
+package beans;
 
 import Manager.CommesseManager;
+import Manager.StatiOrdineManager;
+import java.util.List;
 import model.Commesse;
+import model.StatiOrdine;
 
 /**
  *
@@ -11,10 +14,12 @@ public class Ordine {
 
     private Integer idGiorno;
     private Integer idOperatore;
-    Integer idCassa;
+    private Integer idCassa;
 
-    CommesseManager commessaMgr;
-    Commesse commessa;
+    private CommesseManager commessaMgr;
+    private Commesse commessa;
+    List<StatiOrdine> statiOrdine;
+    StatiOrdine statoOrdine;
 
     /**
      *
@@ -25,23 +30,37 @@ public class Ordine {
     public Ordine(Integer idCassa, Integer idOperatore, Integer idGiorno) {
         this.idOperatore = idOperatore;
         this.idGiorno = idGiorno;
-        this.idCassa=idCassa;
+        this.idCassa = idCassa;
+
         commessaMgr = new CommesseManager();
         this.commessa = new Commesse();
+
+        StatiOrdineManager statiOrdineMgr = new StatiOrdineManager();
+        statiOrdine = statiOrdineMgr.getElencoStati();
+        statoOrdine = statiOrdineMgr.getDefault();
         ApriOrdine();
     }
 
+    /**
+     *
+     */
     public void ApriOrdine() {
         this.commessa.setIdCassa(getIdCassa());
         this.commessa.setIdOperatore(getIdOperatore());
         this.commessa.setIdGiorno(getIdGiorno());
         getCommessaMgr().insert(commessa);
-        
+
     }
 
+    /**
+     *
+     */
     public void ChiudiOrdine() {
     }
 
+    /**
+     *
+     */
     public void AnnullaOrdine() {
     }
 
@@ -113,6 +132,34 @@ public class Ordine {
      */
     public void setCommessaMgr(CommesseManager commessaMgr) {
         this.commessaMgr = commessaMgr;
+    }
+
+    /**
+     * @return the statiOrdine
+     */
+    public List<StatiOrdine> getStatiOrdine() {
+        return statiOrdine;
+    }
+
+    /**
+     * @param statiOrdine the statiOrdine to set
+     */
+    public void setStatiOrdine(List<StatiOrdine> statiOrdine) {
+        this.statiOrdine = statiOrdine;
+    }
+
+    /**
+     * @return the statoOrdine
+     */
+    public StatiOrdine getStatoOrdine() {
+        return statoOrdine;
+    }
+
+    /**
+     * @param statoOrdine the statoOrdine to set
+     */
+    public void setStatoOrdine(StatiOrdine statoOrdine) {
+        this.statoOrdine = statoOrdine;
     }
 
 }

@@ -20,4 +20,4 @@ public class ProdottiGiornalieraManager extends AbstractManagerGiorno<ProdottiGi
         super(ProdottiGiornaliera.class);
     }
 
-  }
+}

@@ -20,4 +20,3 @@ public class ListinoRealeManager extends AbstractManagerGiorno<ListinoReale, Lis
         super(ListinoReale.class);
     }
 }
-

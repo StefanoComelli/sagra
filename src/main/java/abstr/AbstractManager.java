@@ -50,13 +50,13 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @param pojo
      * @return
      */
-    public Integer insert(Pojo pojo) {
+    public PrimaryKey insert(Pojo pojo) {
         Session session = getFactory().openSession();
         Transaction tx = null;
-        Integer id = null;
+        PrimaryKey id = null;
         try {
             tx = session.beginTransaction();
-            id = (Integer) session.save(pojo);
+            id = (PrimaryKey) session.save(pojo);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -118,6 +118,31 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
             session.close();
         }
         return pojo;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public List<Pojo> getAll() {
+        List<Pojo> pojos = null;
+        Session session = getFactory().openSession();
+
+        Transaction tx = null;
+
+        try {
+            tx = session.beginTransaction();
+            pojos = session.createCriteria(getPojoClass()).list();
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            LOGGER.error(e);
+        } finally {
+            session.close();
+        }
+        return pojos;
     }
 
     /**
