@@ -10,7 +10,7 @@ import org.jboss.logging.Logger;
 public class Operatori extends AbstractData<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger(Operatori.class);
-    String operatore;
+    private String operatore;
 
     /**
      * @return the operatore
@@ -26,4 +26,12 @@ public class Operatori extends AbstractData<Integer> {
         this.operatore = operatore;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + "-" + getOperatore();
+    }
 }

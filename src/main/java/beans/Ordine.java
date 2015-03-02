@@ -18,8 +18,8 @@ public class Ordine {
 
     private CommesseManager commessaMgr;
     private Commesse commessa;
-    List<StatiOrdine> statiOrdine;
-    StatiOrdine statoOrdine;
+    private List<StatiOrdine> statiOrdine;
+    private StatiOrdine statoOrdine;
 
     /**
      *

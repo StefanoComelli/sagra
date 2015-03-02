@@ -35,6 +35,7 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
      * @return
      */
     public List<Pojo> getByDate(Integer idGiorno) {
+        
         List<Pojo> pojos = null;
         Session session = getFactory().openSession();
         Criteria cr = session.createCriteria(super.getPojoClass());

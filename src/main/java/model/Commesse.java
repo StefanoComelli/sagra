@@ -23,7 +23,7 @@ public class Commesse extends AbstractData<Integer> {
     private Set<RigheCommesse> righeCommesse;
     private Set<LogOrdini> logOrdine;
     private int idGiorno;
-    int idStatoOrdine;
+    private int idStatoOrdine;
 
     /**
      * @return the idCassa

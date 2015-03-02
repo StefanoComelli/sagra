@@ -18,6 +18,30 @@ USE `sagra`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `casse`
+--
+
+DROP TABLE IF EXISTS `casse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `casse` (
+  `idCassa` int(10) NOT NULL,
+  `descrizione` tinytext NOT NULL,
+  PRIMARY KEY (`idCassa`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `casse`
+--
+
+LOCK TABLES `casse` WRITE;
+/*!40000 ALTER TABLE `casse` DISABLE KEYS */;
+INSERT INTO `casse` VALUES (1,'Cassa 1'),(2,'Cassa 2'),(3,'Cassa 3');
+/*!40000 ALTER TABLE `casse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `categorieprodotti`
 --
 
@@ -179,7 +203,7 @@ CREATE TABLE `operatori` (
 
 LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
-INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto');
+INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto'),(3,'Paperino');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -365,4 +389,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-02-28 12:03:13
+-- Dump completed on 2015-03-02 22:19:37

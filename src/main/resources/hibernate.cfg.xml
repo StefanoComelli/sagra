@@ -21,5 +21,6 @@
     <mapping resource="Giorni.hbm.xml"/>
     <mapping resource="ListinoReale.hbm.xml"/>
     <mapping resource="Operatori.hbm.xml"/>
+    <mapping resource="Casse.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

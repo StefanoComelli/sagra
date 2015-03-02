@@ -26,7 +26,8 @@ public class Cassa {
     private Operatori operatore;
     private List<Varianti> varianti;
     private ListinoRealeManager listinoMgr;
-    List<Sconti> sconti;
+    private List<Sconti> sconti;
+    private Ordine ordine;
 
     /**
      *
@@ -46,14 +47,14 @@ public class Cassa {
         ScontiManager scontiMgr = new ScontiManager();
         sconti = scontiMgr.getAll();
 
-        Refresh();
+        RefreshListino();
 
     }
 
     /**
      *
      */
-    public void Refresh() {
+    private void RefreshListino() {
         this.listino = listinoMgr.getByDate(giorno.getId());
     }
 
@@ -161,5 +162,19 @@ public class Cassa {
      */
     public void setSconti(List<Sconti> sconti) {
         this.sconti = sconti;
+    }
+
+    /**
+     * @return the ordine
+     */
+    public Ordine getOrdine() {
+        return ordine;
+    }
+
+    /**
+     * @param ordine the ordine to set
+     */
+    public void setOrdine(Ordine ordine) {
+        this.ordine = ordine;
     }
 }

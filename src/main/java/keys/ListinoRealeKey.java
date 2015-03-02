@@ -6,4 +6,6 @@ package keys;
  */
 public class ListinoRealeKey extends ProdottiGiornalieraKey {
 
+    // Intenzionalmente vuoto
+    // ad oggi è una copia di ProdottiGiornalieraKey
 }

@@ -59,4 +59,12 @@ public class Giorni extends AbstractData<Integer> {
         this.prodottiGiornaliera = prodottiGiornaliera;
     }
 
+     /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + "-" + getData().toString();
+    }
 }

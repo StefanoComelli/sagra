@@ -35,7 +35,9 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @param pojoClass
      */
     protected AbstractManager(Class<Pojo> pojoClass) {
+        
         this.pojoClass = pojoClass;
+       
         try {
             factory = new Configuration().configure().buildSessionFactory();
         } catch (Throwable ex) {
@@ -76,9 +78,11 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public List<Pojo> select(String query) {
+        
         Session session = getFactory().openSession();
         Transaction tx = null;
         List<Pojo> pojos = null;
+        
         try {
             tx = session.beginTransaction();
             pojos = session.createQuery(query).list();
@@ -101,6 +105,7 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public Pojo get(PrimaryKey primaryKey) {
+        
         Pojo pojo = null;
         Session session = getFactory().openSession();
         Transaction tx = null;
@@ -125,6 +130,7 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public List<Pojo> getAll() {
+       
         List<Pojo> pojos = null;
         Session session = getFactory().openSession();
 

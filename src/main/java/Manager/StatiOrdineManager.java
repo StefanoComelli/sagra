@@ -117,7 +117,6 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
         cr.addOrder(Order.asc("ordineSequenziale"));
 
         Transaction tx = null;
-        List<StatiOrdine> pojos = null;
         try {
             tx = session.beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);
