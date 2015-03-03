@@ -3,7 +3,10 @@ package beans;
 import Manager.CommesseManager;
 import Manager.StatiOrdineManager;
 import java.util.List;
+import model.Casse;
 import model.Commesse;
+import model.Giorni;
+import model.Operatori;
 import model.StatiOrdine;
 
 /**
@@ -12,25 +15,26 @@ import model.StatiOrdine;
  */
 public class Ordine {
 
-    private Integer idGiorno;
-    private Integer idOperatore;
-    private Integer idCassa;
+    Giorni giorno;
+    Operatori operatore;
+    Casse cassa;
 
     private CommesseManager commessaMgr;
     private Commesse commessa;
     private List<StatiOrdine> statiOrdine;
     private StatiOrdine statoOrdine;
 
+    
     /**
-     *
-     * @param idCassa
-     * @param idOperatore
-     * @param idGiorno
+     * 
+     * @param cassa
+     * @param operatore
+     * @param giorno 
      */
-    public Ordine(Integer idCassa, Integer idOperatore, Integer idGiorno) {
-        this.idOperatore = idOperatore;
-        this.idGiorno = idGiorno;
-        this.idCassa = idCassa;
+    public Ordine(Casse cassa, Operatori operatore, Giorni giorno) {
+        this.cassa = cassa;
+        this.operatore = operatore;
+        this.giorno = giorno;
 
         commessaMgr = new CommesseManager();
         this.commessa = new Commesse();
@@ -45,9 +49,9 @@ public class Ordine {
      *
      */
     public void ApriOrdine() {
-        this.commessa.setIdCassa(getIdCassa());
-        this.commessa.setIdOperatore(getIdOperatore());
-        this.commessa.setIdGiorno(getIdGiorno());
+        this.commessa.setCassa(getCassa());
+        this.commessa.setOperatore(getOperatore());
+        this.commessa.setGiorno(getGiorno());
         getCommessaMgr().insert(commessa);
 
     }
@@ -65,34 +69,6 @@ public class Ordine {
     }
 
     /**
-     * @return the idGiorno
-     */
-    public Integer getIdGiorno() {
-        return idGiorno;
-    }
-
-    /**
-     * @param idGiorno the idGiorno to set
-     */
-    public void setIdGiorno(Integer idGiorno) {
-        this.idGiorno = idGiorno;
-    }
-
-    /**
-     * @return the idOperatore
-     */
-    public Integer getIdOperatore() {
-        return idOperatore;
-    }
-
-    /**
-     * @param idOperatore the idOperatore to set
-     */
-    public void setIdOperatore(Integer idOperatore) {
-        this.idOperatore = idOperatore;
-    }
-
-    /**
      * @return the commessa
      */
     public Commesse getCommessa() {
@@ -106,20 +82,7 @@ public class Ordine {
         this.commessa = commessa;
     }
 
-    /**
-     * @return the idCassa
-     */
-    public Integer getIdCassa() {
-        return idCassa;
-    }
-
-    /**
-     * @param idCassa the idCassa to set
-     */
-    public void setIdCassa(Integer idCassa) {
-        this.idCassa = idCassa;
-    }
-
+ 
     /**
      * @return the commessaMgr
      */
@@ -160,6 +123,48 @@ public class Ordine {
      */
     public void setStatoOrdine(StatiOrdine statoOrdine) {
         this.statoOrdine = statoOrdine;
+    }
+
+    /**
+     * @return the giorno
+     */
+    public Giorni getGiorno() {
+        return giorno;
+    }
+
+    /**
+     * @param giorno the giorno to set
+     */
+    public void setGiorno(Giorni giorno) {
+        this.giorno = giorno;
+    }
+
+    /**
+     * @return the operatore
+     */
+    public Operatori getOperatore() {
+        return operatore;
+    }
+
+    /**
+     * @param operatore the operatore to set
+     */
+    public void setOperatore(Operatori operatore) {
+        this.operatore = operatore;
+    }
+
+    /**
+     * @return the cassa
+     */
+    public Casse getCassa() {
+        return cassa;
+    }
+
+    /**
+     * @param cassa the cassa to set
+     */
+    public void setCassa(Casse cassa) {
+        this.cassa = cassa;
     }
 
 }

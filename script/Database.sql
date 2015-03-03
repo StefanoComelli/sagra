@@ -159,6 +159,33 @@ INSERT INTO `listinoprodotti` VALUES (1000,1,'Penne all\'arrabbiata','',5.00),(1
 UNLOCK TABLES;
 
 --
+-- Table structure for table `logcasse`
+--
+
+DROP TABLE IF EXISTS `logcasse`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `logcasse` (
+  `idCassa` int(10) NOT NULL,
+  `idGiorno` int(10) NOT NULL,
+  `dataOra` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `idOperazione` char(3) NOT NULL,
+  `idOperatore` int(10) NOT NULL,
+  `descrizione` varchar(45) DEFAULT NULL,
+  PRIMARY KEY (`idCassa`,`idGiorno`,`dataOra`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `logcasse`
+--
+
+LOCK TABLES `logcasse` WRITE;
+/*!40000 ALTER TABLE `logcasse` DISABLE KEYS */;
+/*!40000 ALTER TABLE `logcasse` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `logordini`
 --
 
@@ -205,6 +232,30 @@ LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
 INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto'),(3,'Paperino');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `operazionicassa`
+--
+
+DROP TABLE IF EXISTS `operazionicassa`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `operazionicassa` (
+  `idOperazione` char(3) NOT NULL,
+  `descrizione` varchar(45) NOT NULL,
+  PRIMARY KEY (`idOperazione`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `operazionicassa`
+--
+
+LOCK TABLES `operazionicassa` WRITE;
+/*!40000 ALTER TABLE `operazionicassa` DISABLE KEYS */;
+INSERT INTO `operazionicassa` VALUES ('FND','Fondo Cassa'),('VER','Versamento');
+/*!40000 ALTER TABLE `operazionicassa` ENABLE KEYS */;
 UNLOCK TABLES;
 
 --
@@ -375,7 +426,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vistalistinoreale` AS select `l`.`idProdotto` AS `idProdotto`,`l`.`idCategoriaProdotto` AS `idCategoriaProdotto`,`g`.`idGiorno` AS `idGiorno`,`l`.`nomeProdotto` AS `nomeProdotto`,`l`.`prezzoUnitario` AS `prezzoUnitario`,`g`.`disponibilita` AS `disponibilita`,`g`.`quantitaVenduta` AS `quantitaVenduta`,`g`.`quantitaWarning` AS `quantitaWarning` from (`listinoprodotti` `l` join `prodottigiornaliera` `g` on((`l`.`idProdotto` = `g`.`idProdotto`))) where (`g`.`sospensione` = 0) */;
+/*!50001 VIEW `vistalistinoreale` AS select `l`.`idProdotto` AS `idProdotto`,`l`.`idCategoriaProdotto` AS `idCategoriaProdotto`,`g`.`idGiorno` AS `idGiorno`,`l`.`nomeProdotto` AS `nomeProdotto`,`l`.`prezzoUnitario` AS `prezzoUnitario`,`g`.`disponibilita` AS `disponibilita`,`g`.`quantitaVenduta` AS `quantitaVenduta`,`g`.`quantitaWarning` AS `quantitaWarning` from ((`listinoprodotti` `l` join `prodottigiornaliera` `g` on((`l`.`idProdotto` = `g`.`idProdotto`))) join `categorieprodotti` `cp` on((`l`.`idCategoriaProdotto` = `cp`.`idCategoriaProdotto`))) where (`g`.`sospensione` = 0) order by `cp`.`ordineSequenziale`,`l`.`nomeProdotto` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -389,4 +440,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-02 22:19:37
+-- Dump completed on 2015-03-03 23:14:20

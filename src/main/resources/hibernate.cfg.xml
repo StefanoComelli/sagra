@@ -22,5 +22,7 @@
     <mapping resource="ListinoReale.hbm.xml"/>
     <mapping resource="Operatori.hbm.xml"/>
     <mapping resource="Casse.hbm.xml"/>
+    <mapping resource="OperazioniCassa.hbm.xml"/>
+    <mapping resource="LogCasse.hbm.xml"/>
   </session-factory>
 </hibernate-configuration>

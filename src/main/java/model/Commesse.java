@@ -11,46 +11,46 @@ import org.jboss.logging.Logger;
 public class Commesse extends AbstractData<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger(Commesse.class);
-    private int idCassa;
-    private int idOperatore;
-    private float totalePagato;
-    private float totaleContanti;
-    private float totaleResto;
-    private float scontoApplicato;
-    private String nomeCliente;
-    private String tavoloCliente;
-    private String note;
-    private Set<RigheCommesse> righeCommesse;
-    private Set<LogOrdini> logOrdine;
-    private int idGiorno;
-    private int idStatoOrdine;
+    Casse cassa;
+    Operatori operatore;
+    float totalePagato;
+    float totaleContanti;
+    float totaleResto;
+    float scontoApplicato;
+    String nomeCliente;
+    String tavoloCliente;
+    String note;
+    Set<RigheCommesse> righeCommesse;
+    Set<LogOrdini> logOrdine;
+    Giorni giorno;
+    StatiOrdine statoOrdine;
 
     /**
-     * @return the idCassa
+     * @return the cassa
      */
-    public int getIdCassa() {
-        return idCassa;
+    public Casse getCassa() {
+        return cassa;
     }
 
     /**
-     * @param idCassa the idCassa to set
+     * @param cassa the cassa to set
      */
-    public void setIdCassa(int idCassa) {
-        this.idCassa = idCassa;
+    public void setCassa(Casse cassa) {
+        this.cassa = cassa;
     }
 
     /**
-     * @return the idOperatore
+     * @return the operatore
      */
-    public int getIdOperatore() {
-        return idOperatore;
+    public Operatori getOperatore() {
+        return operatore;
     }
 
     /**
-     * @param idOperatore the idOperatore to set
+     * @param operatore the operatore to set
      */
-    public void setIdOperatore(int idOperatore) {
-        this.idOperatore = idOperatore;
+    public void setOperatore(Operatori operatore) {
+        this.operatore = operatore;
     }
 
     /**
@@ -180,31 +180,31 @@ public class Commesse extends AbstractData<Integer> {
     }
 
     /**
-     * @return the idGiorno
+     * @return the giorno
      */
-    public int getIdGiorno() {
-        return idGiorno;
+    public Giorni getGiorno() {
+        return giorno;
     }
 
     /**
-     * @param idGiorno the idGiorno to set
+     * @param giorno the giorno to set
      */
-    public void setIdGiorno(int idGiorno) {
-        this.idGiorno = idGiorno;
+    public void setGiorno(Giorni giorno) {
+        this.giorno = giorno;
     }
 
     /**
-     * @return the idStato
+     * @return the statoOrdine
      */
-    public int getIdStatoOrdine() {
-        return idStatoOrdine;
+    public StatiOrdine getStatoOrdine() {
+        return statoOrdine;
     }
 
     /**
-     * @param idStatoOrdine
+     * @param statoOrdine the statoOrdine to set
      */
-    public void setIdStatoOrdine(int idStatoOrdine) {
-        this.idStatoOrdine = idStatoOrdine;
+    public void setStatoOrdine(StatiOrdine statoOrdine) {
+        this.statoOrdine = statoOrdine;
     }
 
 }

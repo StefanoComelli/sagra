@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+ 
+<hibernate-mapping>
+    <class name="model.LogCasse" table="logcasse" catalog="sagra">
+        <composite-id class="keys.LogCasseKey" name="id">
+            <key-property name="idCassa" type="integer">
+                <column name="idCassa"/>
+            </key-property> 
+            <key-property name="idGiorno" type="integer">
+                <column name="idGiorno"/>
+            </key-property> 
+            <key-property name="dataOra" type="date">
+                <column name="dataOra"/>    
+            </key-property>
+        </composite-id>
+        <many-to-one name="operazione" class="model.OperazioniCassa" fetch="select" lazy="false">
+            <column name="idOperazione"  not-null="true" />
+        </many-to-one>
+        <many-to-one name="operatore" class="model.Operatori" fetch="select" lazy="false">
+            <column name="idOperatore"  not-null="true" />
+        </many-to-one>
+        <property name="descrizione" type="string">
+            <column name="descrizione" length="65535" not-null="true" />
+        </property>
+
+    </class>
+</hibernate-mapping>

@@ -12,7 +12,6 @@ import org.jboss.logging.Logger;
 public class LogOrdini extends AbstractData<LogOrdiniKey> {
 
     private static final Logger LOGGER = Logger.getLogger(LogOrdini.class);
-
     private StatiOrdine statoOrdine;
     private Date dataOra;
 
