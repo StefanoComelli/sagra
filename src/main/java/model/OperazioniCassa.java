@@ -10,7 +10,7 @@ import org.jboss.logging.Logger;
 public class OperazioniCassa extends AbstractData<String> {
 
     private static final Logger LOGGER = Logger.getLogger(OperazioniCassa.class);
-    String descrizione;
+    private String descrizione;
 
     /**
      * @return the descrizione
@@ -25,5 +25,5 @@ public class OperazioniCassa extends AbstractData<String> {
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
-    
+
 }

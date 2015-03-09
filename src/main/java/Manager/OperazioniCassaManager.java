@@ -8,14 +8,14 @@ import org.jboss.logging.Logger;
  *
  * @author Stefano
  */
-public class OperazioniCassaiManager extends AbstractManager<Varianti, Integer> {
+public class OperazioniCassaManager extends AbstractManager<Varianti, Integer> {
 
-    private static final Logger LOGGER = Logger.getLogger(OperazioniCassaiManager.class);
+    private static final Logger LOGGER = Logger.getLogger(OperazioniCassaManager.class);
 
     /**
      * CategorieProdottiManager
      */
-    public OperazioniCassaiManager() {
+    public OperazioniCassaManager() {
         super(Varianti.class);
     }
 }

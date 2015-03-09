@@ -18,4 +18,4 @@ public class OperatoriManager extends AbstractManager<Operatori, Integer> {
     public OperatoriManager() {
         super(Operatori.class);
     }
-}
+ }

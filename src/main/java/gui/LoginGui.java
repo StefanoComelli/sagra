@@ -20,6 +20,18 @@ public class LoginGui extends javax.swing.JFrame {
     /**
      *
      */
+    private void GoLogin() {
+        jCmbCassa.getSelectedItem();
+        String giorno = (String) jCmbGiorno.getSelectedItem();
+        String cassa = (String) jCmbCassa.getSelectedItem();
+        String operatore = (String) jCmbOperatore.getSelectedItem();
+        // String giorno, String cassa, String operatore
+        CassaGui cassaGui = new CassaGui(giorno, cassa, operatore);
+    }
+
+    /**
+     *
+     */
     private void StatoFinestra() {
 
         if (jCmbCassa.getSelectedItem() == null || jCmbOperatore.getSelectedItem() == null
@@ -39,17 +51,17 @@ public class LoginGui extends javax.swing.JFrame {
             jCmbCassa.addItem(cassa.toString());
         }
         jCmbCassa.setSelectedItem(null);
-        
+
         for (Operatori operatore : login.getOperatori()) {
             jCmbOperatore.addItem(operatore.toString());
         }
         jCmbOperatore.setSelectedItem(null);
-        
+
         for (Giorni giorno : login.getGiorni()) {
             jCmbGiorno.addItem(giorno.toString());
         }
         jCmbGiorno.setSelectedItem(null);
- 
+
         setLocationRelativeTo(null);
 
         StatoFinestra();
@@ -87,7 +99,7 @@ public class LoginGui extends javax.swing.JFrame {
         exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Sagra Sant'Andrea - Login");
+        setTitle("Sagra Sant'Andrea: Login");
         setName("Form"); // NOI18N
         setResizable(false);
         setType(java.awt.Window.Type.UTILITY);
@@ -134,6 +146,11 @@ public class LoginGui extends javax.swing.JFrame {
 
         jButtonOk.setText("Ok");
         jButtonOk.setName("jButtonOk"); // NOI18N
+        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonOkActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelLayout = new javax.swing.GroupLayout(jPanel);
         jPanel.setLayout(jPanelLayout);
@@ -245,6 +262,11 @@ public class LoginGui extends javax.swing.JFrame {
     private void jCmbGiornoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbGiornoItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jCmbGiornoItemStateChanged
+
+    private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
+        // TODO add your handling code here:
+        GoLogin();
+    }//GEN-LAST:event_jButtonOkActionPerformed
 
     /**
      * @param args the command line arguments

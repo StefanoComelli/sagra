@@ -11,19 +11,19 @@ import org.jboss.logging.Logger;
 public class Commesse extends AbstractData<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger(Commesse.class);
-    Casse cassa;
-    Operatori operatore;
-    float totalePagato;
-    float totaleContanti;
-    float totaleResto;
-    float scontoApplicato;
-    String nomeCliente;
-    String tavoloCliente;
-    String note;
-    Set<RigheCommesse> righeCommesse;
-    Set<LogOrdini> logOrdine;
-    Giorni giorno;
-    StatiOrdine statoOrdine;
+    private Casse cassa;
+    private Operatori operatore;
+    private float totalePagato;
+    private float totaleContanti;
+    private float totaleResto;
+    private float scontoApplicato;
+    private String nomeCliente;
+    private String tavoloCliente;
+    private String note;
+    private Set<RigheCommesse> righeCommesse;
+    private Set<LogOrdini> logOrdine;
+    private Giorni giorno;
+    private StatiOrdine statoOrdine;
 
     /**
      * @return the cassa

@@ -32,6 +32,6 @@ public class Operatori extends AbstractData<Integer> {
      */
     @Override
     public String toString() {
-        return getId().toString() + "-" + getOperatore();
+        return getId().toString() + TO_STRING_SEP + getOperatore();
     }
 }

@@ -10,6 +10,7 @@ import org.jboss.logging.Logger;
  */
 public abstract class AbstractData<PrimaryKey extends Serializable> extends AbstractPrimaryKey<PrimaryKey> {
 
+    protected static final String TO_STRING_SEP =" - ";
     private static final Logger LOGGER = Logger.getLogger(AbstractData.class);
 
     /**

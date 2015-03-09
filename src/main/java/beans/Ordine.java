@@ -15,21 +15,20 @@ import model.StatiOrdine;
  */
 public class Ordine {
 
-    Giorni giorno;
-    Operatori operatore;
-    Casse cassa;
+    private Giorni giorno;
+    private Operatori operatore;
+    private Casse cassa;
 
     private CommesseManager commessaMgr;
     private Commesse commessa;
     private List<StatiOrdine> statiOrdine;
     private StatiOrdine statoOrdine;
 
-    
     /**
-     * 
+     *
      * @param cassa
      * @param operatore
-     * @param giorno 
+     * @param giorno
      */
     public Ordine(Casse cassa, Operatori operatore, Giorni giorno) {
         this.cassa = cassa;
@@ -82,7 +81,6 @@ public class Ordine {
         this.commessa = commessa;
     }
 
- 
     /**
      * @return the commessaMgr
      */

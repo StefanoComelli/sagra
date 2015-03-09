@@ -1,17 +1,21 @@
 package beans;
 
+import Manager.CasseManager;
 import Manager.GiorniManager;
 import Manager.ListinoRealeManager;
+import Manager.OperatoriManager;
 import Manager.ScontiManager;
 import Manager.VariantiManager;
 import java.util.Date;
 import java.util.List;
+import model.Casse;
 import model.Giorni;
 import model.ListinoReale;
 import model.Operatori;
 import model.Sconti;
 import model.Varianti;
 import org.jboss.logging.Logger;
+import utils.IdDescr;
 
 /**
  *
@@ -20,6 +24,7 @@ import org.jboss.logging.Logger;
 public class Cassa {
 
     private static final Logger LOGGER = Logger.getLogger(Cassa.class);
+    private Casse dbCassa;
     private Date data;
     private Giorni giorno;
     private List<ListinoReale> listino;
@@ -31,15 +36,25 @@ public class Cassa {
 
     /**
      *
-     * @param data
+     * @param giorno
+     * @param cassa
      * @param operatore
      */
-    public Cassa(Date data, Operatori operatore) {
-        this.data = data;
-        this.operatore = operatore;
+    public Cassa(String giorno, String cassa, String operatore) {
+        IdDescr dGiorno = new IdDescr(giorno);
+        IdDescr dCassa = new IdDescr(cassa);
+        IdDescr dOperatore = new IdDescr(operatore);
 
         GiorniManager giorniMgr = new GiorniManager();
-        this.giorno = giorniMgr.getByDate(data);
+        this.giorno = giorniMgr.get(dGiorno.getId());
+        this.data = this.giorno.getData();
+
+        CasseManager casseMgr = new CasseManager();
+        this.dbCassa = casseMgr.get(dCassa.getId());
+
+        OperatoriManager operatoriMgr = new OperatoriManager();
+        this.operatore = operatoriMgr.get(dOperatore.getId());
+
         listinoMgr = new ListinoRealeManager();
 
         VariantiManager variantiMgr = new VariantiManager();
@@ -55,7 +70,7 @@ public class Cassa {
      *
      */
     private void RefreshListino() {
-        this.listino = listinoMgr.getByDate(giorno.getId());
+        //   this.listino = listinoMgr.getBy(giorno.getId());
     }
 
     /**
@@ -84,14 +99,6 @@ public class Cassa {
      */
     public void setGiorno(Giorni giorno) {
         this.giorno = giorno;
-    }
-
-    /**
-     *
-     * @return
-     */
-    private Integer getIdGiorno() {
-        return getGiorno().getId();
     }
 
     /**
@@ -176,5 +183,19 @@ public class Cassa {
      */
     public void setOrdine(Ordine ordine) {
         this.ordine = ordine;
+    }
+
+    /**
+     * @return the dbCassa
+     */
+    public Casse getDbCassa() {
+        return dbCassa;
+    }
+
+    /**
+     * @param dbCassa the dbCassa to set
+     */
+    public void setDbCassa(Casse dbCassa) {
+        this.dbCassa = dbCassa;
     }
 }

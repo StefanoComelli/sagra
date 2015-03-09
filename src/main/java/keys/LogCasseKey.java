@@ -9,9 +9,9 @@ import java.util.Date;
  */
 public class LogCasseKey implements Serializable {
 
-    int idCassa;
-    int idGiorno;
-    Date dataOra;
+    private int idCassa;
+    private int idGiorno;
+    private Date dataOra;
 
     /**
      * @return the idCassa
@@ -55,4 +55,4 @@ public class LogCasseKey implements Serializable {
         this.dataOra = dataOra;
     }
 
-  }
+}

@@ -219,8 +219,9 @@ DROP TABLE IF EXISTS `operatori`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `operatori` (
   `idOperatore` int(11) NOT NULL,
-  `operatore` tinytext NOT NULL,
-  PRIMARY KEY (`idOperatore`)
+  `operatore` char(10) NOT NULL,
+  PRIMARY KEY (`idOperatore`),
+  UNIQUE KEY `operatore_UNIQUE` (`operatore`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -230,7 +231,7 @@ CREATE TABLE `operatori` (
 
 LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
-INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto'),(3,'Paperino');
+INSERT INTO `operatori` VALUES (3,'Paperino'),(1,'Pippo'),(2,'Pluto');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -440,4 +441,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-03 23:14:20
+-- Dump completed on 2015-03-09 21:06:26

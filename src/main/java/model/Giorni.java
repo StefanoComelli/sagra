@@ -65,6 +65,6 @@ public class Giorni extends AbstractData<Integer> {
      */
     @Override
     public String toString() {
-        return getId().toString() + "-" + getData().toString();
+        return getId().toString() + TO_STRING_SEP + getData().toString();
     }
 }

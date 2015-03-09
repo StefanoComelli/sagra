@@ -32,6 +32,6 @@ public class Casse extends AbstractData<Integer> {
      */
     @Override
     public String toString() {
-        return getId().toString() + "-" + getDescrizione();
+        return getId().toString() + TO_STRING_SEP + getDescrizione();
     }
 }

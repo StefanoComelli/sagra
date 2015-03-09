@@ -8,12 +8,12 @@ import org.jboss.logging.Logger;
  *
  * @author Stefano
  */
-public class LogCasse  extends AbstractData<LogCasseKey> {
+public class LogCasse extends AbstractData<LogCasseKey> {
 
     private static final Logger LOGGER = Logger.getLogger(LogCasse.class);
-    OperazioniCassa operazione;
-    Operatori operatore;
-    String descrizione;
+    private OperazioniCassa operazione;
+    private Operatori operatore;
+    private String descrizione;
 
     /**
      * @return the operazione
@@ -21,7 +21,7 @@ public class LogCasse  extends AbstractData<LogCasseKey> {
     public OperazioniCassa getOperazione() {
         return operazione;
     }
-    
+
     /**
      * @param operazione the operazione to set
      */
@@ -56,5 +56,5 @@ public class LogCasse  extends AbstractData<LogCasseKey> {
     public void setDescrizione(String descrizione) {
         this.descrizione = descrizione;
     }
-    
+
 }
