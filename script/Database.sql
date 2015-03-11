@@ -80,19 +80,19 @@ CREATE TABLE `commesse` (
   `idCassa` int(10) unsigned NOT NULL,
   `idOperatore` int(11) NOT NULL,
   `idStatoOrdine` int(10) NOT NULL,
-  `totalePagato` decimal(10,2) unsigned NOT NULL COMMENT 'Totale commessa',
-  `totaleContanti` decimal(10,2) unsigned NOT NULL COMMENT 'Totale contanti',
-  `totaleResto` decimal(10,2) unsigned NOT NULL COMMENT 'Resto',
-  `scontoApplicato` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto totale applicato',
+  `totalePagato` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Totale commessa',
+  `totaleContanti` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Totale contanti',
+  `totaleResto` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Resto',
+  `scontoApplicato` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Sconto totale applicato',
   `nomeCliente` text NOT NULL COMMENT 'Nome del cliente',
-  `tavoloClente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
-  `note` varchar(80) NOT NULL,
+  `tavoloCliente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
+  `note` varchar(80) DEFAULT NULL,
   PRIMARY KEY (`idCommessa`),
   KEY `idx_commesse_idCassa` (`idCassa`),
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -441,4 +441,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-09 21:06:26
+-- Dump completed on 2015-03-11 22:30:12

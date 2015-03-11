@@ -1,6 +1,7 @@
 package gui;
 
 import beans.Cassa;
+import beans.Ordine;
 
 /**
  *
@@ -30,11 +31,30 @@ public class CassaGui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jButtonEsce = new javax.swing.JButton();
+        jButtonNuovo = new javax.swing.JButton();
+        jButtonLegge = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+
+        jButtonEsce.setText("Esce");
+        jButtonEsce.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonEsceActionPerformed(evt);
+            }
+        });
+
+        jButtonNuovo.setText("Nuovo");
+        jButtonNuovo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonNuovoActionPerformed(evt);
+            }
+        });
+
+        jButtonLegge.setText("Legge");
 
         jMenu1.setText("File");
 
@@ -54,11 +74,27 @@ public class CassaGui extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jButtonEsce)
+                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButtonNuovo)
+                .addGap(70, 70, 70)
+                .addComponent(jButtonLegge)
+                .addContainerGap(196, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 279, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jButtonNuovo)
+                    .addComponent(jButtonLegge))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                .addComponent(jButtonEsce)
+                .addContainerGap())
         );
 
         pack();
@@ -68,8 +104,21 @@ public class CassaGui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuExitActionPerformed
 
+    private void jButtonEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEsceActionPerformed
+        // TODO add your handling code here:
+        System.exit(0);
+    }//GEN-LAST:event_jButtonEsceActionPerformed
+
+    private void jButtonNuovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuovoActionPerformed
+        // TODO add your handling code here:
+        Ordine ordine = new Ordine (this.cassa, "Adriano Celentano");
+    }//GEN-LAST:event_jButtonNuovoActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jButtonEsce;
+    private javax.swing.JButton jButtonLegge;
+    private javax.swing.JButton jButtonNuovo;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuExit;

@@ -24,7 +24,7 @@ import utils.IdDescr;
 public class Cassa {
 
     private static final Logger LOGGER = Logger.getLogger(Cassa.class);
-    private Casse dbCassa;
+    Casse cassa;
     private Date data;
     private Giorni giorno;
     private List<ListinoReale> listino;
@@ -50,7 +50,7 @@ public class Cassa {
         this.data = this.giorno.getData();
 
         CasseManager casseMgr = new CasseManager();
-        this.dbCassa = casseMgr.get(dCassa.getId());
+        this.cassa = casseMgr.get(dCassa.getId());
 
         OperatoriManager operatoriMgr = new OperatoriManager();
         this.operatore = operatoriMgr.get(dOperatore.getId());
@@ -69,8 +69,8 @@ public class Cassa {
     /**
      *
      */
-    private void RefreshListino() {
-        //   this.listino = listinoMgr.getBy(giorno.getId());
+    public final void RefreshListino() {
+           this.listino = listinoMgr.getByDate(giorno.getId());
     }
 
     /**
@@ -186,16 +186,16 @@ public class Cassa {
     }
 
     /**
-     * @return the dbCassa
+     * @return the cassa
      */
-    public Casse getDbCassa() {
-        return dbCassa;
+    public Casse getCassa() {
+        return cassa;
     }
 
     /**
-     * @param dbCassa the dbCassa to set
+     * @param cassa the cassa to set
      */
-    public void setDbCassa(Casse dbCassa) {
-        this.dbCassa = dbCassa;
+    public void setCassa(Casse cassa) {
+        this.cassa = cassa;
     }
 }

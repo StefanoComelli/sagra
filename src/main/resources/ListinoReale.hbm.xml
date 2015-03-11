@@ -3,12 +3,12 @@
 "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.ListinoReale" table="listinoreale" catalog="sagra">
-        <composite-id class="keys.ProdottiGiornalieraKey" name="id">
-            <key-property name="idGiorno" type="long">
+    <class name="model.ListinoReale" table="vistalistinoreale" catalog="sagra">
+        <composite-id class="keys.ListinoRealeKey" name="id">
+            <key-property name="idGiorno" type="integer">
                 <column name="idGiorno"/>
             </key-property> 
-            <key-property name="idProdotto" type="long">
+            <key-property name="idProdotto" type="integer">
                 <column name="idProdotto"/>
             </key-property>
         </composite-id>

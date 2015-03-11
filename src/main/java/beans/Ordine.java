@@ -6,8 +6,11 @@ import java.util.List;
 import model.Casse;
 import model.Commesse;
 import model.Giorni;
+import model.ListinoReale;
 import model.Operatori;
+import model.Sconti;
 import model.StatiOrdine;
+import model.Varianti;
 
 /**
  *
@@ -15,25 +18,33 @@ import model.StatiOrdine;
  */
 public class Ordine {
 
-    private Giorni giorno;
-    private Operatori operatore;
-    private Casse cassa;
+    Giorni giorno;
+    Operatori operatore;
+    Casse cassa;
+
+    List<ListinoReale> listino;
+    List<Varianti> varianti;
+    List<Sconti> sconti;
 
     private CommesseManager commessaMgr;
     private Commesse commessa;
     private List<StatiOrdine> statiOrdine;
     private StatiOrdine statoOrdine;
 
+    String cliente;
+
     /**
      *
      * @param cassa
-     * @param operatore
-     * @param giorno
+     * @param cliente
      */
-    public Ordine(Casse cassa, Operatori operatore, Giorni giorno) {
-        this.cassa = cassa;
-        this.operatore = operatore;
-        this.giorno = giorno;
+    public Ordine(Cassa cassa, String cliente) {
+        this.cassa = cassa.getCassa();
+        this.operatore = cassa.getOperatore();
+        this.giorno = cassa.getGiorno();
+        this.listino = cassa.getListino();
+        this.varianti = cassa.getVarianti();
+        this.sconti = cassa.getSconti();
 
         commessaMgr = new CommesseManager();
         this.commessa = new Commesse();
@@ -41,6 +52,13 @@ public class Ordine {
         StatiOrdineManager statiOrdineMgr = new StatiOrdineManager();
         statiOrdine = statiOrdineMgr.getElencoStati();
         statoOrdine = statiOrdineMgr.getDefault();
+        this.commessa.setStatoOrdine(statoOrdine);
+        this.commessa.setNomeCliente(cliente);
+        this.commessa.setTavoloCliente("a1");
+        this.commessa.setCassa(this.cassa);
+        this.commessa.setGiorno(giorno);
+        this.commessa.setOperatore(operatore);
+        //    this.commessa.set
         ApriOrdine();
     }
 
@@ -163,6 +181,62 @@ public class Ordine {
      */
     public void setCassa(Casse cassa) {
         this.cassa = cassa;
+    }
+
+    /**
+     * @return the listino
+     */
+    public List<ListinoReale> getListino() {
+        return listino;
+    }
+
+    /**
+     * @param listino the listino to set
+     */
+    public void setListino(List<ListinoReale> listino) {
+        this.listino = listino;
+    }
+
+    /**
+     * @return the varianti
+     */
+    public List<Varianti> getVarianti() {
+        return varianti;
+    }
+
+    /**
+     * @param varianti the varianti to set
+     */
+    public void setVarianti(List<Varianti> varianti) {
+        this.varianti = varianti;
+    }
+
+    /**
+     * @return the sconti
+     */
+    public List<Sconti> getSconti() {
+        return sconti;
+    }
+
+    /**
+     * @param sconti the sconti to set
+     */
+    public void setSconti(List<Sconti> sconti) {
+        this.sconti = sconti;
+    }
+
+    /**
+     * @return the cliente
+     */
+    public String getCliente() {
+        return cliente;
+    }
+
+    /**
+     * @param cliente the cliente to set
+     */
+    public void setCliente(String cliente) {
+        this.cliente = cliente;
     }
 
 }
