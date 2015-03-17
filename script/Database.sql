@@ -51,9 +51,9 @@ DROP TABLE IF EXISTS `categorieprodotti`;
 CREATE TABLE `categorieprodotti` (
   `idCategoriaProdotto` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `descrizione` text NOT NULL,
-  `ordineSequenziale` int(11) DEFAULT NULL,
+  `ordineSequenziale` int(11) NOT NULL,
   PRIMARY KEY (`idCategoriaProdotto`),
-  KEY `idxOrdineSequenziale` (`ordineSequenziale`)
+  UNIQUE KEY `idxOrdineSequenziale` (`ordineSequenziale`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -92,7 +92,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -113,8 +113,8 @@ DROP TABLE IF EXISTS `giorni`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `giorni` (
   `idGiorno` int(11) NOT NULL,
-  `data` date DEFAULT NULL,
-  `scontoGiorno` decimal(10,2) DEFAULT NULL,
+  `data` date NOT NULL,
+  `scontoGiorno` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`idGiorno`),
   UNIQUE KEY `idxData` (`data`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -142,7 +142,7 @@ CREATE TABLE `listinoprodotti` (
   `idCategoriaProdotto` int(10) unsigned NOT NULL,
   `nomeProdotto` tinytext NOT NULL COMMENT 'Nome identificativo del prodotto',
   `descrizione` tinytext NOT NULL COMMENT 'Descrizione estesa del prodotto',
-  `prezzoUnitario` decimal(10,2) NOT NULL,
+  `prezzoUnitario` decimal(10,2) NOT NULL DEFAULT '0.00',
   PRIMARY KEY (`idProdotto`),
   KEY `idxCategoriaProdotto` (`idCategoriaProdotto`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8;
@@ -269,13 +269,14 @@ DROP TABLE IF EXISTS `prodottigiornaliera`;
 CREATE TABLE `prodottigiornaliera` (
   `idGiorno` int(10) NOT NULL,
   `idProdotto` int(10) unsigned NOT NULL COMMENT 'identifica il prodotto nella tabella listino',
-  `disponibilita` int(10) unsigned NOT NULL COMMENT 'quantità disponibile all''inizio dell''esercizio',
-  `quantitaVenduta` int(10) unsigned NOT NULL COMMENT 'quantità venduta fino al momento nel giorno scelto',
-  `quantitaWarning` int(10) unsigned NOT NULL COMMENT 'Quantità al di sotto della quale visualizzare un warning',
-  `scontoGiorno` decimal(10,2) unsigned NOT NULL COMMENT 'Sconto da applicare nel giorno selezionato',
-  `sospensione` tinyint(1) NOT NULL COMMENT 'Sospensione momentanea della vendita',
+  `disponibilita` int(10) NOT NULL DEFAULT '0' COMMENT 'quantità disponibile all''inizio dell''esercizio',
+  `quantitaVenduta` int(10) NOT NULL DEFAULT '0' COMMENT 'quantità venduta fino al momento nel giorno scelto',
+  `quantitaWarning` int(10) NOT NULL DEFAULT '0' COMMENT 'Quantità al di sotto della quale visualizzare un warning',
+  `scontoGiorno` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Sconto da applicare nel giorno selezionato',
+  `sospensione` tinyint(1) NOT NULL DEFAULT '0' COMMENT 'Sospensione momentanea della vendita',
   `motivoSospensione` text COMMENT 'Motivo della sospensione',
-  PRIMARY KEY (`idGiorno`,`idProdotto`)
+  PRIMARY KEY (`idGiorno`,`idProdotto`),
+  KEY `idxAttivi` (`sospensione`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -299,10 +300,10 @@ DROP TABLE IF EXISTS `righecommesse`;
 CREATE TABLE `righecommesse` (
   `idRiga` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
   `idCommessa` int(11) NOT NULL COMMENT 'Chiave primaria',
-  `idProdotto` int(11) DEFAULT NULL COMMENT 'Identifica il prodotto venduto',
-  `varianti` text NOT NULL COMMENT 'Varianti applicate alla riga',
-  `prezzoListino` decimal(10,2) NOT NULL COMMENT 'Prezzo listino applicato',
-  `scontoApplicato` decimal(10,2) NOT NULL COMMENT 'Sconto applicato',
+  `idProdotto` int(11) NOT NULL COMMENT 'Identifica il prodotto venduto',
+  `varianti` text COMMENT 'Varianti applicate alla riga',
+  `prezzoListino` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Prezzo listino applicato',
+  `scontoApplicato` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Sconto applicato',
   PRIMARY KEY (`idRiga`,`idCommessa`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -327,7 +328,7 @@ DROP TABLE IF EXISTS `sconti`;
 CREATE TABLE `sconti` (
   `idSconto` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
   `descrizione` text NOT NULL COMMENT 'Descrizione dello sconto',
-  `sconto` decimal(5,2) NOT NULL COMMENT 'Sconto da applicare',
+  `sconto` decimal(5,2) NOT NULL DEFAULT '0.00' COMMENT 'Sconto da applicare',
   PRIMARY KEY (`idSconto`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -354,7 +355,7 @@ CREATE TABLE `statiordine` (
   `ordineSequenziale` int(11) NOT NULL,
   `descrizione` tinytext NOT NULL,
   PRIMARY KEY (`idStatoOrdine`),
-  KEY `idx_statiordine_ordineSequenziale` (`ordineSequenziale`)
+  UNIQUE KEY `idx_statiordine_ordineSequenziale` (`ordineSequenziale`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -441,4 +442,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-11 22:30:12
+-- Dump completed on 2015-03-17 20:32:45
