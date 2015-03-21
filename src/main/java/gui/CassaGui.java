@@ -2,6 +2,7 @@ package gui;
 
 import beans.Cassa;
 import beans.Ordine;
+import static java.awt.event.MouseEvent.*;
 
 /**
  *
@@ -34,7 +35,13 @@ public class CassaGui extends javax.swing.JFrame {
         jButtonEsce = new javax.swing.JButton();
         jButtonNuovo = new javax.swing.JButton();
         jButtonLegge = new javax.swing.JButton();
-        jMenuBar1 = new javax.swing.JMenuBar();
+        jLblCliente = new javax.swing.JLabel();
+        jTxtCliente = new javax.swing.JTextField();
+        jLblTavolo = new javax.swing.JLabel();
+        jTxtTavolo = new javax.swing.JTextField();
+        jScrollPanel = new javax.swing.JScrollPane();
+        jTblLista = new javax.swing.JTable();
+        jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
 
@@ -56,6 +63,44 @@ public class CassaGui extends javax.swing.JFrame {
 
         jButtonLegge.setText("Legge");
 
+        jLblCliente.setText("Cliente:");
+
+        jLblTavolo.setText("Tavolo:");
+
+        jTblLista.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "Prodotto", "Prezzo", "Sconto", "Quantità", "Note"
+            }
+        ) {
+            Class[] types = new Class [] {
+                java.lang.String.class, java.lang.Float.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
+            };
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false
+            };
+
+            public Class getColumnClass(int columnIndex) {
+                return types [columnIndex];
+            }
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jTblLista.getTableHeader().setReorderingAllowed(false);
+        jTblLista.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTblListaMouseClicked(evt);
+            }
+        });
+        jScrollPanel.setViewportView(jTblLista);
+
         jMenu1.setText("File");
 
         jMenuExit.setText("Esce");
@@ -66,24 +111,39 @@ public class CassaGui extends javax.swing.JFrame {
         });
         jMenu1.add(jMenuExit);
 
-        jMenuBar1.add(jMenu1);
+        jMenuBar.add(jMenu1);
 
-        setJMenuBar(jMenuBar1);
+        setJMenuBar(jMenuBar);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jButtonEsce)
-                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButtonNuovo)
-                .addGap(70, 70, 70)
-                .addComponent(jButtonLegge)
-                .addContainerGap(196, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButtonEsce))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jButtonNuovo)
+                                        .addGap(70, 70, 70)
+                                        .addComponent(jButtonLegge))
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(jLblCliente)
+                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                        .addComponent(jTxtCliente)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jLblTavolo)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 431, Short.MAX_VALUE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -92,7 +152,15 @@ public class CassaGui extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButtonNuovo)
                     .addComponent(jButtonLegge))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 211, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblCliente)
+                    .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblTavolo)
+                    .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 36, Short.MAX_VALUE)
                 .addComponent(jButtonEsce)
                 .addContainerGap())
         );
@@ -111,16 +179,31 @@ public class CassaGui extends javax.swing.JFrame {
 
     private void jButtonNuovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuovoActionPerformed
         // TODO add your handling code here:
-        Ordine ordine = new Ordine (this.cassa, "Adriano Celentano");
+        Ordine ordine = new Ordine(this.cassa, "Adriano Celentano");
     }//GEN-LAST:event_jButtonNuovoActionPerformed
+
+    private void jTblListaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListaMouseClicked
+        // TODO add your handling code here:
+        int colonna = jTblLista.getSelectedColumn();
+        int riga = jTblLista.getSelectedRow();
+        if (evt.getButton() == BUTTON3) {
+            System.out.printf("Colonna %d", jTblLista.getSelectedColumn());
+        }
+    }//GEN-LAST:event_jTblListaMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButtonEsce;
     private javax.swing.JButton jButtonLegge;
     private javax.swing.JButton jButtonNuovo;
+    private javax.swing.JLabel jLblCliente;
+    private javax.swing.JLabel jLblTavolo;
     private javax.swing.JMenu jMenu1;
-    private javax.swing.JMenuBar jMenuBar1;
+    private javax.swing.JMenuBar jMenuBar;
     private javax.swing.JMenuItem jMenuExit;
+    private javax.swing.JScrollPane jScrollPanel;
+    private javax.swing.JTable jTblLista;
+    private javax.swing.JTextField jTxtCliente;
+    private javax.swing.JTextField jTxtTavolo;
     // End of variables declaration//GEN-END:variables
 }

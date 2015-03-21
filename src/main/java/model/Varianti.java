@@ -40,4 +40,14 @@ public class Varianti extends AbstractData<Integer> {
     public void setCategoriaProdotto(CategorieProdotti categoriaProdotto) {
         this.categoriaProdotto = categoriaProdotto;
     }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getVariante();
+    }
+
 }

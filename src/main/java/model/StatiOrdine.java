@@ -41,4 +41,12 @@ public class StatiOrdine extends AbstractData<Integer> {
         this.ordineSequenziale = ordineSequenziale;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + TO_STRING_SEP + getDescrizione();
+    }
 }

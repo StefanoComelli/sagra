@@ -26,4 +26,12 @@ public class OperazioniCassa extends AbstractData<String> {
         this.descrizione = descrizione;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId() + TO_STRING_SEP + getDescrizione();
+    }
 }

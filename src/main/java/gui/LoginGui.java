@@ -27,7 +27,7 @@ public class LoginGui extends javax.swing.JFrame {
         String operatore = (String) jCmbOperatore.getSelectedItem();
         // String giorno, String cassa, String operatore
         CassaGui cassaGui = new CassaGui(giorno, cassa, operatore);
-   cassaGui.setVisible(true);
+        cassaGui.setVisible(true);
     }
 
     /**

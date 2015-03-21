@@ -118,4 +118,12 @@ public class ProdottiGiornaliera extends AbstractData<ProdottiGiornalieraKey> {
         this.motivoSospensione = motivoSospensione;
     }
 
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + TO_STRING_SEP + getProdotto().getDescrizione();
+    }
 }

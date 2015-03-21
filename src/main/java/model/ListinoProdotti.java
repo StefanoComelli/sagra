@@ -70,4 +70,13 @@ public class ListinoProdotti extends AbstractData<Integer> {
     public void setPrezzoUnitario(float prezzoUnitario) {
         this.prezzoUnitario = prezzoUnitario;
     }
+
+    /**
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + TO_STRING_SEP + getDescrizione();
+    }
 }

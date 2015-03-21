@@ -301,6 +301,7 @@ CREATE TABLE `righecommesse` (
   `idRiga` int(11) NOT NULL AUTO_INCREMENT COMMENT 'Chiave primaria',
   `idCommessa` int(11) NOT NULL COMMENT 'Chiave primaria',
   `idProdotto` int(11) NOT NULL COMMENT 'Identifica il prodotto venduto',
+  `quantita` int(3) NOT NULL DEFAULT '1',
   `varianti` text COMMENT 'Varianti applicate alla riga',
   `prezzoListino` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Prezzo listino applicato',
   `scontoApplicato` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Sconto applicato',
@@ -442,4 +443,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-17 20:32:45
+-- Dump completed on 2015-03-21 10:25:28

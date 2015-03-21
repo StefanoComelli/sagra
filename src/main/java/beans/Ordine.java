@@ -58,19 +58,10 @@ public class Ordine {
         this.commessa.setCassa(this.cassa);
         this.commessa.setGiorno(giorno);
         this.commessa.setOperatore(operatore);
-        //    this.commessa.set
-        ApriOrdine();
-    }
-
-    /**
-     *
-     */
-    public void ApriOrdine() {
         this.commessa.setCassa(getCassa());
         this.commessa.setOperatore(getOperatore());
         this.commessa.setGiorno(getGiorno());
         getCommessaMgr().insert(commessa);
-
     }
 
     /**

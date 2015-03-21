@@ -40,6 +40,7 @@ public class IdDescr {
             idString = getSplit()[0];
             id = Integer.parseInt(idString);
         } catch (Exception e) {
+            LOGGER.warn(e);
             id = 0;
         }
 

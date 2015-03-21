@@ -56,5 +56,12 @@ public class CategorieProdotti extends AbstractData<Integer> {
     public void setOrdineSequenziale(int ordineSequenziale) {
         this.ordineSequenziale = ordineSequenziale;
     }
-
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String toString() {
+        return getId().toString() + TO_STRING_SEP + getDescrizione();
+    }
 }

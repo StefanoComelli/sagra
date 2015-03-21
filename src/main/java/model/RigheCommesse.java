@@ -12,6 +12,7 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
 
     private static final Logger LOGGER = Logger.getLogger(RigheCommesse.class);
     private ListinoProdotti prodotto;
+    int quantita;
     private String varianti;
     private float prezzoListino;
     private float scontoApplicato;
@@ -70,5 +71,19 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
      */
     public void setScontoApplicato(float scontoApplicato) {
         this.scontoApplicato = scontoApplicato;
+    }
+
+    /**
+     * @return the quantita
+     */
+    public int getQuantita() {
+        return quantita;
+    }
+
+    /**
+     * @param quantita the quantita to set
+     */
+    public void setQuantita(int quantita) {
+        this.quantita = quantita;
     }
 }

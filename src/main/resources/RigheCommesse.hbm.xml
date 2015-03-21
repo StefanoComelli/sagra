@@ -15,6 +15,9 @@
         <many-to-one name="prodotto" class="model.ListinoProdotti" fetch="select" lazy="false">
             <column name="idProdotto"  not-null="true" />
         </many-to-one>
+        <property name="quantita" type="int">
+            <column name="quantita"  not-null="true" />
+        </property>
         <property name="varianti" type="string">
             <column name="varianti" length="65535" not-null="true" />
         </property>
