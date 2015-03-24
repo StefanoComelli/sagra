@@ -286,7 +286,7 @@ CREATE TABLE `prodottigiornaliera` (
 
 LOCK TABLES `prodottigiornaliera` WRITE;
 /*!40000 ALTER TABLE `prodottigiornaliera` DISABLE KEYS */;
-INSERT INTO `prodottigiornaliera` VALUES (1,1001,100,0,0,0.00,0,' ');
+INSERT INTO `prodottigiornaliera` VALUES (1,1000,999,0,0,0.00,0,NULL),(1,1001,999,0,0,0.00,0,NULL),(1,1002,999,0,0,0.00,0,NULL),(1,1003,999,0,0,0.00,0,NULL),(1,2000,999,0,0,0.00,0,NULL),(1,2001,999,0,0,0.00,0,NULL),(2,1000,999,0,0,0.00,0,NULL),(2,1001,999,0,0,0.00,0,NULL),(2,1002,999,0,0,0.00,0,NULL),(2,1003,999,0,0,0.00,0,NULL),(2,2000,999,0,0,0.00,0,NULL),(2,2001,999,0,0,0.00,0,NULL),(3,1000,999,0,0,0.00,0,NULL),(3,1001,999,0,0,0.00,0,NULL),(3,1002,999,0,0,0.00,0,NULL),(3,1003,999,0,0,0.00,0,NULL),(3,2000,999,0,0,0.00,0,NULL),(3,2001,999,0,0,0.00,0,NULL),(4,1000,999,0,0,0.00,0,NULL),(4,1001,999,0,0,0.00,0,NULL),(4,1002,999,0,0,0.00,0,NULL),(4,1003,999,0,0,0.00,0,NULL),(4,2000,999,0,0,0.00,0,NULL),(4,2001,999,0,0,0.00,0,NULL),(5,1000,999,0,0,0.00,0,NULL),(5,1001,999,0,0,0.00,0,NULL),(5,1002,999,0,0,0.00,0,NULL),(5,1003,999,0,0,0.00,0,NULL),(5,2000,999,0,0,0.00,0,NULL),(5,2001,999,0,0,0.00,0,NULL);
 /*!40000 ALTER TABLE `prodottigiornaliera` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -409,6 +409,7 @@ SET character_set_client = utf8;
   `idGiorno` tinyint NOT NULL,
   `nomeProdotto` tinyint NOT NULL,
   `prezzoUnitario` tinyint NOT NULL,
+  `descrizione` tinyint NOT NULL,
   `disponibilita` tinyint NOT NULL,
   `quantitaVenduta` tinyint NOT NULL,
   `quantitaWarning` tinyint NOT NULL
@@ -429,7 +430,7 @@ SET character_set_client = @saved_cs_client;
 /*!50001 SET collation_connection      = utf8_general_ci */;
 /*!50001 CREATE ALGORITHM=UNDEFINED */
 /*!50013 DEFINER=`root`@`localhost` SQL SECURITY DEFINER */
-/*!50001 VIEW `vistalistinoreale` AS select `l`.`idProdotto` AS `idProdotto`,`l`.`idCategoriaProdotto` AS `idCategoriaProdotto`,`g`.`idGiorno` AS `idGiorno`,`l`.`nomeProdotto` AS `nomeProdotto`,`l`.`prezzoUnitario` AS `prezzoUnitario`,`g`.`disponibilita` AS `disponibilita`,`g`.`quantitaVenduta` AS `quantitaVenduta`,`g`.`quantitaWarning` AS `quantitaWarning` from ((`listinoprodotti` `l` join `prodottigiornaliera` `g` on((`l`.`idProdotto` = `g`.`idProdotto`))) join `categorieprodotti` `cp` on((`l`.`idCategoriaProdotto` = `cp`.`idCategoriaProdotto`))) where (`g`.`sospensione` = 0) order by `cp`.`ordineSequenziale`,`l`.`nomeProdotto` */;
+/*!50001 VIEW `vistalistinoreale` AS select `l`.`idProdotto` AS `idProdotto`,`l`.`idCategoriaProdotto` AS `idCategoriaProdotto`,`g`.`idGiorno` AS `idGiorno`,`l`.`nomeProdotto` AS `nomeProdotto`,`l`.`prezzoUnitario` AS `prezzoUnitario`,`l`.`descrizione` AS `descrizione`,`g`.`disponibilita` AS `disponibilita`,`g`.`quantitaVenduta` AS `quantitaVenduta`,`g`.`quantitaWarning` AS `quantitaWarning` from ((`listinoprodotti` `l` join `prodottigiornaliera` `g` on((`l`.`idProdotto` = `g`.`idProdotto`))) join `categorieprodotti` `cp` on((`l`.`idCategoriaProdotto` = `cp`.`idCategoriaProdotto`))) where (`g`.`sospensione` = 0) order by `cp`.`ordineSequenziale`,`l`.`nomeProdotto` */;
 /*!50001 SET character_set_client      = @saved_cs_client */;
 /*!50001 SET character_set_results     = @saved_cs_results */;
 /*!50001 SET collation_connection      = @saved_col_connection */;
@@ -443,4 +444,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-21 10:25:28
+-- Dump completed on 2015-03-24 22:42:13

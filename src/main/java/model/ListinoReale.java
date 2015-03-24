@@ -3,6 +3,7 @@ package model;
 import abstr.AbstractData;
 import keys.ListinoRealeKey;
 import org.jboss.logging.Logger;
+import utils.Valuta;
 
 /**
  *
@@ -115,5 +116,19 @@ public class ListinoReale extends AbstractData<ListinoRealeKey> {
      */
     public void setQuantitaWarning(int quantitaWarning) {
         this.quantitaWarning = quantitaWarning;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Object[] getRow() {
+        Valuta prezzo = new Valuta(prezzoUnitario);
+        return new Object[]{
+            categoriaProdotto.getDescrizione(),
+            nomeProdotto,
+            prezzo.toString(),
+            descrizione
+        };
     }
 }

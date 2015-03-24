@@ -15,6 +15,9 @@
         <property name="nomeProdotto" type="string">
             <column name="nomeProdotto" length="65535" not-null="true" />
         </property>
+        <property name="descrizione" type="string">
+            <column name="descrizione" length="65535" not-null="false" />
+        </property>
         <property name="prezzoUnitario" type="float">
             <column name="prezzounitario" not-null="true" />
         </property> 

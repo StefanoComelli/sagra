@@ -3,6 +3,7 @@ package model;
 import abstr.AbstractData;
 import keys.RigheCommesseKey;
 import org.jboss.logging.Logger;
+import utils.Valuta;
 
 /**
  *
@@ -85,5 +86,16 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
      */
     public void setQuantita(int quantita) {
         this.quantita = quantita;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Object[] getRow() {
+        Valuta prezzo = new Valuta(prezzoListino);
+        return new Object[]{
+            prodotto.getNomeProdotto(),
+            prezzo.toString(),};
     }
 }

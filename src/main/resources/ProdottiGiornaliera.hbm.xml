@@ -13,16 +13,16 @@
             </key-property>
         </composite-id>
         <property name="disponibilita" type="integer">
-            <column name="disponibilita"   not-null="true" />
+            <column name="disponibilita" not-null="true" />
         </property>
         <property name="quantitaVenduta" type="integer">
-            <column name="quantitaVenduta"   not-null="true" />
+            <column name="quantitaVenduta" not-null="true" />
         </property>
         <property name="quantitaWarning" type="integer">
-            <column name="quantitaWarning"   not-null="true" />
+            <column name="quantitaWarning" not-null="true" />
         </property>
         <property name="scontoGiorno" type="float">
-            <column name="scontoGiorno"   not-null="true" />
+            <column name="scontoGiorno" not-null="true" />
         </property>
         <property name="sospensione" type="integer">
             <column name="sospensione" not-null="true" />

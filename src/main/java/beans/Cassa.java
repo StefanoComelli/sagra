@@ -1,6 +1,7 @@
 package beans;
 
 import Manager.CasseManager;
+import Manager.CategorieProdottiManager;
 import Manager.GiorniManager;
 import Manager.ListinoRealeManager;
 import Manager.OperatoriManager;
@@ -9,6 +10,7 @@ import Manager.VariantiManager;
 import java.util.Date;
 import java.util.List;
 import model.Casse;
+import model.CategorieProdotti;
 import model.Giorni;
 import model.ListinoReale;
 import model.Operatori;
@@ -33,6 +35,7 @@ public class Cassa {
     private ListinoRealeManager listinoMgr;
     private List<Sconti> sconti;
     private Ordine ordine;
+    private List<CategorieProdotti> categorie;
 
     /**
      *
@@ -41,6 +44,7 @@ public class Cassa {
      * @param operatore
      */
     public Cassa(String giorno, String cassa, String operatore) {
+
         IdDescr dGiorno = new IdDescr(giorno);
         IdDescr dCassa = new IdDescr(cassa);
         IdDescr dOperatore = new IdDescr(operatore);
@@ -62,6 +66,9 @@ public class Cassa {
         ScontiManager scontiMgr = new ScontiManager();
         sconti = scontiMgr.getAll();
 
+        CategorieProdottiManager categorieProdottiManager = new CategorieProdottiManager();
+        categorie = categorieProdottiManager.getAll();
+
         RefreshListino();
 
     }
@@ -70,7 +77,7 @@ public class Cassa {
      *
      */
     public final void RefreshListino() {
-           this.listino = listinoMgr.getByDate(giorno.getId());
+        this.listino = listinoMgr.getByDate(giorno.getId());
     }
 
     /**
@@ -197,5 +204,19 @@ public class Cassa {
      */
     public void setCassa(Casse cassa) {
         this.cassa = cassa;
+    }
+
+    /**
+     * @return the categorie
+     */
+    public List<CategorieProdotti> getCategorie() {
+        return categorie;
+    }
+
+    /**
+     * @param categorie the categorie to set
+     */
+    public void setCategorie(List<CategorieProdotti> categorie) {
+        this.categorie = categorie;
     }
 }
