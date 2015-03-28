@@ -2,6 +2,7 @@ package utils;
 
 import java.text.NumberFormat;
 import java.util.Locale;
+import org.jboss.logging.Logger;
 
 /**
  *
@@ -9,6 +10,7 @@ import java.util.Locale;
  */
 public class Valuta {
 
+    private static final Logger LOGGER = Logger.getLogger(Valuta.class);
     private float valore;
 
     /**
@@ -17,6 +19,35 @@ public class Valuta {
      */
     public Valuta(float valore) {
         this.valore = valore;
+    }
+
+    /**
+     *
+     * @param valore
+     */
+    public Valuta(String valore) {
+        try {
+            String tmp = valore.substring(2);
+            this.valore = Float.valueOf(tmp);
+        } catch (Exception e) {
+            this.valore = 0;
+        }
+
+    }
+
+    /**
+     *
+     * @param valore
+     */
+    public Valuta(Object valore) {
+        try {
+            String tV = (String) valore;
+            String tmp = (String) tV.substring(2);
+            this.valore = Float.valueOf(tmp);
+        } catch (Exception e) {
+            this.valore = 0;
+        }
+
     }
 
     /**

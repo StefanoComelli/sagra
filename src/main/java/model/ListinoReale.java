@@ -3,6 +3,7 @@ package model;
 import abstr.AbstractData;
 import keys.ListinoRealeKey;
 import org.jboss.logging.Logger;
+import utils.IdDescr;
 import utils.Valuta;
 
 /**
@@ -122,11 +123,27 @@ public class ListinoReale extends AbstractData<ListinoRealeKey> {
      *
      * @return
      */
+    public IdDescr getIdDescrCategoria() {
+        return new IdDescr(categoriaProdotto.getId(), categoriaProdotto.getDescrizione());
+    }
+
+    /**
+     *
+     * @return
+     */
+    public IdDescr getIdDescrProdotto() {
+        return new IdDescr(this.getId().getIdProdotto(), nomeProdotto);
+    }
+
+    /**
+     *
+     * @return
+     */
     public Object[] getRow() {
         Valuta prezzo = new Valuta(prezzoUnitario);
         return new Object[]{
-            categoriaProdotto.getDescrizione(),
-            nomeProdotto,
+            getIdDescrCategoria().getIdDescr(),//categoriaProdotto.getDescrizione(),
+            getIdDescrProdotto().getIdDescr(),//nomeProdotto,
             prezzo.toString(),
             descrizione
         };

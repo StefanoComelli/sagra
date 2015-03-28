@@ -12,25 +12,11 @@ import utils.Valuta;
 public class RigheCommesse extends AbstractData<RigheCommesseKey> {
 
     private static final Logger LOGGER = Logger.getLogger(RigheCommesse.class);
-    private ListinoProdotti prodotto;
-    int quantita;
+    private int idProdotto;
+    private int quantita;
     private String varianti;
     private float prezzoListino;
     private float scontoApplicato;
-
-    /**
-     * @return the prodotto
-     */
-    public ListinoProdotti getProdotto() {
-        return prodotto;
-    }
-
-    /**
-     * @param prodotto the prodotto to set
-     */
-    public void setProdotto(ListinoProdotti prodotto) {
-        this.prodotto = prodotto;
-    }
 
     /**
      * @return the varianti
@@ -95,7 +81,21 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
     public Object[] getRow() {
         Valuta prezzo = new Valuta(prezzoListino);
         return new Object[]{
-            prodotto.getNomeProdotto(),
+            idProdotto,//prodotto.getNomeProdotto(),
             prezzo.toString(),};
+    }
+
+    /**
+     * @return the idProdotto
+     */
+    public int getIdProdotto() {
+        return idProdotto;
+    }
+
+    /**
+     * @param idProdotto the idProdotto to set
+     */
+    public void setIdProdotto(int idProdotto) {
+        this.idProdotto = idProdotto;
     }
 }

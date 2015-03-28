@@ -1,13 +1,16 @@
-package utils;
+package guiUtils;
 
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
+import org.jboss.logging.Logger;
 
 /**
  *
  * @author Stefano
  */
 public class GuiUtils {
+
+    private static final Logger LOGGER = Logger.getLogger(GuiUtils.class);
 
     /**
      *

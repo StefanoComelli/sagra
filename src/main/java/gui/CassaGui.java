@@ -6,7 +6,11 @@ import static java.awt.event.MouseEvent.*;
 import javax.swing.table.DefaultTableModel;
 import model.CategorieProdotti;
 import model.ListinoReale;
-import utils.GuiUtils;
+import guiUtils.GuiUtils;
+import utils.IdDescr;
+import guiUtils.TableMouseListener;
+import model.RigheCommesse;
+import utils.Valuta;
 
 /**
  *
@@ -15,6 +19,11 @@ import utils.GuiUtils;
 public class CassaGui extends javax.swing.JFrame {
 
     private final Cassa cassa;
+
+    private final int TBL_LISTINO_CATEGORIA = 0;
+    private final int TBL_LISTINO_PRODOTTO = 0;
+    private final int TBL_LISTINO_PREZZO = 0;
+    private final int TBL_LISTINO_DESCRIZIONE = 0;
 
     /**
      *
@@ -25,7 +34,54 @@ public class CassaGui extends javax.swing.JFrame {
     public CassaGui(String giorno, String cassa, String operatore) {
         this.cassa = new Cassa(giorno, cassa, operatore);
         initComponents();
+        SetupGui();
+        SetupCategorie();
         RefreshListino();
+        StatoBottoni();
+    }
+
+    /**
+     *
+     */
+    private void SetupGui() {
+
+        jTblListino.setComponentPopupMenu(jPopListino);
+        jTblListino.addMouseListener(new TableMouseListener(jTblListino));
+
+        jTblOrdine.setComponentPopupMenu(jPopOrdine);
+        jTblOrdine.addMouseListener(new TableMouseListener(jTblOrdine));
+    }
+
+    /**
+     *
+     */
+    private void SetupCategorie() {
+        jCmbCategoria.removeAllItems();
+        jCmbCategoria.addItem("");
+        for (CategorieProdotti categoria : cassa.getCategorie()) {
+            jCmbCategoria.addItem(categoria.toString());
+        }
+    }
+
+    /**
+     *
+     */
+    private void AggiungidaListino() {
+        //TODO
+
+        int row = jTblListino.getSelectedRow();
+        RigheCommesse riga = new RigheCommesse();
+        IdDescr prodotto;
+
+        Valuta prezzo;
+        DefaultTableModel model = (DefaultTableModel) jTblListino.getSelectionModel();
+
+        prodotto = new IdDescr(model.getValueAt(row, TBL_LISTINO_PRODOTTO));
+
+        prezzo = new Valuta(model.getValueAt(row, TBL_LISTINO_PREZZO));
+        riga.setIdProdotto(prodotto.getId());
+        riga.setPrezzoListino(prezzo.getValore());
+
     }
 
     /**
@@ -33,18 +89,39 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void RefreshListino() {
 
+        boolean flgFiltro = false;
+        int idCategoriaFiltro;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
+
+        IdDescr idCategoria = new IdDescr((String) jCmbCategoria.getSelectedItem());
+        idCategoriaFiltro = idCategoria.getId();
+        if (idCategoriaFiltro != 0) {
+            flgFiltro = true;
+        }
 
         GuiUtils.EmptyJtable(jTblListino);
         for (ListinoReale prodotto : cassa.getListino()) {
-            model.addRow(prodotto.getRow());
+            boolean flgAdd = true;
+            if (flgFiltro) {
+                if (prodotto.getCategoriaProdotto().getId() != idCategoriaFiltro) {
+                    flgAdd = false;
+                }
+            }
+
+            if (flgAdd) {
+                model.addRow(prodotto.getRow());
+            }
         }
 
-        jCmbCategoria.removeAllItems();
-        jCmbCategoria.addItem("");
-        for (CategorieProdotti categoria : cassa.getCategorie()) {
-            jCmbCategoria.addItem(categoria.toString());
-        }
+    }
+
+    /**
+     *
+     */
+    private void StatoBottoni() {
+        jBtnElimina.setEnabled(jTblOrdine.getSelectedRowCount() != 0);
+        jBtnAggiungi.setEnabled(jTblListino.getSelectedRowCount() != 0);
+        //jBtnAnnullafiltro.setEnabled(jCmbCategoria.getSelectedItem()!=null);
     }
 
     /**
@@ -56,6 +133,13 @@ public class CassaGui extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPopListino = new javax.swing.JPopupMenu();
+        jMenuAggiungi = new javax.swing.JMenuItem();
+        jPopOrdine = new javax.swing.JPopupMenu();
+        jMenuElimina = new javax.swing.JMenuItem();
+        jMenuVarianti = new javax.swing.JMenuItem();
+        jMenuInc = new javax.swing.JMenuItem();
+        jMenuDec = new javax.swing.JMenuItem();
         jButtonEsce = new javax.swing.JButton();
         jButtonNuovo = new javax.swing.JButton();
         jButtonLegge = new javax.swing.JButton();
@@ -63,17 +147,49 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtCliente = new javax.swing.JTextField();
         jLblTavolo = new javax.swing.JLabel();
         jTxtTavolo = new javax.swing.JTextField();
-        jScrollPanel = new javax.swing.JScrollPane();
+        jScrollOrdine = new javax.swing.JScrollPane();
         jTblOrdine = new javax.swing.JTable();
-        jScrollPanel1 = new javax.swing.JScrollPane();
+        jScrollListino = new javax.swing.JScrollPane();
         jTblListino = new javax.swing.JTable();
         jCmbCategoria = new javax.swing.JComboBox();
         jLblFiltro = new javax.swing.JLabel();
+        jBtnAnnullafiltro = new javax.swing.JButton();
+        jBtnAggiungi = new javax.swing.JButton();
+        jBtnElimina = new javax.swing.JButton();
+        jBtnVarianti = new javax.swing.JButton();
+        jBtnInc = new javax.swing.JButton();
+        jbtnDec = new javax.swing.JButton();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
 
+        jMenuAggiungi.setText("Aggiungi");
+        jMenuAggiungi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jMenuAggiungiMouseClicked(evt);
+            }
+        });
+        jMenuAggiungi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuAggiungiActionPerformed(evt);
+            }
+        });
+        jPopListino.add(jMenuAggiungi);
+
+        jMenuElimina.setText("Elimina");
+        jPopOrdine.add(jMenuElimina);
+
+        jMenuVarianti.setText("Varianti");
+        jPopOrdine.add(jMenuVarianti);
+
+        jMenuInc.setText("+1");
+        jPopOrdine.add(jMenuInc);
+
+        jMenuDec.setText("-1");
+        jPopOrdine.add(jMenuDec);
+
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Sagra Sant'Andrea: Cassa");
 
         jButtonEsce.setText("Esce");
         jButtonEsce.addActionListener(new java.awt.event.ActionListener() {
@@ -124,7 +240,7 @@ public class CassaGui extends javax.swing.JFrame {
                 jTblOrdineMouseClicked(evt);
             }
         });
-        jScrollPanel.setViewportView(jTblOrdine);
+        jScrollOrdine.setViewportView(jTblOrdine);
 
         jTblListino.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -149,21 +265,44 @@ public class CassaGui extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTblListino.setToolTipText("");
         jTblListino.getTableHeader().setReorderingAllowed(false);
         jTblListino.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jTblListinoMouseClicked(evt);
             }
         });
-        jScrollPanel1.setViewportView(jTblListino);
+        jScrollListino.setViewportView(jTblListino);
 
-        jCmbCategoria.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jCmbCategoriaMouseClicked(evt);
+        jCmbCategoria.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                jCmbCategoriaItemStateChanged(evt);
             }
         });
 
         jLblFiltro.setText("Filtro:");
+
+        jBtnAnnullafiltro.setText("Annulla Filtro");
+        jBtnAnnullafiltro.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jBtnAnnullafiltroMouseClicked(evt);
+            }
+        });
+
+        jBtnAggiungi.setText("<- Aggiungi");
+        jBtnAggiungi.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jBtnAggiungiMouseClicked(evt);
+            }
+        });
+
+        jBtnElimina.setText("Elimina");
+
+        jBtnVarianti.setText("Varianti...");
+
+        jBtnInc.setText("+1");
+
+        jbtnDec.setText("-1");
 
         jMenu1.setText("File");
 
@@ -185,36 +324,52 @@ public class CassaGui extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jButtonNuovo)
-                                .addGap(70, 70, 70)
-                                .addComponent(jButtonLegge))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLblCliente)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jTxtCliente)))
+                        .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLblTavolo)
+                        .addComponent(jBtnVarianti)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBtnInc)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jbtnDec))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jButtonNuovo)
+                                    .addGap(70, 70, 70)
+                                    .addComponent(jButtonLegge))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLblCliente)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jTxtCliente)))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jLblTavolo)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jButtonEsce))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jScrollPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jButtonEsce))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLblFiltro)
                                 .addGap(18, 18, 18)
-                                .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(0, 4, Short.MAX_VALUE)))
-                .addContainerGap())
+                                .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(9, 9, 9)
+                                .addComponent(jBtnAnnullafiltro)
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addContainerGap())
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jBtnAggiungi)
+                        .addGap(9, 9, 9)
+                        .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -235,31 +390,54 @@ public class CassaGui extends javax.swing.JFrame {
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLblFiltro))
-                        .addGap(6, 6, 6)))
+                            .addComponent(jLblFiltro)
+                            .addComponent(jBtnAnnullafiltro))
+                        .addGap(4, 4, 4)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                        .addComponent(jScrollOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE))
+                    .addComponent(jBtnAggiungi))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                        .addGap(113, 113, 113)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jbtnDec)
+                            .addComponent(jBtnInc))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                         .addComponent(jButtonEsce))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 343, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 131, Short.MAX_VALUE)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBtnElimina)
+                            .addComponent(jBtnVarianti))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     *
+     * @param evt
+     */
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuExitActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jButtonEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEsceActionPerformed
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_jButtonEsceActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jButtonNuovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuovoActionPerformed
         // TODO add your handling code here:
         Ordine ordine = new Ordine(this.cassa, "Adriano Celentano");
@@ -276,19 +454,63 @@ public class CassaGui extends javax.swing.JFrame {
         if (evt.getButton() == BUTTON3) {
             System.out.printf("Colonna %d", jTblOrdine.getSelectedColumn());
         }
+        StatoBottoni();
     }//GEN-LAST:event_jTblOrdineMouseClicked
 
+    /**
+     *
+     * @param evt
+     */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
         // TODO add your handling code here:
+        int colonna = jTblOrdine.getSelectedColumn();
+        int riga = jTblOrdine.getSelectedRow();
+
+        StatoBottoni();
     }//GEN-LAST:event_jTblListinoMouseClicked
 
-    private void jCmbCategoriaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCmbCategoriaMouseClicked
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnAnnullafiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullafiltroMouseClicked
         // TODO add your handling code here:
+        jCmbCategoria.setSelectedIndex(-1);
+        RefreshListino();
+        StatoBottoni();
+    }//GEN-LAST:event_jBtnAnnullafiltroMouseClicked
 
-    }//GEN-LAST:event_jCmbCategoriaMouseClicked
+    /**
+     *
+     * @param evt
+     */
+    private void jCmbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbCategoriaItemStateChanged
+        // TODO add your handling code here:
+        RefreshListino();
+        StatoBottoni();
+    }//GEN-LAST:event_jCmbCategoriaItemStateChanged
+
+    private void jMenuAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAggiungiMouseClicked
+        // TODO add your handling code here:
+        AggiungidaListino();
+    }//GEN-LAST:event_jMenuAggiungiMouseClicked
+
+    private void jBtnAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAggiungiMouseClicked
+        // TODO add your handling code here:
+        AggiungidaListino();
+    }//GEN-LAST:event_jBtnAggiungiMouseClicked
+
+    private void jMenuAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAggiungiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuAggiungiActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton jBtnAggiungi;
+    private javax.swing.JButton jBtnAnnullafiltro;
+    private javax.swing.JButton jBtnElimina;
+    private javax.swing.JButton jBtnInc;
+    private javax.swing.JButton jBtnVarianti;
     private javax.swing.JButton jButtonEsce;
     private javax.swing.JButton jButtonLegge;
     private javax.swing.JButton jButtonNuovo;
@@ -297,13 +519,21 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JLabel jLblFiltro;
     private javax.swing.JLabel jLblTavolo;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenuItem jMenuAggiungi;
     private javax.swing.JMenuBar jMenuBar;
+    private javax.swing.JMenuItem jMenuDec;
+    private javax.swing.JMenuItem jMenuElimina;
     private javax.swing.JMenuItem jMenuExit;
-    private javax.swing.JScrollPane jScrollPanel;
-    private javax.swing.JScrollPane jScrollPanel1;
+    private javax.swing.JMenuItem jMenuInc;
+    private javax.swing.JMenuItem jMenuVarianti;
+    private javax.swing.JPopupMenu jPopListino;
+    private javax.swing.JPopupMenu jPopOrdine;
+    private javax.swing.JScrollPane jScrollListino;
+    private javax.swing.JScrollPane jScrollOrdine;
     private javax.swing.JTable jTblListino;
     private javax.swing.JTable jTblOrdine;
     private javax.swing.JTextField jTxtCliente;
     private javax.swing.JTextField jTxtTavolo;
+    private javax.swing.JButton jbtnDec;
     // End of variables declaration//GEN-END:variables
 }
