@@ -4,22 +4,21 @@
  
 <hibernate-mapping>
     <class name="model.RigheCommesse" table="righecommesse" catalog="sagra">
-        <composite-id class="keys.RigheCommesseKey" name="id">
-            <key-property name="idCommessa" type="long">
-                <column name="idCommessa"/>
-            </key-property> 
-            <key-property name="idRiga" type="long">
-                <column name="idRiga"/>
-            </key-property>
-        </composite-id>
-       <property name="idProdotto" type="int">
+        <id name="id" type="int">
+            <column name="idRiga" />
+            <generator class="identity" />
+        </id>
+        <property name="idCommessa" type="int">
+            <column name="idCommessa" not-null="true"/>
+        </property> 
+        <property name="idProdotto" type="int">
             <column name="idProdotto"  not-null="true" />
         </property>
         <property name="quantita" type="int">
             <column name="quantita"  not-null="true" />
         </property>
         <property name="varianti" type="string">
-            <column name="varianti" length="65535" not-null="true" />
+            <column name="varianti" length="65535" />
         </property>
         <property name="prezzoListino" type="float">
             <column name="prezzoListino" not-null="true" />

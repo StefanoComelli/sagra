@@ -92,7 +92,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -305,9 +305,10 @@ CREATE TABLE `righecommesse` (
   `varianti` text COMMENT 'Varianti applicate alla riga',
   `prezzoListino` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Prezzo listino applicato',
   `scontoApplicato` decimal(10,2) NOT NULL DEFAULT '0.00' COMMENT 'Sconto applicato',
-  PRIMARY KEY (`idRiga`,`idCommessa`),
-  KEY `idx_righecommesse_idProdotto` (`idProdotto`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`idRiga`),
+  KEY `idx_righecommesse_idProdotto` (`idProdotto`),
+  KEY `idxCommessa` (`idCommessa`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -444,4 +445,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-03-24 22:42:13
+-- Dump completed on 2015-04-04 18:05:24

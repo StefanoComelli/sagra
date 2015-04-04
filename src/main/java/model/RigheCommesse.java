@@ -1,15 +1,16 @@
 package model;
 
+import Manager.ListinoProdottiManager;
 import abstr.AbstractData;
-import keys.RigheCommesseKey;
 import org.jboss.logging.Logger;
+import utils.IdDescr;
 import utils.Valuta;
 
 /**
  *
  * @author Stefano
  */
-public class RigheCommesse extends AbstractData<RigheCommesseKey> {
+public class RigheCommesse extends AbstractData<Integer> {
 
     private static final Logger LOGGER = Logger.getLogger(RigheCommesse.class);
     private int idProdotto;
@@ -17,12 +18,19 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
     private String varianti;
     private float prezzoListino;
     private float scontoApplicato;
+    private int idCommessa;
 
     /**
      * @return the varianti
      */
     public String getVarianti() {
         return varianti;
+    }
+
+    private ListinoProdotti getProdotto() {
+        ListinoProdottiManager mgrProdotto = new ListinoProdottiManager();
+        return mgrProdotto.get(idProdotto);
+
     }
 
     /**
@@ -78,11 +86,24 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
      *
      * @return
      */
+    public IdDescr getIdDescrProdotto() {
+        return new IdDescr(this.getProdotto().getId(), this.getProdotto().getDescrizione());
+    }
+
+    /**
+     *
+     * @return
+     */
     public Object[] getRow() {
         Valuta prezzo = new Valuta(prezzoListino);
+        Valuta sconto = new Valuta(getScontoApplicato());
         return new Object[]{
-            idProdotto,//prodotto.getNomeProdotto(),
-            prezzo.toString(),};
+            getIdDescrProdotto().getIdDescr(),
+            prezzo.toString(),
+            sconto,
+            getQuantita(),
+            getVarianti()
+        };
     }
 
     /**
@@ -98,4 +119,26 @@ public class RigheCommesse extends AbstractData<RigheCommesseKey> {
     public void setIdProdotto(int idProdotto) {
         this.idProdotto = idProdotto;
     }
+
+    /**
+     * @return the idCommessa
+     */
+    public int getIdCommessa() {
+        return idCommessa;
+    }
+
+    /**
+     * @param idCommessa the idCommessa to set
+     */
+    public void setIdCommessa(int idCommessa) {
+        this.idCommessa = idCommessa;
+    }
+    /**
+     *
+     * @return
+     */
+//    public IdDescr getIdDescrProdotto() {
+//        return new IdDescr(this.getIdProdotto(), nomeProdotto);
+//    }
+
 }

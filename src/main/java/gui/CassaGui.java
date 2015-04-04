@@ -1,5 +1,6 @@
 package gui;
 
+import Manager.RigheCommesseManager;
 import beans.Cassa;
 import beans.Ordine;
 import static java.awt.event.MouseEvent.*;
@@ -19,7 +20,7 @@ import utils.Valuta;
 public class CassaGui extends javax.swing.JFrame {
 
     private final Cassa cassa;
-
+    private Ordine ordine;
     private final int TBL_LISTINO_CATEGORIA = 0;
     private final int TBL_LISTINO_PRODOTTO = 0;
     private final int TBL_LISTINO_PREZZO = 0;
@@ -66,7 +67,7 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
-    private void AggiungidaListino() {
+    private void AggiungiDaListino() {
         //TODO
 
         int row = jTblListino.getSelectedRow();
@@ -74,7 +75,7 @@ public class CassaGui extends javax.swing.JFrame {
         IdDescr prodotto;
 
         Valuta prezzo;
-        DefaultTableModel model = (DefaultTableModel) jTblListino.getSelectionModel();
+        DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
 
         prodotto = new IdDescr(model.getValueAt(row, TBL_LISTINO_PRODOTTO));
 
@@ -82,6 +83,20 @@ public class CassaGui extends javax.swing.JFrame {
         riga.setIdProdotto(prodotto.getId());
         riga.setPrezzoListino(prezzo.getValore());
 
+        riga.setIdCommessa(ordine.getCommessa().getId());
+
+        RigheCommesseManager mgrRiga = new RigheCommesseManager();
+        mgrRiga.insert(riga);
+
+        RefreshOrdine();
+    }
+
+    private void RefreshOrdine() {
+        DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
+        GuiUtils.EmptyJtable(jTblOrdine);
+        for (RigheCommesse riga : ordine.getCommessa().getRigheCommesse()) {
+            model.addRow(riga.getRow());
+        }
     }
 
     /**
@@ -206,6 +221,16 @@ public class CassaGui extends javax.swing.JFrame {
         });
 
         jButtonLegge.setText("Legge");
+        jButtonLegge.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jButtonLeggeMouseClicked(evt);
+            }
+        });
+        jButtonLegge.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButtonLeggeActionPerformed(evt);
+            }
+        });
 
         jLblCliente.setText("Cliente:");
 
@@ -293,6 +318,11 @@ public class CassaGui extends javax.swing.JFrame {
         jBtnAggiungi.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jBtnAggiungiMouseClicked(evt);
+            }
+        });
+        jBtnAggiungi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAggiungiActionPerformed(evt);
             }
         });
 
@@ -440,7 +470,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jButtonNuovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonNuovoActionPerformed
         // TODO add your handling code here:
-        Ordine ordine = new Ordine(this.cassa, "Adriano Celentano");
+        ordine = new Ordine(this.cassa, "Adriano Celentano");
     }//GEN-LAST:event_jButtonNuovoActionPerformed
 
     /**
@@ -492,17 +522,30 @@ public class CassaGui extends javax.swing.JFrame {
 
     private void jMenuAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAggiungiMouseClicked
         // TODO add your handling code here:
-        AggiungidaListino();
+        AggiungiDaListino();
     }//GEN-LAST:event_jMenuAggiungiMouseClicked
 
     private void jBtnAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAggiungiMouseClicked
         // TODO add your handling code here:
-        AggiungidaListino();
+        AggiungiDaListino();
     }//GEN-LAST:event_jBtnAggiungiMouseClicked
 
     private void jMenuAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAggiungiActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jMenuAggiungiActionPerformed
+
+    private void jBtnAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAggiungiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnAggiungiActionPerformed
+
+    private void jButtonLeggeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonLeggeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButtonLeggeActionPerformed
+
+    private void jButtonLeggeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButtonLeggeMouseClicked
+        // TODO add your handling code here:
+
+    }//GEN-LAST:event_jButtonLeggeMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
