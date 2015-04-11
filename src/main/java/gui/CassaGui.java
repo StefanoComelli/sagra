@@ -10,6 +10,7 @@ import model.ListinoReale;
 import guiUtils.GuiUtils;
 import utils.IdDescr;
 import guiUtils.TableMouseListener;
+import java.util.List;
 import model.RigheCommesse;
 import utils.Valuta;
 
@@ -22,9 +23,11 @@ public class CassaGui extends javax.swing.JFrame {
     private final Cassa cassa;
     private Ordine ordine;
     private final int TBL_LISTINO_CATEGORIA = 0;
-    private final int TBL_LISTINO_PRODOTTO = 0;
-    private final int TBL_LISTINO_PREZZO = 0;
-    private final int TBL_LISTINO_DESCRIZIONE = 0;
+    private final int TBL_LISTINO_PRODOTTO = 1;
+    private final int TBL_LISTINO_PREZZO = 2;
+    private final int TBL_LISTINO_DESCRIZIONE = 3;
+    private final int TBL_LISTINO_ID_CATEGORIA = 4;
+    private final int TBL_LISTINO_ID_PRODOTTO = 5;
 
     /**
      *
@@ -72,17 +75,14 @@ public class CassaGui extends javax.swing.JFrame {
 
         int row = jTblListino.getSelectedRow();
         RigheCommesse riga = new RigheCommesse();
-        IdDescr prodotto;
 
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
 
-        prodotto = new IdDescr(model.getValueAt(row, TBL_LISTINO_PRODOTTO));
-
         prezzo = new Valuta(model.getValueAt(row, TBL_LISTINO_PREZZO));
-        riga.setIdProdotto(prodotto.getId());
+        riga.setIdProdotto((Integer) model.getValueAt(row, TBL_LISTINO_ID_PRODOTTO));
         riga.setPrezzoListino(prezzo.getValore());
-
+        riga.setQuantita(1);
         riga.setIdCommessa(ordine.getCommessa().getId());
 
         RigheCommesseManager mgrRiga = new RigheCommesseManager();
@@ -91,10 +91,15 @@ public class CassaGui extends javax.swing.JFrame {
         RefreshOrdine();
     }
 
+    /**
+     *
+     */
     private void RefreshOrdine() {
         DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
         GuiUtils.EmptyJtable(jTblOrdine);
-        for (RigheCommesse riga : ordine.getCommessa().getRigheCommesse()) {
+        int idCommessa = ordine.getCommessa().getId();
+        List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
+        for (RigheCommesse riga : righe) {
             model.addRow(riga.getRow());
         }
     }
@@ -136,7 +141,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void StatoBottoni() {
         jBtnElimina.setEnabled(jTblOrdine.getSelectedRowCount() != 0);
         jBtnAggiungi.setEnabled(jTblListino.getSelectedRowCount() != 0);
-        //jBtnAnnullafiltro.setEnabled(jCmbCategoria.getSelectedItem()!=null);
+        jBtnAnnullaFiltro.setEnabled(jCmbCategoria.getSelectedItem() != null);
     }
 
     /**
@@ -168,7 +173,7 @@ public class CassaGui extends javax.swing.JFrame {
         jTblListino = new javax.swing.JTable();
         jCmbCategoria = new javax.swing.JComboBox();
         jLblFiltro = new javax.swing.JLabel();
-        jBtnAnnullafiltro = new javax.swing.JButton();
+        jBtnAnnullaFiltro = new javax.swing.JButton();
         jBtnAggiungi = new javax.swing.JButton();
         jBtnElimina = new javax.swing.JButton();
         jBtnVarianti = new javax.swing.JButton();
@@ -241,14 +246,14 @@ public class CassaGui extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Prodotto", "Prezzo", "Sconto", "Quantità", "Note"
+                "Prodotto", "Prezzo", "Sconto", "Quantità", "Note", "IdProdotto"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.Float.class, java.lang.Integer.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -266,20 +271,24 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
         jScrollOrdine.setViewportView(jTblOrdine);
+        if (jTblOrdine.getColumnModel().getColumnCount() > 0) {
+            jTblOrdine.getColumnModel().getColumn(5).setMinWidth(0);
+            jTblOrdine.getColumnModel().getColumn(5).setMaxWidth(0);
+        }
 
         jTblListino.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "Categoria", "Prodotto", "Prezzo", "Descrizione"
+                "Categoria", "Prodotto", "Prezzo", "Descrizione", "IdCategoria", "IdProdotto"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class
+                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -298,6 +307,12 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
         jScrollListino.setViewportView(jTblListino);
+        if (jTblListino.getColumnModel().getColumnCount() > 0) {
+            jTblListino.getColumnModel().getColumn(4).setMinWidth(0);
+            jTblListino.getColumnModel().getColumn(4).setMaxWidth(0);
+            jTblListino.getColumnModel().getColumn(5).setMinWidth(0);
+            jTblListino.getColumnModel().getColumn(5).setMaxWidth(0);
+        }
 
         jCmbCategoria.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
@@ -307,10 +322,10 @@ public class CassaGui extends javax.swing.JFrame {
 
         jLblFiltro.setText("Filtro:");
 
-        jBtnAnnullafiltro.setText("Annulla Filtro");
-        jBtnAnnullafiltro.addMouseListener(new java.awt.event.MouseAdapter() {
+        jBtnAnnullaFiltro.setText("Annulla Filtro");
+        jBtnAnnullaFiltro.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jBtnAnnullafiltroMouseClicked(evt);
+                jBtnAnnullaFiltroMouseClicked(evt);
             }
         });
 
@@ -391,7 +406,7 @@ public class CassaGui extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(9, 9, 9)
-                                .addComponent(jBtnAnnullafiltro)
+                                .addComponent(jBtnAnnullaFiltro)
                                 .addGap(0, 0, Short.MAX_VALUE)))
                         .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
@@ -421,7 +436,7 @@ public class CassaGui extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLblFiltro)
-                            .addComponent(jBtnAnnullafiltro))
+                            .addComponent(jBtnAnnullaFiltro))
                         .addGap(4, 4, 4)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
@@ -503,12 +518,12 @@ public class CassaGui extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jBtnAnnullafiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullafiltroMouseClicked
+    private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
         // TODO add your handling code here:
         jCmbCategoria.setSelectedIndex(-1);
         RefreshListino();
         StatoBottoni();
-    }//GEN-LAST:event_jBtnAnnullafiltroMouseClicked
+    }//GEN-LAST:event_jBtnAnnullaFiltroMouseClicked
 
     /**
      *
@@ -550,7 +565,7 @@ public class CassaGui extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAggiungi;
-    private javax.swing.JButton jBtnAnnullafiltro;
+    private javax.swing.JButton jBtnAnnullaFiltro;
     private javax.swing.JButton jBtnElimina;
     private javax.swing.JButton jBtnInc;
     private javax.swing.JButton jBtnVarianti;

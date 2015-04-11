@@ -24,7 +24,11 @@ public class RigheCommesse extends AbstractData<Integer> {
      * @return the varianti
      */
     public String getVarianti() {
-        return varianti;
+        if (varianti != null) {
+            return varianti;
+        } else {
+            return "";
+        }
     }
 
     private ListinoProdotti getProdotto() {
@@ -87,7 +91,7 @@ public class RigheCommesse extends AbstractData<Integer> {
      * @return
      */
     public IdDescr getIdDescrProdotto() {
-        return new IdDescr(this.getProdotto().getId(), this.getProdotto().getDescrizione());
+        return new IdDescr(this.getProdotto().getId(), this.getProdotto().getNomeProdotto());
     }
 
     /**
@@ -98,11 +102,14 @@ public class RigheCommesse extends AbstractData<Integer> {
         Valuta prezzo = new Valuta(prezzoListino);
         Valuta sconto = new Valuta(getScontoApplicato());
         return new Object[]{
-            getIdDescrProdotto().getIdDescr(),
+           // getIdDescrProdotto().getIdDescr(),
+            this.getProdotto().getNomeProdotto(),
             prezzo.toString(),
-            sconto,
+            sconto.toString(),
             getQuantita(),
-            getVarianti()
+            getVarianti(),
+            this.getProdotto().getId()
+            
         };
     }
 

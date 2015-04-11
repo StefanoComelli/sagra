@@ -138,7 +138,7 @@
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="jCmbCategoria" min="-2" pref="302" max="-2" attributes="0"/>
                               <EmptySpace min="-2" pref="9" max="-2" attributes="0"/>
-                              <Component id="jBtnAnnullafiltro" min="-2" max="-2" attributes="0"/>
+                              <Component id="jBtnAnnullaFiltro" min="-2" max="-2" attributes="0"/>
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                       </Group>
@@ -178,7 +178,7 @@
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="jCmbCategoria" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="jLblFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBtnAnnullafiltro" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="jBtnAnnullaFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
                   </Group>
@@ -263,12 +263,13 @@
         <Component class="javax.swing.JTable" name="jTblOrdine">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="5" rowCount="0">
+              <Table columnCount="6" rowCount="0">
                 <Column editable="false" title="Prodotto" type="java.lang.String"/>
                 <Column editable="false" title="Prezzo" type="java.lang.String"/>
-                <Column editable="false" title="Sconto" type="java.lang.Float"/>
+                <Column editable="false" title="Sconto" type="java.lang.String"/>
                 <Column editable="false" title="Quantit&#xe0;" type="java.lang.Integer"/>
                 <Column editable="false" title="Note" type="java.lang.String"/>
+                <Column editable="false" title="IdProdotto" type="java.lang.Integer"/>
               </Table>
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
@@ -289,6 +290,16 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="0" minWidth="0" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -315,11 +326,13 @@
         <Component class="javax.swing.JTable" name="jTblListino">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="4" rowCount="0">
+              <Table columnCount="6" rowCount="0">
                 <Column editable="false" title="Categoria" type="java.lang.String"/>
                 <Column editable="false" title="Prodotto" type="java.lang.String"/>
                 <Column editable="false" title="Prezzo" type="java.lang.String"/>
                 <Column editable="false" title="Descrizione" type="java.lang.String"/>
+                <Column editable="false" title="IdCategoria" type="java.lang.Integer"/>
+                <Column editable="false" title="IdProdotto" type="java.lang.Integer"/>
               </Table>
             </Property>
             <Property name="toolTipText" type="java.lang.String" value=""/>
@@ -341,6 +354,16 @@
                   <Renderer/>
                 </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="0" minWidth="0" prefWidth="-1" resizable="true">
+                  <Title/>
+                  <Editor/>
+                  <Renderer/>
+                </Column>
+                <Column maxWidth="0" minWidth="0" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>
                   <Renderer/>
@@ -372,12 +395,12 @@
         <Property name="text" type="java.lang.String" value="Filtro:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JButton" name="jBtnAnnullafiltro">
+    <Component class="javax.swing.JButton" name="jBtnAnnullaFiltro">
       <Properties>
         <Property name="text" type="java.lang.String" value="Annulla Filtro"/>
       </Properties>
       <Events>
-        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jBtnAnnullafiltroMouseClicked"/>
+        <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="jBtnAnnullaFiltroMouseClicked"/>
       </Events>
     </Component>
     <Component class="javax.swing.JButton" name="jBtnAggiungi">

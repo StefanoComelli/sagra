@@ -42,7 +42,7 @@ public class Valuta {
     public Valuta(Object valore) {
         try {
             String tV = (String) valore;
-            String tmp = (String) tV.substring(2);
+            String tmp = (String) tV.substring(2).replace(",", ".");
             this.valore = Float.valueOf(tmp);
         } catch (Exception e) {
             this.valore = 0;

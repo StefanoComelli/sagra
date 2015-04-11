@@ -80,7 +80,6 @@ public class IdDescr {
     public String getDescr() {
         String descr;
         try {
-
             descr = getSplit()[1];
         } catch (Exception e) {
             descr = "";

@@ -1,6 +1,7 @@
 package beans;
 
 import Manager.CommesseManager;
+import Manager.RigheCommesseManager;
 import Manager.StatiOrdineManager;
 import java.util.List;
 import model.Casse;
@@ -27,6 +28,7 @@ public class Ordine {
     List<Sconti> sconti;
 
     private CommesseManager commessaMgr;
+    private RigheCommesseManager righeMgr;
     private Commesse commessa;
     private List<StatiOrdine> statiOrdine;
     private StatiOrdine statoOrdine;
@@ -50,6 +52,7 @@ public class Ordine {
         this.commessa = new Commesse();
 
         StatiOrdineManager statiOrdineMgr = new StatiOrdineManager();
+        righeMgr = new RigheCommesseManager();
         statiOrdine = statiOrdineMgr.getElencoStati();
         statoOrdine = statiOrdineMgr.getDefault();
         this.commessa.setStatoOrdine(statoOrdine);
@@ -228,6 +231,20 @@ public class Ordine {
      */
     public void setCliente(String cliente) {
         this.cliente = cliente;
+    }
+
+    /**
+     * @return the righeMgr
+     */
+    public RigheCommesseManager getRigheMgr() {
+        return righeMgr;
+    }
+
+    /**
+     * @param righeMgr the righeMgr to set
+     */
+    public void setRigheMgr(RigheCommesseManager righeMgr) {
+        this.righeMgr = righeMgr;
     }
 
 }

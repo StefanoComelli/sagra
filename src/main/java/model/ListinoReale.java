@@ -142,10 +142,12 @@ public class ListinoReale extends AbstractData<ListinoRealeKey> {
     public Object[] getRow() {
         Valuta prezzo = new Valuta(prezzoUnitario);
         return new Object[]{
-            getIdDescrCategoria().getIdDescr(),//categoriaProdotto.getDescrizione(),
-            getIdDescrProdotto().getIdDescr(),//nomeProdotto,
+            categoriaProdotto.getDescrizione(),
+            nomeProdotto,
             prezzo.toString(),
-            descrizione
+            descrizione,
+            categoriaProdotto.getId(),
+            this.getId().getIdProdotto()
         };
     }
 }

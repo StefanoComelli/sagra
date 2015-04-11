@@ -20,7 +20,6 @@ public class Commesse extends AbstractData<Integer> {
     private String nomeCliente;
     private String tavoloCliente;
     private String note;
-    private Set<RigheCommesse> righeCommesse;
     private Set<LogOrdini> logOrdine;
     private Giorni giorno;
     private StatiOrdine statoOrdine;
@@ -149,20 +148,6 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setNote(String note) {
         this.note = note;
-    }
-
-    /**
-     * @return the righeCommesse
-     */
-    public Set<RigheCommesse> getRigheCommesse() {
-        return righeCommesse;
-    }
-
-    /**
-     * @param righeCommesse the righeCommesse to set
-     */
-    public void setRigheCommesse(Set<RigheCommesse> righeCommesse) {
-        this.righeCommesse = righeCommesse;
     }
 
     /**

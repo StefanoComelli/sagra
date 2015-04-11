@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
-"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
     <class name="model.Commesse" table="commesse" catalog="sagra">
@@ -41,15 +41,8 @@
         <property name="note" type="string">
             <column name="note" length="80" not-null="false" />
         </property>
-        <set name="righeCommesse" table="righecommesse" 
-             inverse="true" lazy="false" fetch="select">
-            <key>
-                <column name="idCommessa" not-null="true" />
-            </key>
-            <one-to-many class="model.RigheCommesse" />
-        </set>
         <set name="logOrdine" table="logOrdini" 
-             inverse="true" lazy="false" fetch="select">
+              inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="idOrdine" not-null="true" />
             </key>
