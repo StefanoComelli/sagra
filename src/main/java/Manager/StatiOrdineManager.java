@@ -71,7 +71,6 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
         }
 
         Transaction tx = null;
-        List<StatiOrdine> pojos = null;
         try {
             tx = session.beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);

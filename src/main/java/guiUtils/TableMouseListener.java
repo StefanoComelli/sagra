@@ -18,10 +18,18 @@ public class TableMouseListener extends MouseAdapter {
     private static final Logger LOGGER = Logger.getLogger(TableMouseListener.class);
     private final JTable table;
 
+    /**
+     * 
+     * @param table 
+     */
     public TableMouseListener(JTable table) {
         this.table = table;
     }
 
+    /**
+     * 
+     * @param event 
+     */
     @Override
     public void mousePressed(MouseEvent event) {
         // selects the row at which point the mouse is clicked

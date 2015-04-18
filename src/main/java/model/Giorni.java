@@ -4,6 +4,7 @@ import abstr.AbstractData;
 import java.util.Date;
 import java.util.Set;
 import org.jboss.logging.Logger;
+import utils.Sconto;
 
 /**
  *
@@ -59,12 +60,25 @@ public class Giorni extends AbstractData<Integer> {
         this.prodottiGiornaliera = prodottiGiornaliera;
     }
 
-     /**
+    /**
      *
      * @return
      */
     @Override
     public String toString() {
         return getId().toString() + TO_STRING_SEP + getData().toString();
+    }
+
+    /**
+     *
+     * @return
+     */
+    public String getTitolo() {
+        if (scontoGiorno == 0) {
+            return data.toString();
+        } else {
+            Sconto sGiorno = new Sconto(getScontoGiorno());
+            return data.toString() + " Sconto " + sGiorno.toString();
+        }
     }
 }

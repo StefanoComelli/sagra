@@ -42,7 +42,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         try {
             tx = session.beginTransaction();
             righe = cr.list();
-
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -69,7 +68,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         RigheCommesse riga = get(id);
         riga.DeltaQuantita(deltaQuantita);
         update(id, riga);
-
     }
 
     /**
@@ -97,7 +95,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         RigheCommesse riga = get(id);
         riga.setVarianti(variante);
         update(id, riga);
-
     }
 
 }

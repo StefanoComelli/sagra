@@ -42,7 +42,6 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
         try {
             tx = session.beginTransaction();
             giorni = cr.list();
-
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {

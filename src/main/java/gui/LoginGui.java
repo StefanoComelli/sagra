@@ -37,9 +37,9 @@ public class LoginGui extends javax.swing.JFrame {
 
         if (jCmbCassa.getSelectedItem() == null || jCmbOperatore.getSelectedItem() == null
                 || jCmbGiorno.getSelectedItem() == null) {
-            jButtonOk.setEnabled(false);
+            jBtnOk.setEnabled(false);
         } else {
-            jButtonOk.setEnabled(true);
+            jBtnOk.setEnabled(true);
         }
     }
 
@@ -88,13 +88,13 @@ public class LoginGui extends javax.swing.JFrame {
 
         jPanel = new javax.swing.JPanel();
         jCmbCassa = new javax.swing.JComboBox();
-        jLabelCassa = new javax.swing.JLabel();
-        jLabelOperatore = new javax.swing.JLabel();
+        jLblCassa = new javax.swing.JLabel();
+        jLblOperatore = new javax.swing.JLabel();
         jCmbOperatore = new javax.swing.JComboBox();
-        jLabelGiorno = new javax.swing.JLabel();
+        jLblGiorno = new javax.swing.JLabel();
         jCmbGiorno = new javax.swing.JComboBox();
-        jButtonEsce = new javax.swing.JButton();
-        jButtonOk = new javax.swing.JButton();
+        jBtnEsce = new javax.swing.JButton();
+        jBtnOk = new javax.swing.JButton();
         menuBar = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
         exitMenuItem = new javax.swing.JMenuItem();
@@ -114,11 +114,11 @@ public class LoginGui extends javax.swing.JFrame {
             }
         });
 
-        jLabelCassa.setText("Cassa:");
-        jLabelCassa.setName("jLabelCassa"); // NOI18N
+        jLblCassa.setText("Cassa:");
+        jLblCassa.setName("jLblCassa"); // NOI18N
 
-        jLabelOperatore.setText("Operatore:");
-        jLabelOperatore.setName("jLabelOperatore"); // NOI18N
+        jLblOperatore.setText("Operatore:");
+        jLblOperatore.setName("jLblOperatore"); // NOI18N
 
         jCmbOperatore.setName("jCmbOperatore"); // NOI18N
         jCmbOperatore.addItemListener(new java.awt.event.ItemListener() {
@@ -127,8 +127,8 @@ public class LoginGui extends javax.swing.JFrame {
             }
         });
 
-        jLabelGiorno.setText("Giorno:");
-        jLabelGiorno.setName("jLabelGiorno"); // NOI18N
+        jLblGiorno.setText("Giorno:");
+        jLblGiorno.setName("jLblGiorno"); // NOI18N
 
         jCmbGiorno.setName("jCmbGiorno"); // NOI18N
         jCmbGiorno.addItemListener(new java.awt.event.ItemListener() {
@@ -137,19 +137,19 @@ public class LoginGui extends javax.swing.JFrame {
             }
         });
 
-        jButtonEsce.setText("Esce");
-        jButtonEsce.setName("jButtonEsce"); // NOI18N
-        jButtonEsce.addActionListener(new java.awt.event.ActionListener() {
+        jBtnEsce.setText("Esce");
+        jBtnEsce.setName("jBtnEsce"); // NOI18N
+        jBtnEsce.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEsceActionPerformed(evt);
+                jBtnEsceActionPerformed(evt);
             }
         });
 
-        jButtonOk.setText("Ok");
-        jButtonOk.setName("jButtonOk"); // NOI18N
-        jButtonOk.addActionListener(new java.awt.event.ActionListener() {
+        jBtnOk.setText("Ok");
+        jBtnOk.setName("jBtnOk"); // NOI18N
+        jBtnOk.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonOkActionPerformed(evt);
+                jBtnOkActionPerformed(evt);
             }
         });
 
@@ -162,20 +162,20 @@ public class LoginGui extends javax.swing.JFrame {
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelLayout.createSequentialGroup()
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabelOperatore)
-                            .addComponent(jLabelCassa))
+                            .addComponent(jLblOperatore)
+                            .addComponent(jLblCassa))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jCmbCassa, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jCmbOperatore, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanelLayout.createSequentialGroup()
-                        .addComponent(jLabelGiorno)
+                        .addComponent(jLblGiorno)
                         .addGap(23, 23, 23)
                         .addComponent(jCmbGiorno, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
-                        .addComponent(jButtonOk)
+                        .addComponent(jBtnOk)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 118, Short.MAX_VALUE)
-                        .addComponent(jButtonEsce)))
+                        .addComponent(jBtnEsce)))
                 .addContainerGap())
         );
         jPanelLayout.setVerticalGroup(
@@ -183,20 +183,20 @@ public class LoginGui extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelGiorno)
+                    .addComponent(jLblGiorno)
                     .addComponent(jCmbGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCmbCassa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabelCassa))
+                    .addComponent(jLblCassa))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelOperatore)
+                    .addComponent(jLblOperatore)
                     .addComponent(jCmbOperatore, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButtonOk)
-                    .addComponent(jButtonEsce))
+                    .addComponent(jBtnOk)
+                    .addComponent(jBtnEsce))
                 .addGap(0, 11, Short.MAX_VALUE))
         );
 
@@ -245,29 +245,45 @@ public class LoginGui extends javax.swing.JFrame {
         System.exit(0);
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void jCmbCassaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbCassaItemStateChanged
-        // TODO add your handling code here:
         StatoFinestra();
     }//GEN-LAST:event_jCmbCassaItemStateChanged
 
+    /**
+     * 
+     * @param evt 
+     */
     private void jCmbOperatoreItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbOperatoreItemStateChanged
-        // TODO add your handling code here:
         StatoFinestra();
     }//GEN-LAST:event_jCmbOperatoreItemStateChanged
 
-    private void jButtonEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEsceActionPerformed
-        // TODO add your handling code here:
+    /**
+     * 
+     * @param evt 
+     */
+    private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButtonEsceActionPerformed
+    }//GEN-LAST:event_jBtnEsceActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void jCmbGiornoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbGiornoItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jCmbGiornoItemStateChanged
 
-    private void jButtonOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonOkActionPerformed
-        // TODO add your handling code here:
+    /**
+     * 
+     * @param evt 
+     */
+    private void jBtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnOkActionPerformed
         GoLogin();
-    }//GEN-LAST:event_jButtonOkActionPerformed
+    }//GEN-LAST:event_jBtnOkActionPerformed
 
     /**
      * @param args the command line arguments
@@ -327,14 +343,14 @@ public class LoginGui extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JButton jButtonEsce;
-    private javax.swing.JButton jButtonOk;
+    private javax.swing.JButton jBtnEsce;
+    private javax.swing.JButton jBtnOk;
     private javax.swing.JComboBox jCmbCassa;
     private javax.swing.JComboBox jCmbGiorno;
     private javax.swing.JComboBox jCmbOperatore;
-    private javax.swing.JLabel jLabelCassa;
-    private javax.swing.JLabel jLabelGiorno;
-    private javax.swing.JLabel jLabelOperatore;
+    private javax.swing.JLabel jLblCassa;
+    private javax.swing.JLabel jLblGiorno;
+    private javax.swing.JLabel jLblOperatore;
     private javax.swing.JPanel jPanel;
     private javax.swing.JMenuBar menuBar;
     // End of variables declaration//GEN-END:variables

@@ -47,6 +47,6 @@ public class Sconti extends AbstractData<Integer> {
      */
     @Override
     public String toString() {
-        return getId().toString() + TO_STRING_SEP + getDescrizione() + TO_STRING_SUB + getSconto();
+        return getDescrizione() + TO_STRING_SUB + getSconto();
     }
 }

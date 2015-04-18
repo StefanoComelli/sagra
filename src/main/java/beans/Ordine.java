@@ -19,13 +19,13 @@ import model.Varianti;
  */
 public class Ordine {
 
-    Giorni giorno;
-    Operatori operatore;
-    Casse cassa;
+    private Giorni giorno;
+    private Operatori operatore;
+    private Casse cassa;
 
-    List<ListinoReale> listino;
-    List<Varianti> varianti;
-    List<Sconti> sconti;
+    private List<ListinoReale> listino;
+    private List<Varianti> varianti;
+    private List<Sconti> sconti;
 
     private CommesseManager commessaMgr;
     private RigheCommesseManager righeMgr;
@@ -33,7 +33,7 @@ public class Ordine {
     private List<StatiOrdine> statiOrdine;
     private StatiOrdine statoOrdine;
 
-    String cliente;
+    private String cliente;
 
     /**
      *

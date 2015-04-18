@@ -13,7 +13,9 @@ import guiUtils.TableMouseListener;
 import guiUtils.BetterTableCellRenderer;
 import java.util.List;
 import model.RigheCommesse;
+import model.Sconti;
 import model.Varianti;
+import utils.Sconto;
 import utils.Valuta;
 
 /**
@@ -50,8 +52,28 @@ public class CassaGui extends javax.swing.JFrame {
         initComponents();
         SetupGui();
         SetupCategorie();
+        SetupSconti();
         RefreshListino();
+        PopolaVarianti();
         StatoBottoni();
+    }
+
+    /**
+     *
+     */
+    private void CalcolaTotale() {
+        //TODO
+    }
+
+    /**
+     *
+     */
+    private void SetupSconti() {
+        jCmbSconti.removeAllItems();
+        jCmbSconti.addItem("");
+        for (Sconti sconto : cassa.getSconti()) {
+            jCmbSconti.addItem(sconto.toString());
+        }
     }
 
     /**
@@ -59,13 +81,15 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void SetupGui() {
 
+        setTitle(cassa.getGiorno().getTitolo());
+        Sconto scontoGiorno = new Sconto(cassa.getGiorno().getScontoGiorno());
+        jTxtScontoGiorno.setText(scontoGiorno.toString());
         jTblListino.setComponentPopupMenu(jPopListino);
         jTblListino.addMouseListener(new TableMouseListener(jTblListino));
 
         jTblOrdine.setComponentPopupMenu(jPopOrdine);
         jTblOrdine.addMouseListener(new TableMouseListener(jTblOrdine));
 
-        PopolaVarianti();
         jTblOrdine.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
         jTblListino.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
     }
@@ -102,6 +126,10 @@ public class CassaGui extends javax.swing.JFrame {
         RefreshOrdine();
     }
 
+    /**
+     *
+     * @param variante
+     */
     private void ModificaVariante(String variante) {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
@@ -136,8 +164,6 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void AggiungiDaListino() {
-        //TODO
-
         int row = jTblListino.getSelectedRow();
         RigheCommesse riga = new RigheCommesse();
 
@@ -225,18 +251,19 @@ public class CassaGui extends javax.swing.JFrame {
 
         jBtnElimina.setEnabled(flgOrdineSel);
         jBtnAggiungi.setEnabled(flgListinoSel && flgOrdineOk);
+        jMenuAggiungi.setEnabled(flgListinoSel && flgOrdineOk);
 
         jBtnConfermaVariante.setEnabled(flgOrdineSel);
         jBtnEliminaVariante.setEnabled(flgOrdineSel);
         jCmbVarianti.setEnabled(flgOrdineSel);
         jBtnInc.setEnabled(flgOrdineSel);
-        jbtnDec.setEnabled(flgOrdineSel);
+        jBtnDec.setEnabled(flgOrdineSel);
 
         jBtnAnnullaFiltro.setEnabled(jCmbCategoria.getSelectedItem() != null);
         if (!flgOrdineSel) {
             jCmbVarianti.setSelectedItem(null);
         } else {
-            jbtnDec.setEnabled(quantita > 1);
+            jBtnDec.setEnabled(quantita > 1);
         }
 
         jBtnNuovoOrdine.setEnabled(!flgOrdineOk);
@@ -262,8 +289,7 @@ public class CassaGui extends javax.swing.JFrame {
         jMenuVarianti = new javax.swing.JMenuItem();
         jMenuInc = new javax.swing.JMenuItem();
         jMenuDec = new javax.swing.JMenuItem();
-        jButtonEsce = new javax.swing.JButton();
-        jBtnNuovoOrdine = new javax.swing.JButton();
+        jBtnEsce = new javax.swing.JButton();
         jLblCliente = new javax.swing.JLabel();
         jTxtCliente = new javax.swing.JTextField();
         jLblTavolo = new javax.swing.JLabel();
@@ -278,16 +304,32 @@ public class CassaGui extends javax.swing.JFrame {
         jBtnAggiungi = new javax.swing.JButton();
         jBtnElimina = new javax.swing.JButton();
         jBtnInc = new javax.swing.JButton();
-        jbtnDec = new javax.swing.JButton();
+        jBtnDec = new javax.swing.JButton();
         jPanelVarianti = new javax.swing.JPanel();
         jCmbVarianti = new javax.swing.JComboBox();
         jBtnConfermaVariante = new javax.swing.JButton();
         jBtnEliminaVariante = new javax.swing.JButton();
-        jLabelVarianti = new javax.swing.JLabel();
-        jLabelListino = new javax.swing.JLabel();
-        jLabelOrdine = new javax.swing.JLabel();
+        jLblListino = new javax.swing.JLabel();
+        jLblOrdine = new javax.swing.JLabel();
+        jPanelConto = new javax.swing.JPanel();
+        jLblTotale = new javax.swing.JLabel();
+        jTxtTotale = new javax.swing.JTextField();
+        jLblScontoOrdine = new javax.swing.JLabel();
+        jTxtScontoOrdine = new javax.swing.JTextField();
+        jTxtNetto = new javax.swing.JTextField();
+        jLblContanti = new javax.swing.JLabel();
+        jTxtContanti = new javax.swing.JTextField();
+        jLblResto = new javax.swing.JLabel();
+        jTxtResto = new javax.swing.JTextField();
+        jPanelOrdine = new javax.swing.JPanel();
+        jBtnNuovoOrdine = new javax.swing.JButton();
         jBtnConfermaOrdine = new javax.swing.JButton();
         jBtnAnnullaOrdine = new javax.swing.JButton();
+        jPanelSconto = new javax.swing.JPanel();
+        jLblScontoGiorno = new javax.swing.JLabel();
+        jTxtScontoGiorno = new javax.swing.JTextField();
+        jLblSconti = new javax.swing.JLabel();
+        jCmbSconti = new javax.swing.JComboBox();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
@@ -306,6 +348,11 @@ public class CassaGui extends javax.swing.JFrame {
         jPopListino.add(jMenuAggiungi);
 
         jMenuElimina.setText("Elimina");
+        jMenuElimina.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuEliminaActionPerformed(evt);
+            }
+        });
         jPopOrdine.add(jMenuElimina);
 
         jMenuVarianti.setText("Varianti");
@@ -320,17 +367,10 @@ public class CassaGui extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Sagra Sant'Andrea: Cassa");
 
-        jButtonEsce.setText("Esce");
-        jButtonEsce.addActionListener(new java.awt.event.ActionListener() {
+        jBtnEsce.setText("Esce");
+        jBtnEsce.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButtonEsceActionPerformed(evt);
-            }
-        });
-
-        jBtnNuovoOrdine.setText("Nuovo Ordine");
-        jBtnNuovoOrdine.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnNuovoOrdineActionPerformed(evt);
+                jBtnEsceActionPerformed(evt);
             }
         });
 
@@ -343,7 +383,7 @@ public class CassaGui extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Prodotto", "Prezzo", "Sconto", "Quantità", "Note", "IdProdotto", "Id"
+                "Prodotto", "Prezzo", "Sconto", "Quantità", "Variante", "IdProdotto", "Id"
             }
         ) {
             Class[] types = new Class [] {
@@ -400,7 +440,7 @@ public class CassaGui extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
-        jTblListino.setToolTipText("");
+        jTblListino.setToolTipText("Listino");
         jTblListino.setEnabled(false);
         jTblListino.getTableHeader().setReorderingAllowed(false);
         jTblListino.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -467,14 +507,15 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
-        jbtnDec.setText("-1");
-        jbtnDec.addActionListener(new java.awt.event.ActionListener() {
+        jBtnDec.setText("-1");
+        jBtnDec.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jbtnDecActionPerformed(evt);
+                jBtnDecActionPerformed(evt);
             }
         });
 
-        jPanelVarianti.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        jPanelVarianti.setBorder(javax.swing.BorderFactory.createTitledBorder("Varianti"));
+        jPanelVarianti.setName("jPanelVarianti"); // NOI18N
 
         jCmbVarianti.setEditable(true);
 
@@ -492,33 +533,23 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
-        jLabelVarianti.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabelVarianti.setText("Varianti");
-
         javax.swing.GroupLayout jPanelVariantiLayout = new javax.swing.GroupLayout(jPanelVarianti);
         jPanelVarianti.setLayout(jPanelVariantiLayout);
         jPanelVariantiLayout.setHorizontalGroup(
             jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelVariantiLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelVariantiLayout.createSequentialGroup()
-                        .addComponent(jLabelVarianti)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(jPanelVariantiLayout.createSequentialGroup()
-                        .addComponent(jCmbVarianti, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBtnConfermaVariante)
-                        .addGap(18, 18, 18)
-                        .addComponent(jBtnEliminaVariante)))
+                .addComponent(jCmbVarianti, 0, 257, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBtnConfermaVariante)
+                .addGap(18, 18, 18)
+                .addComponent(jBtnEliminaVariante)
                 .addContainerGap())
         );
         jPanelVariantiLayout.setVerticalGroup(
             jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelVariantiLayout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabelVarianti)
-                .addGap(2, 2, 2)
                 .addGroup(jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jCmbVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtnConfermaVariante)
@@ -526,19 +557,156 @@ public class CassaGui extends javax.swing.JFrame {
                 .addGap(27, 27, 27))
         );
 
-        jLabelListino.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabelListino.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelListino.setLabelFor(jTblOrdine);
-        jLabelListino.setText("Listino");
+        jLblListino.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLblListino.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLblListino.setLabelFor(jTblOrdine);
+        jLblListino.setText("Listino");
+        jLblListino.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jLabelOrdine.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        jLabelOrdine.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabelOrdine.setLabelFor(jTblOrdine);
-        jLabelOrdine.setText("Ordine");
+        jLblOrdine.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        jLblOrdine.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLblOrdine.setLabelFor(jTblOrdine);
+        jLblOrdine.setText("Ordine");
+        jLblOrdine.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
-        jBtnConfermaOrdine.setText("Conferma Ordine");
+        jPanelConto.setBorder(javax.swing.BorderFactory.createTitledBorder("Conto"));
 
-        jBtnAnnullaOrdine.setText("Annulla Ordine");
+        jLblTotale.setText("Totale:");
+
+        jTxtTotale.setEditable(false);
+
+        jLblScontoOrdine.setText("Sconto:");
+
+        jTxtScontoOrdine.setEditable(false);
+
+        jTxtNetto.setEditable(false);
+        jTxtNetto.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+
+        jLblContanti.setText("Contanti:");
+
+        jLblResto.setText("Resto:");
+
+        jTxtResto.setEditable(false);
+
+        javax.swing.GroupLayout jPanelContoLayout = new javax.swing.GroupLayout(jPanelConto);
+        jPanelConto.setLayout(jPanelContoLayout);
+        jPanelContoLayout.setHorizontalGroup(
+            jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContoLayout.createSequentialGroup()
+                        .addComponent(jLblTotale)
+                        .addGap(18, 18, 18))
+                    .addGroup(jPanelContoLayout.createSequentialGroup()
+                        .addComponent(jLblContanti)
+                        .addGap(7, 7, 7)))
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jTxtContanti, javax.swing.GroupLayout.DEFAULT_SIZE, 70, Short.MAX_VALUE)
+                    .addComponent(jTxtTotale))
+                .addGap(26, 26, 26)
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLblScontoOrdine)
+                    .addComponent(jLblResto))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelContoLayout.createSequentialGroup()
+                        .addComponent(jTxtResto, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
+                    .addGroup(jPanelContoLayout.createSequentialGroup()
+                        .addComponent(jTxtScontoOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jTxtNetto))))
+        );
+        jPanelContoLayout.setVerticalGroup(
+            jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelContoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblTotale)
+                    .addComponent(jTxtTotale, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblScontoOrdine)
+                    .addComponent(jTxtScontoOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtNetto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblContanti)
+                    .addComponent(jTxtContanti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblResto)
+                    .addComponent(jTxtResto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+
+        jPanelOrdine.setBorder(javax.swing.BorderFactory.createTitledBorder("Ordine"));
+
+        jBtnNuovoOrdine.setText("Nuovo");
+        jBtnNuovoOrdine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnNuovoOrdineActionPerformed(evt);
+            }
+        });
+
+        jBtnConfermaOrdine.setText("Conferma");
+
+        jBtnAnnullaOrdine.setText("Annulla");
+
+        javax.swing.GroupLayout jPanelOrdineLayout = new javax.swing.GroupLayout(jPanelOrdine);
+        jPanelOrdine.setLayout(jPanelOrdineLayout);
+        jPanelOrdineLayout.setHorizontalGroup(
+            jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelOrdineLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jBtnNuovoOrdine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jBtnConfermaOrdine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBtnAnnullaOrdine)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelOrdineLayout.setVerticalGroup(
+            jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelOrdineLayout.createSequentialGroup()
+                .addGroup(jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jBtnNuovoOrdine)
+                    .addComponent(jBtnConfermaOrdine)
+                    .addComponent(jBtnAnnullaOrdine))
+                .addGap(0, 1, Short.MAX_VALUE))
+        );
+
+        jPanelSconto.setBorder(javax.swing.BorderFactory.createTitledBorder("Sconto"));
+
+        jLblScontoGiorno.setText("Sconto Giorno:");
+
+        jTxtScontoGiorno.setEditable(false);
+
+        jLblSconti.setText("Sconti:");
+
+        javax.swing.GroupLayout jPanelScontoLayout = new javax.swing.GroupLayout(jPanelSconto);
+        jPanelSconto.setLayout(jPanelScontoLayout);
+        jPanelScontoLayout.setHorizontalGroup(
+            jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelScontoLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLblScontoGiorno)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(jLblSconti)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+        );
+        jPanelScontoLayout.setVerticalGroup(
+            jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanelScontoLayout.createSequentialGroup()
+                .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblScontoGiorno)
+                    .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLblSconti)
+                        .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
 
         jMenu1.setText("File");
 
@@ -559,98 +727,96 @@ public class CassaGui extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(36, 36, 36)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jPanelVarianti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBtnInc)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jbtnDec)
-                                .addGap(4, 4, 4))
-                            .addComponent(jScrollOrdine)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jBtnNuovoOrdine)
-                                        .addGap(22, 22, 22)
-                                        .addComponent(jBtnConfermaOrdine))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jLblCliente)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                        .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLblTavolo)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jBtnAnnullaOrdine)))))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabelOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 439, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(99, 99, 99)
-                        .addComponent(jLabelListino, javax.swing.GroupLayout.PREFERRED_SIZE, 375, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jLblFiltro)
+                        .addComponent(jPanelOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 302, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(9, 9, 9)
-                        .addComponent(jBtnAnnullaFiltro))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(jButtonEsce)
-                        .addGroup(layout.createSequentialGroup()
-                            .addComponent(jBtnAggiungi)
+                        .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLblCliente)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(46, 46, 46)
+                        .addComponent(jLblTavolo)
+                        .addGap(310, 310, 310)
+                        .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jPanelConto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jBtnEsce))
+                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLblOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                        .addGroup(layout.createSequentialGroup()
+                                            .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                            .addComponent(jBtnInc)
+                                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                            .addComponent(jBtnDec))
+                                        .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                    .addComponent(jBtnAggiungi))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGap(280, 280, 280)
+                                    .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(jLblFiltro)
+                                    .addGap(252, 252, 252)
+                                    .addComponent(jBtnAnnullaFiltro))))))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanelSconto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanelOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblCliente)
+                    .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblTavolo)
+                    .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblFiltro)
+                    .addComponent(jBtnAnnullaFiltro))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblOrdine)
+                    .addComponent(jLblListino))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBtnNuovoOrdine)
-                            .addComponent(jBtnConfermaOrdine)
-                            .addComponent(jBtnAnnullaOrdine))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jBtnAggiungi)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jBtnElimina)
+                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                        .addComponent(jBtnDec)
+                                        .addComponent(jBtnInc)))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLblCliente)
-                            .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLblTavolo)
-                            .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLblFiltro)
-                            .addComponent(jBtnAnnullaFiltro))
-                        .addGap(4, 4, 4)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabelOrdine)
-                    .addComponent(jLabelListino))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 319, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBtnAggiungi)
-                    .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 327, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jbtnDec)
-                    .addComponent(jBtnInc)
-                    .addComponent(jBtnElimina))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButtonEsce)
-                    .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(54, 54, 54))
+                        .addComponent(jBtnEsce)))
+                .addContainerGap(23, Short.MAX_VALUE))
         );
 
         pack();
@@ -668,17 +834,15 @@ public class CassaGui extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jButtonEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonEsceActionPerformed
-        // TODO add your handling code here:
+    private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_jButtonEsceActionPerformed
+    }//GEN-LAST:event_jBtnEsceActionPerformed
 
     /**
      *
      * @param evt
      */
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
-        // TODO add your handling code here:
         ordine = new Ordine(this.cassa, "Adriano Celentano");
         StatoBottoni();
     }//GEN-LAST:event_jBtnNuovoOrdineActionPerformed
@@ -688,7 +852,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblOrdineMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblOrdineMouseClicked
-        // TODO add your handling code here:
         int colonna = jTblOrdine.getSelectedColumn();
         int riga = jTblOrdine.getSelectedRow();
         if (evt.getButton() == BUTTON3) {
@@ -702,7 +865,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
-        // TODO add your handling code here:
         int colonna = jTblOrdine.getSelectedColumn();
         int riga = jTblOrdine.getSelectedRow();
 
@@ -724,7 +886,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
-        // TODO add your handling code here:
         jCmbCategoria.setSelectedIndex(-1);
         RefreshListino();
         StatoBottoni();
@@ -735,7 +896,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jCmbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbCategoriaItemStateChanged
-        // TODO add your handling code here:
         RefreshListino();
         StatoBottoni();
     }//GEN-LAST:event_jCmbCategoriaItemStateChanged
@@ -745,7 +905,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jMenuAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAggiungiMouseClicked
-        // TODO add your handling code here:
         AggiungiDaListino();
     }//GEN-LAST:event_jMenuAggiungiMouseClicked
 
@@ -754,7 +913,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAggiungiMouseClicked
-        // TODO add your handling code here:
         AggiungiDaListino();
     }//GEN-LAST:event_jBtnAggiungiMouseClicked
 
@@ -774,41 +932,66 @@ public class CassaGui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnAggiungiActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnEliminaActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnEliminaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnEliminaMouseClicked
-        // TODO add your handling code here:
         EliminaRiga();
     }//GEN-LAST:event_jBtnEliminaMouseClicked
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnIncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnIncActionPerformed
-        // TODO add your handling code here:
         incQuantita();
     }//GEN-LAST:event_jBtnIncActionPerformed
 
-    private void jbtnDecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbtnDecActionPerformed
-        // TODO add your handling code here:
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnDecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDecActionPerformed
         decQuantita();
-    }//GEN-LAST:event_jbtnDecActionPerformed
+    }//GEN-LAST:event_jBtnDecActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnConfermaVarianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConfermaVarianteActionPerformed
-        // TODO add your handling code here:
         String variante = (String) jCmbVarianti.getSelectedItem();
         ModificaVariante(variante);
-
     }//GEN-LAST:event_jBtnConfermaVarianteActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnEliminaVarianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminaVarianteActionPerformed
-        // TODO add your handling code here:
         ModificaVariante("");
-
     }//GEN-LAST:event_jBtnEliminaVarianteActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jBtnAnnullaFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnAnnullaFiltroActionPerformed
+
+    private void jMenuEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuEliminaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jMenuEliminaActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -817,19 +1000,26 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JButton jBtnAnnullaOrdine;
     private javax.swing.JButton jBtnConfermaOrdine;
     private javax.swing.JButton jBtnConfermaVariante;
+    private javax.swing.JButton jBtnDec;
     private javax.swing.JButton jBtnElimina;
     private javax.swing.JButton jBtnEliminaVariante;
+    private javax.swing.JButton jBtnEsce;
     private javax.swing.JButton jBtnInc;
     private javax.swing.JButton jBtnNuovoOrdine;
-    private javax.swing.JButton jButtonEsce;
     private javax.swing.JComboBox jCmbCategoria;
+    private javax.swing.JComboBox jCmbSconti;
     private javax.swing.JComboBox jCmbVarianti;
-    private javax.swing.JLabel jLabelListino;
-    private javax.swing.JLabel jLabelOrdine;
-    private javax.swing.JLabel jLabelVarianti;
     private javax.swing.JLabel jLblCliente;
+    private javax.swing.JLabel jLblContanti;
     private javax.swing.JLabel jLblFiltro;
+    private javax.swing.JLabel jLblListino;
+    private javax.swing.JLabel jLblOrdine;
+    private javax.swing.JLabel jLblResto;
+    private javax.swing.JLabel jLblSconti;
+    private javax.swing.JLabel jLblScontoGiorno;
+    private javax.swing.JLabel jLblScontoOrdine;
     private javax.swing.JLabel jLblTavolo;
+    private javax.swing.JLabel jLblTotale;
     private javax.swing.JMenu jMenu1;
     private javax.swing.JMenuItem jMenuAggiungi;
     private javax.swing.JMenuBar jMenuBar;
@@ -838,6 +1028,9 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuExit;
     private javax.swing.JMenuItem jMenuInc;
     private javax.swing.JMenuItem jMenuVarianti;
+    private javax.swing.JPanel jPanelConto;
+    private javax.swing.JPanel jPanelOrdine;
+    private javax.swing.JPanel jPanelSconto;
     private javax.swing.JPanel jPanelVarianti;
     private javax.swing.JPopupMenu jPopListino;
     private javax.swing.JPopupMenu jPopOrdine;
@@ -846,7 +1039,12 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JTable jTblListino;
     private javax.swing.JTable jTblOrdine;
     private javax.swing.JTextField jTxtCliente;
+    private javax.swing.JTextField jTxtContanti;
+    private javax.swing.JTextField jTxtNetto;
+    private javax.swing.JTextField jTxtResto;
+    private javax.swing.JTextField jTxtScontoGiorno;
+    private javax.swing.JTextField jTxtScontoOrdine;
     private javax.swing.JTextField jTxtTavolo;
-    private javax.swing.JButton jbtnDec;
+    private javax.swing.JTextField jTxtTotale;
     // End of variables declaration//GEN-END:variables
 }

@@ -26,7 +26,7 @@ import utils.IdDescr;
 public class Cassa {
 
     private static final Logger LOGGER = Logger.getLogger(Cassa.class);
-    Casse cassa;
+    private Casse cassa;
     private Date data;
     private Giorni giorno;
     private List<ListinoReale> listino;

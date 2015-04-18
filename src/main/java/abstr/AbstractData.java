@@ -29,10 +29,4 @@ public abstract class AbstractData<PrimaryKey extends Serializable> extends Abst
         super.setId(primaryKey);
     }
 
-    /**
-     *
-     * @param As
-     */
-    public void copyValue(AbstractData As) {
-    }
 }
