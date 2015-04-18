@@ -34,7 +34,6 @@ public class RigheCommesse extends AbstractData<Integer> {
     private ListinoProdotti getProdotto() {
         ListinoProdottiManager mgrProdotto = new ListinoProdottiManager();
         return mgrProdotto.get(idProdotto);
-
     }
 
     /**
@@ -102,14 +101,13 @@ public class RigheCommesse extends AbstractData<Integer> {
         Valuta prezzo = new Valuta(prezzoListino);
         Valuta sconto = new Valuta(getScontoApplicato());
         return new Object[]{
-           // getIdDescrProdotto().getIdDescr(),
             this.getProdotto().getNomeProdotto(),
             prezzo.toString(),
             sconto.toString(),
             getQuantita(),
             getVarianti(),
-            this.getProdotto().getId()
-            
+            this.getProdotto().getId(),
+            getId()
         };
     }
 
@@ -140,12 +138,12 @@ public class RigheCommesse extends AbstractData<Integer> {
     public void setIdCommessa(int idCommessa) {
         this.idCommessa = idCommessa;
     }
+
     /**
      *
-     * @return
+     * @param deltaQuantita
      */
-//    public IdDescr getIdDescrProdotto() {
-//        return new IdDescr(this.getIdProdotto(), nomeProdotto);
-//    }
-
+    public void DeltaQuantita(int deltaQuantita) {
+        this.quantita = this.quantita + deltaQuantita;
+    }
 }

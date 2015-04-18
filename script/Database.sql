@@ -92,7 +92,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,7 +308,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -393,6 +393,7 @@ CREATE TABLE `variantiprodotti` (
 
 LOCK TABLES `variantiprodotti` WRITE;
 /*!40000 ALTER TABLE `variantiprodotti` DISABLE KEYS */;
+INSERT INTO `variantiprodotti` VALUES (1,'Senza Formaggio',1),(2,'Pomodoro',1),(3,'In bianco',1);
 /*!40000 ALTER TABLE `variantiprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -445,4 +446,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-04 18:05:24
+-- Dump completed on 2015-04-18 18:17:08

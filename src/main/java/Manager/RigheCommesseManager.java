@@ -59,4 +59,45 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
             return righe;
         }
     }
+
+    /**
+     *
+     * @param id
+     * @param deltaQuantita
+     */
+    public void DeltaQuantita(int id, int deltaQuantita) {
+        RigheCommesse riga = get(id);
+        riga.DeltaQuantita(deltaQuantita);
+        update(id, riga);
+
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void incQuantita(int id) {
+        DeltaQuantita(id, 1);
+    }
+
+    /**
+     *
+     * @param id
+     */
+    public void decQuantita(int id) {
+        DeltaQuantita(id, -1);
+    }
+
+    /**
+     *
+     * @param id
+     * @param variante
+     */
+    public void CambiaVariante(int id, String variante) {
+        RigheCommesse riga = get(id);
+        riga.setVarianti(variante);
+        update(id, riga);
+
+    }
+
 }
