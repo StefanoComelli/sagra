@@ -87,12 +87,13 @@ CREATE TABLE `commesse` (
   `nomeCliente` text NOT NULL COMMENT 'Nome del cliente',
   `tavoloCliente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
   `note` varchar(80) DEFAULT NULL,
+  `coperti` int(10) NOT NULL DEFAULT '0' COMMENT 'Numero coperti',
   PRIMARY KEY (`idCommessa`),
   KEY `idx_commesse_idCassa` (`idCassa`),
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -308,7 +309,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=46 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -446,4 +447,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-04-18 18:17:08
+-- Dump completed on 2015-04-19 21:14:49

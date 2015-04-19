@@ -42,11 +42,14 @@
             <column name="note" length="80" not-null="false" />
         </property>
         <set name="logOrdine" table="logOrdini" 
-              inverse="true" lazy="false" fetch="select">
+             inverse="true" lazy="false" fetch="select">
             <key>
                 <column name="idOrdine" not-null="true" />
             </key>
             <one-to-many class="model.LogOrdini" />
         </set>
+        <property name="coperti" type="java.lang.Integer">
+            <column name="coperto" not-null="true" />
+        </property>       
     </class>
 </hibernate-mapping>
