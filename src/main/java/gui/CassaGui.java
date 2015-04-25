@@ -61,13 +61,6 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
-    private void CalcolaTotale() {
-        //TODO
-    }
-
-    /**
-     *
-     */
     private void SetupSconti() {
         jCmbSconti.removeAllItems();
         jCmbSconti.addItem("");
@@ -180,19 +173,46 @@ public class CassaGui extends javax.swing.JFrame {
         mgrRiga.insert(riga);
 
         RefreshOrdine();
+
     }
 
     /**
      *
      */
     private void RefreshOrdine() {
-        DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
-        GuiUtils.EmptyJtable(jTblOrdine);
-        int idCommessa = ordine.getCommessa().getId();
-        List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
-        for (RigheCommesse riga : righe) {
-            model.addRow(riga.getRow());
+        if (ordine != null) {
+            DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
+            GuiUtils.EmptyJtable(jTblOrdine);
+            int idCommessa = ordine.getCommessa().getId();
+            List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
+            for (RigheCommesse riga : righe) {
+                model.addRow(riga.getRow());
+            }
+
+            RefreshConto();
         }
+    }
+
+    /**
+     *
+     */
+    private void RefreshConto() {
+        int idCommessa = ordine.getCommessa().getId();
+
+        float percScontoDaApplicare;
+        float scontoApplicato;
+        Valuta totale;
+
+        totale = new Valuta(ordine.getRigheMgr().getTotale(idCommessa));
+        jTxtTotale.setText(totale.toString());
+
+        percScontoDaApplicare = getScontoDaApplicare();
+        scontoApplicato = totale.getValore() / 100 * percScontoDaApplicare;
+        Valuta scontoOrdine = new Valuta(scontoApplicato);
+        Valuta netto = new Valuta(totale.getValore() - scontoApplicato);
+
+        jTxtScontoOrdine.setText(scontoOrdine.toString());
+        jTxtNetto.setText(netto.toString());
     }
 
     /**
@@ -228,6 +248,34 @@ public class CassaGui extends javax.swing.JFrame {
 
     /**
      *
+     * @return
+     */
+    private float getScontoDaApplicare() {
+        Sconto scontoDaApplicare;
+        if (jCmbSconti.getSelectedItem() != null && !jCmbSconti.getSelectedItem().equals("")) {
+            IdDescr scontoGiorno = new IdDescr((String) jCmbSconti.getSelectedItem());
+            scontoDaApplicare = new Sconto((float) scontoGiorno.getId());
+        } else if (jTxtScontoGiorno.getText() != null && !jTxtScontoGiorno.getText().isEmpty()) {
+            scontoDaApplicare = new Sconto(jTxtScontoGiorno.getText());
+
+        } else {
+            scontoDaApplicare = new Sconto(0);
+        }
+        return scontoDaApplicare.getValore();
+    }
+
+    /**
+     *
+     */
+    private void PopolaVarianti() {
+        jCmbVarianti.addItem("");
+        for (Varianti variante : cassa.getVarianti()) {
+            jCmbVarianti.addItem(variante.getVariante());
+        }
+    }
+
+    /**
+     *
      */
     private void StatoBottoni() {
         boolean flgOrdineOk;
@@ -241,7 +289,7 @@ public class CassaGui extends javax.swing.JFrame {
         flgOrdineSel = jTblOrdine.getSelectedRowCount() != 0;
 
         if (flgOrdineSel) {
-            int row = jTblListino.getSelectedRow();
+            int row = jTblOrdine.getSelectedRow();
 
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
             quantita = (int) model.getValueAt(row, TBL_RIGHE_QUANTITA);
@@ -266,7 +314,7 @@ public class CassaGui extends javax.swing.JFrame {
             jBtnDec.setEnabled(quantita > 1);
         }
 
-        if (!flgOrdineOk){
+        if (!flgOrdineOk) {
             jTxtCliente.setText("");
             jTxtTavolo.setText("");
             JSpinCoperti.setValue(0);
@@ -337,7 +385,6 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtScontoGiorno = new javax.swing.JTextField();
         jLblSconti = new javax.swing.JLabel();
         jCmbSconti = new javax.swing.JComboBox();
-        jLabel1 = new javax.swing.JLabel();
         jLblCoperti = new javax.swing.JLabel();
         JSpinCoperti = new javax.swing.JSpinner();
         jMenuBar = new javax.swing.JMenuBar();
@@ -487,11 +534,6 @@ public class CassaGui extends javax.swing.JFrame {
         });
 
         jBtnAggiungi.setText("<- Aggiungi");
-        jBtnAggiungi.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jBtnAggiungiMouseClicked(evt);
-            }
-        });
         jBtnAggiungi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnAggiungiActionPerformed(evt);
@@ -499,11 +541,6 @@ public class CassaGui extends javax.swing.JFrame {
         });
 
         jBtnElimina.setText("Elimina");
-        jBtnElimina.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jBtnEliminaMouseClicked(evt);
-            }
-        });
         jBtnElimina.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnEliminaActionPerformed(evt);
@@ -691,6 +728,17 @@ public class CassaGui extends javax.swing.JFrame {
 
         jLblSconti.setText("Sconti:");
 
+        jCmbSconti.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCmbScontiMouseClicked(evt);
+            }
+        });
+        jCmbSconti.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbScontiActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelScontoLayout = new javax.swing.GroupLayout(jPanelSconto);
         jPanelSconto.setLayout(jPanelScontoLayout);
         jPanelScontoLayout.setHorizontalGroup(
@@ -718,8 +766,6 @@ public class CassaGui extends javax.swing.JFrame {
                         .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
-
-        jLabel1.setText("jLabel1");
 
         jLblCoperti.setText("Coperti:");
 
@@ -789,14 +835,12 @@ public class CassaGui extends javax.swing.JFrame {
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(jLabel1))
+                                .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(jLblFiltro)
                                     .addGap(252, 252, 252)
-                                    .addComponent(jBtnAnnullaFiltro))))))
+                                    .addComponent(jBtnAnnullaFiltro)))
+                            .addGap(10, 10, 10))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -833,8 +877,7 @@ public class CassaGui extends javax.swing.JFrame {
                                     .addComponent(jBtnElimina)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                         .addComponent(jBtnDec)
-                                        .addComponent(jBtnInc))))
-                            .addComponent(jLabel1))
+                                        .addComponent(jBtnInc)))))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -854,7 +897,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
-        // TODO add your handling code here:
+        System.exit(0);
     }//GEN-LAST:event_jMenuExitActionPerformed
 
     /**
@@ -900,16 +943,6 @@ public class CassaGui extends javax.swing.JFrame {
 
     /**
      *
-     */
-    private void PopolaVarianti() {
-        jCmbVarianti.addItem("");
-        for (Varianti variante : cassa.getVarianti()) {
-            jCmbVarianti.addItem(variante.getVariante());
-        }
-    }
-
-    /**
-     *
      * @param evt
      */
     private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
@@ -933,15 +966,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jMenuAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAggiungiMouseClicked
         AggiungiDaListino();
+        StatoBottoni();
     }//GEN-LAST:event_jMenuAggiungiMouseClicked
-
-    /**
-     *
-     * @param evt
-     */
-    private void jBtnAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAggiungiMouseClicked
-        AggiungiDaListino();
-    }//GEN-LAST:event_jBtnAggiungiMouseClicked
 
     /**
      *
@@ -949,6 +975,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jMenuAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAggiungiActionPerformed
         // TODO add your handling code here:
+        AggiungiDaListino();
+        StatoBottoni();
     }//GEN-LAST:event_jMenuAggiungiActionPerformed
 
     /**
@@ -957,6 +985,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jBtnAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAggiungiActionPerformed
         // TODO add your handling code here:
+        AggiungiDaListino();
+        StatoBottoni();
     }//GEN-LAST:event_jBtnAggiungiActionPerformed
 
     /**
@@ -964,16 +994,8 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminaActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBtnEliminaActionPerformed
-
-    /**
-     *
-     * @param evt
-     */
-    private void jBtnEliminaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnEliminaMouseClicked
         EliminaRiga();
-    }//GEN-LAST:event_jBtnEliminaMouseClicked
+    }//GEN-LAST:event_jBtnEliminaActionPerformed
 
     /**
      *
@@ -981,6 +1003,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jBtnIncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnIncActionPerformed
         incQuantita();
+        StatoBottoni();
     }//GEN-LAST:event_jBtnIncActionPerformed
 
     /**
@@ -989,6 +1012,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jBtnDecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnDecActionPerformed
         decQuantita();
+        StatoBottoni();
     }//GEN-LAST:event_jBtnDecActionPerformed
 
     /**
@@ -1017,8 +1041,20 @@ public class CassaGui extends javax.swing.JFrame {
     }//GEN-LAST:event_jBtnAnnullaFiltroActionPerformed
 
     private void jMenuEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuEliminaActionPerformed
-        // TODO add your handling code here:
+        EliminaRiga();
     }//GEN-LAST:event_jMenuEliminaActionPerformed
+
+    private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
+        // TODO add your handling code here:
+       RefreshOrdine();
+
+    }//GEN-LAST:event_jCmbScontiActionPerformed
+
+    private void jCmbScontiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCmbScontiMouseClicked
+        // TODO add your handling code here:
+        RefreshOrdine();
+
+    }//GEN-LAST:event_jCmbScontiMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1037,7 +1073,6 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JComboBox jCmbCategoria;
     private javax.swing.JComboBox jCmbSconti;
     private javax.swing.JComboBox jCmbVarianti;
-    private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLblCliente;
     private javax.swing.JLabel jLblContanti;
     private javax.swing.JLabel jLblCoperti;

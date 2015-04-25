@@ -38,4 +38,40 @@ public class LogOrdiniKey implements Serializable {
     public void setIdOrdine(int idOrdine) {
         this.idOrdine = idOrdine;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        int hash = 7;
+        hash = 89 * hash + this.idRigaLog;
+        hash = 89 * hash + this.idOrdine;
+        return hash;
+    }
+
+    /**
+     * 
+     * @param obj
+     * @return 
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final LogOrdiniKey other = (LogOrdiniKey) obj;
+        if (this.idRigaLog != other.idRigaLog) {
+            return false;
+        }
+        if (this.idOrdine != other.idOrdine) {
+            return false;
+        }
+        return true;
+    }
+    
 }

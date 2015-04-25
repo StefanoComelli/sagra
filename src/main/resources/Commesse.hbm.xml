@@ -49,7 +49,7 @@
             <one-to-many class="model.LogOrdini" />
         </set>
         <property name="coperti" type="java.lang.Integer">
-            <column name="coperto" not-null="true" />
+            <column name="coperti" not-null="true" />
         </property>       
     </class>
 </hibernate-mapping>

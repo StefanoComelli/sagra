@@ -38,4 +38,41 @@ public class ProdottiGiornalieraKey implements Serializable {
     public void setIdProdotto(int idProdotto) {
         this.idProdotto = idProdotto;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public int hashCode() {
+        int hash = 5;
+        hash = 89 * hash + this.idGiorno;
+        hash = 89 * hash + this.idProdotto;
+        return hash;
+    }
+
+    /**
+     * 
+     * @param obj
+     * @return 
+     */
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ProdottiGiornalieraKey other = (ProdottiGiornalieraKey) obj;
+        if (this.idGiorno != other.idGiorno) {
+            return false;
+        }
+        if (this.idProdotto != other.idProdotto) {
+            return false;
+        }
+        return true;
+    }
+ 
+    
 }

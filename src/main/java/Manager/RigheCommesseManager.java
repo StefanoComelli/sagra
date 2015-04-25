@@ -97,4 +97,41 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         update(id, riga);
     }
 
+    /**
+     *
+     * @param idCommessa
+     * @return
+     */
+    public float getTotale(int idCommessa) {
+
+        List<RigheCommesse> righe = null;
+        float totale = 0;
+
+        Session session = getFactory().openSession();
+        Criteria cr = session.createCriteria(RigheCommesse.class);
+        cr.add(Restrictions.eq("idCommessa", idCommessa));
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            righe = cr.list();
+            for (RigheCommesse riga : righe) {
+                totale += riga.getPrezzoListino() * riga.getQuantita();
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            LOGGER.error(e);
+        } finally {
+            session.close();
+        }
+
+        if (righe == null || righe.isEmpty()) {
+            return 0;
+        } else {
+            return totale;
+        }
+    }
+
 }

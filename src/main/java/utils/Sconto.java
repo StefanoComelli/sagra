@@ -27,8 +27,7 @@ public class Sconto {
      */
     public Sconto(String valore) {
         try {
-            String tmp = valore.substring(2);
-            this.valore = Float.valueOf(tmp);
+            this.valore = Float.valueOf(valore);
         } catch (Exception e) {
             this.valore = 0;
         }
