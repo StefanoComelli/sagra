@@ -255,10 +255,9 @@
         <Component class="javax.swing.JTable" name="jTblOrdine">
           <Properties>
             <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
-              <Table columnCount="7" rowCount="0">
+              <Table columnCount="6" rowCount="0">
                 <Column editable="false" title="Prodotto" type="java.lang.String"/>
                 <Column editable="false" title="Prezzo" type="java.lang.String"/>
-                <Column editable="false" title="Sconto" type="java.lang.String"/>
                 <Column editable="false" title="Quantit&#xe0;" type="java.lang.Integer"/>
                 <Column editable="false" title="Variante" type="java.lang.String"/>
                 <Column editable="false" title="IdProdotto" type="java.lang.Integer"/>
@@ -267,11 +266,6 @@
             </Property>
             <Property name="columnModel" type="javax.swing.table.TableColumnModel" editor="org.netbeans.modules.form.editors2.TableColumnModelEditor">
               <TableColumnModel selectionModel="0">
-                <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
-                  <Title/>
-                  <Editor/>
-                  <Renderer/>
-                </Column>
                 <Column maxWidth="-1" minWidth="-1" prefWidth="-1" resizable="true">
                   <Title/>
                   <Editor/>

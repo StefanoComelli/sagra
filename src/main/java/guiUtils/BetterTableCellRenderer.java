@@ -11,14 +11,14 @@ import javax.swing.table.DefaultTableCellRenderer;
 public class BetterTableCellRenderer extends DefaultTableCellRenderer {
 
     /**
-     * 
+     *
      * @param table
      * @param value
      * @param selected
      * @param focused
      * @param row
      * @param column
-     * @return 
+     * @return
      */
     @Override
     public Component getTableCellRendererComponent(JTable table, Object value, boolean selected, boolean focused, int row, int column) {

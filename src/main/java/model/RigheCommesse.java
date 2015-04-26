@@ -17,7 +17,6 @@ public class RigheCommesse extends AbstractData<Integer> {
     private int quantita;
     private String varianti;
     private float prezzoListino;
-    private float scontoApplicato;
     private int idCommessa;
 
     /**
@@ -58,20 +57,6 @@ public class RigheCommesse extends AbstractData<Integer> {
     }
 
     /**
-     * @return the scontoApplicato
-     */
-    public float getScontoApplicato() {
-        return scontoApplicato;
-    }
-
-    /**
-     * @param scontoApplicato the scontoApplicato to set
-     */
-    public void setScontoApplicato(float scontoApplicato) {
-        this.scontoApplicato = scontoApplicato;
-    }
-
-    /**
      * @return the quantita
      */
     public int getQuantita() {
@@ -99,11 +84,9 @@ public class RigheCommesse extends AbstractData<Integer> {
      */
     public Object[] getRow() {
         Valuta prezzo = new Valuta(prezzoListino);
-        Valuta sconto = new Valuta(getScontoApplicato());
         return new Object[]{
             this.getProdotto().getNomeProdotto(),
             prezzo.toString(),
-            sconto.toString(),
             getQuantita(),
             getVarianti(),
             this.getProdotto().getId(),

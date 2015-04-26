@@ -23,8 +23,5 @@
         <property name="prezzoListino" type="float">
             <column name="prezzoListino" not-null="true" />
         </property> 
-        <property name="scontoApplicato" type="float">
-            <column name="scontoApplicato" not-null="true" />
-        </property> 
     </class>
 </hibernate-mapping>

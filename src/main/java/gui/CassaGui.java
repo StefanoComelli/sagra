@@ -35,11 +35,10 @@ public class CassaGui extends javax.swing.JFrame {
 
     private final int TBL_RIGHE_PRODOTTO = 0;
     private final int TBL_RIGHE_PREZZO = 1;
-    private final int TBL_RIGHE_SCONTO = 2;
-    private final int TBL_RIGHE_QUANTITA = 3;
-    private final int TBL_RIGHE_NOTE = 4;
-    private final int TBL_RIGHE_ID_PRODOTTO = 5;
-    private final int TBL_RIGHE_ID = 6;
+    private final int TBL_RIGHE_QUANTITA = 2;
+    private final int TBL_RIGHE_NOTE = 3;
+    private final int TBL_RIGHE_ID_PRODOTTO = 4;
+    private final int TBL_RIGHE_ID = 5;
 
     /**
      *
@@ -440,14 +439,14 @@ public class CassaGui extends javax.swing.JFrame {
 
             },
             new String [] {
-                "Prodotto", "Prezzo", "Sconto", "Quantità", "Variante", "IdProdotto", "Id"
+                "Prodotto", "Prezzo", "Quantità", "Variante", "IdProdotto", "Id"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.String.class, java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
+                java.lang.String.class, java.lang.String.class, java.lang.Integer.class, java.lang.String.class, java.lang.Integer.class, java.lang.Integer.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false
+                false, false, false, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -466,12 +465,12 @@ public class CassaGui extends javax.swing.JFrame {
         });
         jScrollOrdine.setViewportView(jTblOrdine);
         if (jTblOrdine.getColumnModel().getColumnCount() > 0) {
+            jTblOrdine.getColumnModel().getColumn(4).setMinWidth(0);
+            jTblOrdine.getColumnModel().getColumn(4).setPreferredWidth(0);
+            jTblOrdine.getColumnModel().getColumn(4).setMaxWidth(0);
             jTblOrdine.getColumnModel().getColumn(5).setMinWidth(0);
             jTblOrdine.getColumnModel().getColumn(5).setPreferredWidth(0);
             jTblOrdine.getColumnModel().getColumn(5).setMaxWidth(0);
-            jTblOrdine.getColumnModel().getColumn(6).setMinWidth(0);
-            jTblOrdine.getColumnModel().getColumn(6).setPreferredWidth(0);
-            jTblOrdine.getColumnModel().getColumn(6).setMaxWidth(0);
         }
 
         jTblListino.setModel(new javax.swing.table.DefaultTableModel(
@@ -1046,7 +1045,7 @@ public class CassaGui extends javax.swing.JFrame {
 
     private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
         // TODO add your handling code here:
-       RefreshOrdine();
+        RefreshOrdine();
 
     }//GEN-LAST:event_jCmbScontiActionPerformed
 
