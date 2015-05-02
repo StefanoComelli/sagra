@@ -77,6 +77,9 @@ public class Ordine {
      *
      */
     public void AnnullaOrdine() {
+        int idCommessa = commessa.getId();
+        righeMgr.deleteByCommessa(idCommessa);
+        commessaMgr.delete(idCommessa);
     }
 
     /**

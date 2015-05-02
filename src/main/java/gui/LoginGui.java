@@ -12,9 +12,9 @@ import org.jboss.logging.Logger;
  * @author Stefano
  */
 public class LoginGui extends javax.swing.JFrame {
-
+    
     private static final Logger LOGGER = Logger.getLogger(LoginGui.class);
-
+    
     private final Login login = new Login();
 
     /**
@@ -28,13 +28,14 @@ public class LoginGui extends javax.swing.JFrame {
         // String giorno, String cassa, String operatore
         CassaGui cassaGui = new CassaGui(giorno, cassa, operatore);
         cassaGui.setVisible(true);
+        setVisible(false);
     }
 
     /**
      *
      */
     private void StatoFinestra() {
-
+        
         if (jCmbCassa.getSelectedItem() == null || jCmbOperatore.getSelectedItem() == null
                 || jCmbGiorno.getSelectedItem() == null) {
             jBtnOk.setEnabled(false);
@@ -47,24 +48,24 @@ public class LoginGui extends javax.swing.JFrame {
      *
      */
     private void Setup() {
-
+        
         for (Casse cassa : login.getCasse()) {
             jCmbCassa.addItem(cassa.toString());
         }
         jCmbCassa.setSelectedItem(null);
-
+        
         for (Operatori operatore : login.getOperatori()) {
             jCmbOperatore.addItem(operatore.toString());
         }
         jCmbOperatore.setSelectedItem(null);
-
+        
         for (Giorni giorno : login.getGiorni()) {
             jCmbGiorno.addItem(giorno.toString());
         }
         jCmbGiorno.setSelectedItem(null);
-
+        
         setLocationRelativeTo(null);
-
+        
         StatoFinestra();
     }
 
@@ -246,40 +247,40 @@ public class LoginGui extends javax.swing.JFrame {
     }//GEN-LAST:event_exitMenuItemActionPerformed
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jCmbCassaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbCassaItemStateChanged
         StatoFinestra();
     }//GEN-LAST:event_jCmbCassaItemStateChanged
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jCmbOperatoreItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbOperatoreItemStateChanged
         StatoFinestra();
     }//GEN-LAST:event_jCmbOperatoreItemStateChanged
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         System.exit(0);
     }//GEN-LAST:event_jBtnEsceActionPerformed
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jCmbGiornoItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbGiornoItemStateChanged
         // TODO add your handling code here:
     }//GEN-LAST:event_jCmbGiornoItemStateChanged
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jBtnOkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnOkActionPerformed
         GoLogin();
@@ -329,9 +330,9 @@ public class LoginGui extends javax.swing.JFrame {
      * @param setCursorBusy
      */
     private void setCursorBusy(boolean isBusy) {
-
+        
         Cursor cursor;
-
+        
         if (isBusy) {
             cursor = new Cursor(Cursor.WAIT_CURSOR);
         } else {

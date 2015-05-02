@@ -61,6 +61,38 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
     /**
      *
+     * @param idCommessa
+     */
+    public void deleteByCommessa(int idCommessa) {
+
+        List<RigheCommesse> righe;
+
+        Session session = getFactory().openSession();
+        Criteria cr = session.createCriteria(RigheCommesse.class);
+        cr.add(Restrictions.eq("idCommessa", idCommessa));
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            righe = cr.list();
+            if (righe != null) {
+                for (RigheCommesse riga : righe) {
+                    delete(riga.getId());
+                }
+            }
+            tx.commit();
+        } catch (HibernateException e) {
+            if (tx != null) {
+                tx.rollback();
+            }
+            LOGGER.error(e);
+        } finally {
+            session.close();
+        }
+
+    }
+
+    /**
+     *
      * @param id
      * @param deltaQuantita
      */

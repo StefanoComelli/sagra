@@ -33,20 +33,21 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuEliminaActionPerformed"/>
           </Events>
         </MenuItem>
-        <MenuItem class="javax.swing.JMenuItem" name="jMenuVarianti">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="Varianti"/>
-          </Properties>
-        </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuInc">
           <Properties>
             <Property name="text" type="java.lang.String" value="+1"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuIncActionPerformed"/>
+          </Events>
         </MenuItem>
         <MenuItem class="javax.swing.JMenuItem" name="jMenuDec">
           <Properties>
             <Property name="text" type="java.lang.String" value="-1"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jMenuDecActionPerformed"/>
+          </Events>
         </MenuItem>
       </SubComponents>
     </Container>
@@ -142,7 +143,7 @@
                                   <EmptySpace max="-2" attributes="0"/>
                                   <Component id="jLblCoperti" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="JSpinCoperti" min="-2" pref="45" max="-2" attributes="0"/>
+                                  <Component id="jSpinCoperti" min="-2" pref="45" max="-2" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -181,7 +182,7 @@
                   <Component id="jLblFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jBtnAnnullaFiltro" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="jLblCoperti" alignment="3" min="-2" max="-2" attributes="0"/>
-                  <Component id="JSpinCoperti" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="jSpinCoperti" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
@@ -696,11 +697,17 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Conferma"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnConfermaOrdineActionPerformed"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jBtnAnnullaOrdine">
           <Properties>
             <Property name="text" type="java.lang.String" value="Annulla"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBtnAnnullaOrdineActionPerformed"/>
+          </Events>
         </Component>
       </SubComponents>
     </Container>
@@ -781,7 +788,7 @@
         <Property name="text" type="java.lang.String" value="Coperti:"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JSpinner" name="JSpinCoperti">
+    <Component class="javax.swing.JSpinner" name="jSpinCoperti">
       <Properties>
         <Property name="model" type="javax.swing.SpinnerModel" editor="org.netbeans.modules.form.editors2.SpinnerModelEditor">
           <SpinnerModel initial="0" maximum="99" minimum="0" numberType="java.lang.Integer" stepSize="1" type="number"/>

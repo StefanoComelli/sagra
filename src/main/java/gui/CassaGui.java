@@ -3,7 +3,6 @@ package gui;
 import Manager.RigheCommesseManager;
 import beans.Cassa;
 import beans.Ordine;
-import static java.awt.event.MouseEvent.*;
 import javax.swing.table.DefaultTableModel;
 import model.CategorieProdotti;
 import model.ListinoReale;
@@ -12,7 +11,6 @@ import utils.IdDescr;
 import guiUtils.TableMouseListener;
 import guiUtils.BetterTableCellRenderer;
 import java.util.List;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import model.RigheCommesse;
 import model.Sconti;
@@ -42,6 +40,11 @@ public class CassaGui extends javax.swing.JFrame {
     private final int TBL_RIGHE_ID_PRODOTTO = 4;
     private final int TBL_RIGHE_ID = 5;
 
+    private int cListino;
+    private int rListino;
+    private int cOrdine;
+    private int rOrdine;
+
     /**
      *
      * @param giorno
@@ -67,6 +70,48 @@ public class CassaGui extends javax.swing.JFrame {
         jCmbSconti.addItem("");
         for (Sconti sconto : cassa.getSconti()) {
             jCmbSconti.addItem(sconto.toString());
+        }
+    }
+
+    /**
+     *
+     * @return
+     */
+    private boolean ChiediConferma(String titolo) {
+        Object[] options = {"Sì", "No"};
+        int n = JOptionPane.showOptionDialog(this, "Confermi ?", titolo,
+                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
+                null, options, options[1]);
+        return n == JOptionPane.YES_OPTION;
+    }
+
+    /**
+     *
+     */
+    private void Annulla() {
+
+        if (ordine != null) {
+            if (ChiediConferma("Annulla Ordine")) {
+                ordine.AnnullaOrdine();
+            }
+            ordine = null;
+            RefreshOrdine();
+        }
+    }
+
+    /**
+     *
+     */
+    private void Conferma() {
+        if (ControlloOrdine()) {
+            ordine.getCommessa().setNomeCliente(jTxtCliente.getText());
+            ordine.getCommessa().setCoperti((int) jSpinCoperti.getValue());
+            IdDescr sconto = new IdDescr((String) jCmbSconti.getSelectedItem());
+            ordine.getCommessa().setDescSconto(sconto.getDescr());
+
+            ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
+            ordine = null;
+            RefreshOrdine();
         }
     }
 
@@ -104,20 +149,22 @@ public class CassaGui extends javax.swing.JFrame {
      * @return
      */
     private int getIdRigaOrdine() {
-        int row = jTblOrdine.getSelectedRow();
         DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
-        return (int) model.getValueAt(row, TBL_RIGHE_ID);
+        return (int) model.getValueAt(rOrdine, TBL_RIGHE_ID);
     }
 
     /**
      *
      */
     private void EliminaRiga() {
-        int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.delete(id);
-        RefreshOrdine();
+        if (ChiediConferma("Elimina riga")) {
+            int id = getIdRigaOrdine();
+            RigheCommesseManager rigaMgr = new RigheCommesseManager();
+
+            rigaMgr.delete(id);
+            RefreshOrdine();
+        }
     }
 
     /**
@@ -158,14 +205,13 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void AggiungiDaListino() {
-        int row = jTblListino.getSelectedRow();
         RigheCommesse riga = new RigheCommesse();
 
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
 
-        prezzo = new Valuta(model.getValueAt(row, TBL_LISTINO_PREZZO));
-        riga.setIdProdotto((Integer) model.getValueAt(row, TBL_LISTINO_ID_PRODOTTO));
+        prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
+        riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
         riga.setPrezzoListino(prezzo.getValore());
         riga.setQuantita(1);
         riga.setIdCommessa(ordine.getCommessa().getId());
@@ -181,16 +227,33 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void RefreshOrdine() {
+
         if (ordine != null) {
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
             GuiUtils.EmptyJtable(jTblOrdine);
             int idCommessa = ordine.getCommessa().getId();
             List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
-            for (RigheCommesse riga : righe) {
-                model.addRow(riga.getRow());
+            if (righe != null) {
+                for (RigheCommesse riga : righe) {
+                    model.addRow(riga.getRow());
+                }
+                jTblOrdine.requestFocus();
+                if (jTblOrdine.getRowCount() > 0) {
+                    if (rOrdine >= jTblOrdine.getRowCount()) {
+                        rOrdine = jTblOrdine.getRowCount() - 1;
+                    }
+                    jTblOrdine.changeSelection(rOrdine, cOrdine, false, false);
+                } else {
+                    rOrdine = -1;
+                }
+            } else {
+                rOrdine = -1;
             }
 
             RefreshConto();
+        } else {
+            GuiUtils.EmptyJtable(jTblOrdine);
+            AnnullaConto();
         }
     }
 
@@ -214,6 +277,15 @@ public class CassaGui extends javax.swing.JFrame {
 
         jTxtScontoOrdine.setText(scontoOrdine.toString());
         jTxtNetto.setText(netto.toString());
+    }
+
+    /**
+     *
+     */
+    private void AnnullaConto() {
+        jTxtTotale.setText("");
+        jTxtScontoOrdine.setText("");
+        jTxtNetto.setText("");
     }
 
     /**
@@ -244,6 +316,8 @@ public class CassaGui extends javax.swing.JFrame {
                 model.addRow(prodotto.getRow());
             }
         }
+        jTblListino.requestFocus();
+        jTblListino.changeSelection(rListino, cListino, false, false);
 
     }
 
@@ -277,23 +351,37 @@ public class CassaGui extends javax.swing.JFrame {
 
     /**
      *
+     * @return
+     */
+    private boolean ControlloOrdine() {
+        boolean esito = true;
+
+        if ((int) jSpinCoperti.getValue() == 0) {
+            esito = ChiediConferma("Numero coperti corretto?");
+        }
+
+        return esito;
+    }
+
+    /**
+     *
      */
     private void StatoBottoni() {
         boolean flgOrdineOk;
         boolean flgOrdineSel;
         boolean flgListinoSel;
+        boolean flgOrdineRigheOk;
 
         int quantita;
 
         flgOrdineOk = ordine != null;
         flgListinoSel = jTblListino.getSelectedRowCount() != 0;
         flgOrdineSel = jTblOrdine.getSelectedRowCount() != 0;
+        flgOrdineRigheOk = flgOrdineOk && jTblOrdine.getRowCount() > 0;
 
         if (flgOrdineSel) {
-            int row = jTblOrdine.getSelectedRow();
-
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
-            quantita = (int) model.getValueAt(row, TBL_RIGHE_QUANTITA);
+            quantita = (int) model.getValueAt(rOrdine, TBL_RIGHE_QUANTITA);
         } else {
             quantita = 0;
         }
@@ -313,19 +401,20 @@ public class CassaGui extends javax.swing.JFrame {
             jCmbVarianti.setSelectedItem(null);
         } else {
             jBtnDec.setEnabled(quantita > 1);
+            jMenuDec.setEnabled(quantita > 1);
         }
 
         if (!flgOrdineOk) {
             jTxtCliente.setText("");
             jTxtTavolo.setText("");
-            JSpinCoperti.setValue(0);
+            jSpinCoperti.setValue(0);
         }
         jBtnNuovoOrdine.setEnabled(!flgOrdineOk);
         jBtnAnnullaOrdine.setEnabled(flgOrdineOk);
-        jBtnConfermaOrdine.setEnabled(flgOrdineOk);
+        jBtnConfermaOrdine.setEnabled(flgOrdineRigheOk);
         jTxtCliente.setEnabled(flgOrdineOk);
         jTxtTavolo.setEnabled(flgOrdineOk);
-        JSpinCoperti.setEnabled(flgOrdineOk);
+        jSpinCoperti.setEnabled(flgOrdineOk);
         jTblListino.setEnabled(flgOrdineOk);
     }
 
@@ -342,7 +431,6 @@ public class CassaGui extends javax.swing.JFrame {
         jMenuAggiungi = new javax.swing.JMenuItem();
         jPopOrdine = new javax.swing.JPopupMenu();
         jMenuElimina = new javax.swing.JMenuItem();
-        jMenuVarianti = new javax.swing.JMenuItem();
         jMenuInc = new javax.swing.JMenuItem();
         jMenuDec = new javax.swing.JMenuItem();
         jBtnEsce = new javax.swing.JButton();
@@ -387,7 +475,7 @@ public class CassaGui extends javax.swing.JFrame {
         jLblSconti = new javax.swing.JLabel();
         jCmbSconti = new javax.swing.JComboBox();
         jLblCoperti = new javax.swing.JLabel();
-        JSpinCoperti = new javax.swing.JSpinner();
+        jSpinCoperti = new javax.swing.JSpinner();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
@@ -413,13 +501,20 @@ public class CassaGui extends javax.swing.JFrame {
         });
         jPopOrdine.add(jMenuElimina);
 
-        jMenuVarianti.setText("Varianti");
-        jPopOrdine.add(jMenuVarianti);
-
         jMenuInc.setText("+1");
+        jMenuInc.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuIncActionPerformed(evt);
+            }
+        });
         jPopOrdine.add(jMenuInc);
 
         jMenuDec.setText("-1");
+        jMenuDec.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuDecActionPerformed(evt);
+            }
+        });
         jPopOrdine.add(jMenuDec);
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -695,8 +790,18 @@ public class CassaGui extends javax.swing.JFrame {
         });
 
         jBtnConfermaOrdine.setText("Conferma");
+        jBtnConfermaOrdine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnConfermaOrdineActionPerformed(evt);
+            }
+        });
 
         jBtnAnnullaOrdine.setText("Annulla");
+        jBtnAnnullaOrdine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnAnnullaOrdineActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanelOrdineLayout = new javax.swing.GroupLayout(jPanelOrdine);
         jPanelOrdine.setLayout(jPanelOrdineLayout);
@@ -770,7 +875,7 @@ public class CassaGui extends javax.swing.JFrame {
 
         jLblCoperti.setText("Coperti:");
 
-        JSpinCoperti.setModel(new javax.swing.SpinnerNumberModel(0, 0, 99, 1));
+        jSpinCoperti.setModel(new javax.swing.SpinnerNumberModel(0, 0, 99, 1));
 
         jMenu1.setText("File");
 
@@ -832,7 +937,7 @@ public class CassaGui extends javax.swing.JFrame {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLblCoperti)
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addComponent(JSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                    .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -861,7 +966,7 @@ public class CassaGui extends javax.swing.JFrame {
                     .addComponent(jLblFiltro)
                     .addComponent(jBtnAnnullaFiltro)
                     .addComponent(jLblCoperti)
-                    .addComponent(JSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLblOrdine)
@@ -914,10 +1019,8 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
-        // create a jframe
-        JFrame frame = new JFrame("JOptionPane showMessageDialog example");
 
-        String cliente = (String) JOptionPane.showInputDialog(frame, "Cliente ?",
+        String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                 "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
         if (!cliente.isEmpty()) {
             ordine = new Ordine(this.cassa, cliente);
@@ -931,11 +1034,8 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblOrdineMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblOrdineMouseClicked
-        int colonna = jTblOrdine.getSelectedColumn();
-        int riga = jTblOrdine.getSelectedRow();
-        if (evt.getButton() == BUTTON3) {
-            System.out.printf("Colonna %d", jTblOrdine.getSelectedColumn());
-        }
+        cOrdine = jTblOrdine.getSelectedColumn();
+        rOrdine = jTblOrdine.getSelectedRow();
         StatoBottoni();
     }//GEN-LAST:event_jTblOrdineMouseClicked
 
@@ -944,9 +1044,8 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
-        int colonna = jTblOrdine.getSelectedColumn();
-        int riga = jTblOrdine.getSelectedRow();
-
+        cListino = jTblListino.getSelectedColumn();
+        rListino = jTblListino.getSelectedRow();
         StatoBottoni();
     }//GEN-LAST:event_jTblListinoMouseClicked
 
@@ -983,7 +1082,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jMenuAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAggiungiActionPerformed
-        // TODO add your handling code here:
         AggiungiDaListino();
         StatoBottoni();
     }//GEN-LAST:event_jMenuAggiungiActionPerformed
@@ -993,7 +1091,6 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAggiungiActionPerformed
-        // TODO add your handling code here:
         AggiungiDaListino();
         StatoBottoni();
     }//GEN-LAST:event_jBtnAggiungiActionPerformed
@@ -1004,6 +1101,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jBtnEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEliminaActionPerformed
         EliminaRiga();
+        StatoBottoni();
     }//GEN-LAST:event_jBtnEliminaActionPerformed
 
     /**
@@ -1049,25 +1147,72 @@ public class CassaGui extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jBtnAnnullaFiltroActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jMenuEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuEliminaActionPerformed
         EliminaRiga();
+        StatoBottoni();
     }//GEN-LAST:event_jMenuEliminaActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
-        // TODO add your handling code here:
         RefreshOrdine();
+        StatoBottoni();
 
     }//GEN-LAST:event_jCmbScontiActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
     private void jCmbScontiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCmbScontiMouseClicked
-        // TODO add your handling code here:
         RefreshOrdine();
 
     }//GEN-LAST:event_jCmbScontiMouseClicked
 
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnAnnullaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaOrdineActionPerformed
+        Annulla();
+        StatoBottoni();
+    }//GEN-LAST:event_jBtnAnnullaOrdineActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
+    private void jMenuIncActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuIncActionPerformed
+        incQuantita();
+        StatoBottoni();
+    }//GEN-LAST:event_jMenuIncActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
+    private void jMenuDecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuDecActionPerformed
+        decQuantita();
+        StatoBottoni();
+    }//GEN-LAST:event_jMenuDecActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnConfermaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConfermaOrdineActionPerformed
+        Conferma();
+        StatoBottoni();
+    }//GEN-LAST:event_jBtnConfermaOrdineActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JSpinner JSpinCoperti;
     private javax.swing.JButton jBtnAggiungi;
     private javax.swing.JButton jBtnAnnullaFiltro;
     private javax.swing.JButton jBtnAnnullaOrdine;
@@ -1101,7 +1246,6 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JMenuItem jMenuElimina;
     private javax.swing.JMenuItem jMenuExit;
     private javax.swing.JMenuItem jMenuInc;
-    private javax.swing.JMenuItem jMenuVarianti;
     private javax.swing.JPanel jPanelConto;
     private javax.swing.JPanel jPanelOrdine;
     private javax.swing.JPanel jPanelSconto;
@@ -1110,6 +1254,7 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JPopupMenu jPopOrdine;
     private javax.swing.JScrollPane jScrollListino;
     private javax.swing.JScrollPane jScrollOrdine;
+    private javax.swing.JSpinner jSpinCoperti;
     private javax.swing.JTable jTblListino;
     private javax.swing.JTable jTblOrdine;
     private javax.swing.JTextField jTxtCliente;
