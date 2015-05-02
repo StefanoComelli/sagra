@@ -12,6 +12,8 @@ import utils.IdDescr;
 import guiUtils.TableMouseListener;
 import guiUtils.BetterTableCellRenderer;
 import java.util.List;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import model.RigheCommesse;
 import model.Sconti;
 import model.Varianti;
@@ -912,7 +914,15 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
-        ordine = new Ordine(this.cassa, "Adriano Celentano");
+        // create a jframe
+        JFrame frame = new JFrame("JOptionPane showMessageDialog example");
+
+        String cliente = (String) JOptionPane.showInputDialog(frame, "Cliente ?",
+                "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
+        if (!cliente.isEmpty()) {
+            ordine = new Ordine(this.cassa, cliente);
+            jTxtCliente.setText(cliente);
+        }
         StatoBottoni();
     }//GEN-LAST:event_jBtnNuovoOrdineActionPerformed
 

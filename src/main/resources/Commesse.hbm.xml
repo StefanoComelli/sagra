@@ -51,5 +51,8 @@
         <property name="coperti" type="java.lang.Integer">
             <column name="coperti" not-null="true" />
         </property>       
+        <property name="descSconto" type="string">
+            <column name="descSconto" length="65535" />
+        </property>
     </class>
 </hibernate-mapping>

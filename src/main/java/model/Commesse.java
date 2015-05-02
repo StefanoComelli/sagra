@@ -24,6 +24,7 @@ public class Commesse extends AbstractData<Integer> {
     private Giorni giorno;
     private StatiOrdine statoOrdine;
     private int coperti;
+    private String descSconto;
 
     /**
      * @return the cassa
@@ -205,6 +206,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setCoperti(int coperti) {
         this.coperti = coperti;
+    }
+
+    /**
+     * @return the descSconto
+     */
+    public String getDescSconto() {
+        return descSconto;
+    }
+
+    /**
+     * @param descSconto the descSconto to set
+     */
+    public void setDescSconto(String descSconto) {
+        this.descSconto = descSconto;
     }
 
 }
