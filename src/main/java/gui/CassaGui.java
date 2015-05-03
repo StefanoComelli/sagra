@@ -93,10 +93,18 @@ public class CassaGui extends javax.swing.JFrame {
         if (ordine != null) {
             if (ChiediConferma("Annulla Ordine")) {
                 ordine.AnnullaOrdine();
+                ordine = null;
+                SvuotaSconto();
+                RefreshOrdine();
             }
-            ordine = null;
-            RefreshOrdine();
         }
+    }
+
+    /**
+     *
+     */
+    private void SvuotaSconto() {
+        jCmbSconti.setSelectedIndex(-1);
     }
 
     /**
@@ -111,6 +119,7 @@ public class CassaGui extends javax.swing.JFrame {
 
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
             ordine = null;
+            SvuotaSconto();
             RefreshOrdine();
         }
     }
