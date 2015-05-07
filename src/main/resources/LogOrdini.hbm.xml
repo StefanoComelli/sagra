@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
  
 <hibernate-mapping>
-    <class name="model.LogOrdini" table="logOrdini" catalog="sagra">
+    <class name="model.LogOrdini" table="logordini" catalog="sagra">
         <composite-id class="keys.LogOrdiniKey" name="id">
             <key-property name="idRigaLog" type="long">
                 <column name="idRigaLog"/>

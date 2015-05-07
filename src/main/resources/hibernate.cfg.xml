@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
-    <session-factory>
-        <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
-        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
-        <property name="hibernate.connection.password">operatoresagra</property>
-        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sagra</property>
-        <property name="hibernate.connection.username">operatoresagra</property>
-        <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
-        <property name="show_sql">true</property>
-        <mapping resource="CategorieProdotti.hbm.xml"/>
-        <mapping resource="StatiOrdine.hbm.xml"/>
-        <mapping resource="Sconti.hbm.xml"/>
-        <mapping resource="ListinoProdotti.hbm.xml"/>
-        <mapping resource="Commesse.hbm.xml"/>
-        <mapping resource="RigheCommesse.hbm.xml"/>
-        <mapping resource="LogOrdini.hbm.xml"/>
-        <mapping resource="Varianti.hbm.xml"/>
-        <mapping resource="ProdottiGiornaliera.hbm.xml"/>
-        <mapping resource="Giorni.hbm.xml"/>
-        <mapping resource="ListinoReale.hbm.xml"/>
-        <mapping resource="Operatori.hbm.xml"/>
-        <mapping resource="Casse.hbm.xml"/>
-        <mapping resource="OperazioniCassa.hbm.xml"/>
-        <mapping resource="LogCasse.hbm.xml"/>
-    </session-factory>
+  <session-factory>
+    <property name="hibernate.bytecode.use_reflection_optimizer">false</property>
+    <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+    <property name="hibernate.connection.password">opcassa</property>
+    <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/sagra</property>
+    <property name="hibernate.connection.username">opcassa</property>
+    <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>
+    <property name="show_sql">true</property>
+    <mapping resource="CategorieProdotti.hbm.xml"/>
+    <mapping resource="StatiOrdine.hbm.xml"/>
+    <mapping resource="Sconti.hbm.xml"/>
+    <mapping resource="ListinoProdotti.hbm.xml"/>
+    <mapping resource="Commesse.hbm.xml"/>
+    <mapping resource="RigheCommesse.hbm.xml"/>
+    <mapping resource="LogOrdini.hbm.xml"/>
+    <mapping resource="Varianti.hbm.xml"/>
+    <mapping resource="ProdottiGiornaliera.hbm.xml"/>
+    <mapping resource="Giorni.hbm.xml"/>
+    <mapping resource="ListinoReale.hbm.xml"/>
+    <mapping resource="Operatori.hbm.xml"/>
+    <mapping resource="Casse.hbm.xml"/>
+    <mapping resource="OperazioniCassa.hbm.xml"/>
+    <mapping resource="LogCasse.hbm.xml"/>
+  </session-factory>
 </hibernate-configuration>
