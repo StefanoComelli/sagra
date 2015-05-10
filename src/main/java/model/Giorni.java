@@ -15,7 +15,7 @@ public class Giorni extends AbstractData<Integer> {
     private static final Logger LOGGER = Logger.getLogger(Giorni.class);
     private Date data;
     private float scontoGiorno;
-
+    private boolean flgAperto;
     private Set<ProdottiGiornaliera> prodottiGiornaliera;
 
     /**
@@ -81,4 +81,19 @@ public class Giorni extends AbstractData<Integer> {
             return data.toString() + " Sconto " + sGiorno.toString();
         }
     }
+
+    /**
+     * @return the flgAperto
+     */
+    public boolean isFlgAperto() {
+        return flgAperto;
+    }
+
+    /**
+     * @param flgAperto the flgAperto to set
+     */
+    public void setFlgAperto(boolean flgAperto) {
+        this.flgAperto = flgAperto;
+    }
+
 }

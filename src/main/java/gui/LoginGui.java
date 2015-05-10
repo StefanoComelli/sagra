@@ -62,7 +62,7 @@ public class LoginGui extends javax.swing.JFrame {
         for (Giorni giorno : login.getGiorni()) {
             jCmbGiorno.addItem(giorno.toString());
         }
-        jCmbGiorno.setSelectedItem(null);
+        jCmbGiorno.setSelectedItem(0);
         
         setLocationRelativeTo(null);
         
@@ -131,6 +131,7 @@ public class LoginGui extends javax.swing.JFrame {
         jLblGiorno.setText("Giorno:");
         jLblGiorno.setName("jLblGiorno"); // NOI18N
 
+        jCmbGiorno.setEnabled(false);
         jCmbGiorno.setName("jCmbGiorno"); // NOI18N
         jCmbGiorno.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {

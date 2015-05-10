@@ -29,7 +29,8 @@ public class Login {
         OperatoriManager operatoriMgr = new OperatoriManager();
         this.operatori = operatoriMgr.getAll();
         GiorniManager giorniMgr = new GiorniManager();
-        this.giorni = giorniMgr.getAll();
+        //this.giorni = giorniMgr.getAll();
+        this.giorni = giorniMgr.getOggi();
     }
 
     /**

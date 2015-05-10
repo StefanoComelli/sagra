@@ -14,8 +14,11 @@
         <property name="scontoGiorno" type="float">
             <column name="scontoGiorno" not-null="true" />
         </property> 
+        <property name="flgAperto" type="boolean">
+            <column name="flgAperto" not-null="true" />
+        </property> 
         <set name="prodottiGiornaliera" table="prodottigiornaliera" 
-             inverse="true" lazy="true" fetch="select">
+            inverse="true" lazy="true" fetch="select">
             <key>
                 <column name="idGiorno" not-null="true" />
             </key>
