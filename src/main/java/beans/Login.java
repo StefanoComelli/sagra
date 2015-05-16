@@ -27,7 +27,7 @@ public class Login {
         CasseManager casseMgr = new CasseManager();
         this.casse = casseMgr.getAll();
         OperatoriManager operatoriMgr = new OperatoriManager();
-        this.operatori = operatoriMgr.getAll();
+        this.operatori = operatoriMgr.getAllSorted();
         GiorniManager giorniMgr = new GiorniManager();
         //this.giorni = giorniMgr.getAll();
         this.giorni = giorniMgr.getOggi();

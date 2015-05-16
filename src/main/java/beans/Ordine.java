@@ -57,6 +57,7 @@ public class Ordine {
         statoOrdine = statiOrdineMgr.getDefault();
         this.commessa.setStatoOrdine(statoOrdine);
         this.commessa.setNomeCliente(cliente);
+        this.cliente=cliente;
         this.commessa.setTavoloCliente("a1");
         this.commessa.setCassa(this.cassa);
         this.commessa.setGiorno(giorno);
