@@ -12,9 +12,9 @@ import org.jboss.logging.Logger;
  * @author Stefano
  */
 public class LoginGui extends javax.swing.JFrame {
-    
+
     private static final Logger LOGGER = Logger.getLogger(LoginGui.class);
-    
+
     private final Login login = new Login();
 
     /**
@@ -35,7 +35,7 @@ public class LoginGui extends javax.swing.JFrame {
      *
      */
     private void StatoFinestra() {
-        
+
         if (jCmbCassa.getSelectedItem() == null || jCmbOperatore.getSelectedItem() == null
                 || jCmbGiorno.getSelectedItem() == null) {
             jBtnOk.setEnabled(false);
@@ -48,24 +48,24 @@ public class LoginGui extends javax.swing.JFrame {
      *
      */
     private void Setup() {
-        
+
         for (Casse cassa : login.getCasse()) {
             jCmbCassa.addItem(cassa.toString());
         }
         jCmbCassa.setSelectedItem(null);
-        
+
         for (Operatori operatore : login.getOperatori()) {
             jCmbOperatore.addItem(operatore.toString());
         }
         jCmbOperatore.setSelectedItem(null);
-        
+
         for (Giorni giorno : login.getGiorni()) {
             jCmbGiorno.addItem(giorno.toString());
         }
         jCmbGiorno.setSelectedItem(0);
-        
+
         setLocationRelativeTo(null);
-        
+
         StatoFinestra();
     }
 
@@ -331,9 +331,9 @@ public class LoginGui extends javax.swing.JFrame {
      * @param setCursorBusy
      */
     private void setCursorBusy(boolean isBusy) {
-        
+
         Cursor cursor;
-        
+
         if (isBusy) {
             cursor = new Cursor(Cursor.WAIT_CURSOR);
         } else {

@@ -40,8 +40,8 @@ public class ProdottiGiornalieraKey implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int hashCode() {
@@ -52,9 +52,9 @@ public class ProdottiGiornalieraKey implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param obj
-     * @return 
+     * @return
      */
     @Override
     public boolean equals(Object obj) {
@@ -73,6 +73,5 @@ public class ProdottiGiornalieraKey implements Serializable {
         }
         return true;
     }
- 
-    
+
 }

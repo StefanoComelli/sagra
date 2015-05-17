@@ -25,6 +25,7 @@ public class Commesse extends AbstractData<Integer> {
     private StatiOrdine statoOrdine;
     private int coperti;
     private String descSconto;
+    private boolean asporto;
 
     /**
      * @return the cassa
@@ -220,6 +221,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setDescSconto(String descSconto) {
         this.descSconto = descSconto;
+    }
+
+    /**
+     * @return the asporto
+     */
+    public boolean isAsporto() {
+        return asporto;
+    }
+
+    /**
+     * @param asporto the asporto to set
+     */
+    public void setAsporto(boolean asporto) {
+        this.asporto = asporto;
     }
 
 }

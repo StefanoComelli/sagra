@@ -40,8 +40,8 @@ public class LogOrdiniKey implements Serializable {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public int hashCode() {
@@ -52,9 +52,9 @@ public class LogOrdiniKey implements Serializable {
     }
 
     /**
-     * 
+     *
      * @param obj
-     * @return 
+     * @return
      */
     @Override
     public boolean equals(Object obj) {
@@ -73,5 +73,5 @@ public class LogOrdiniKey implements Serializable {
         }
         return true;
     }
-    
+
 }

@@ -18,5 +18,5 @@ public class ListinoProdottiManager extends AbstractManager<ListinoProdotti, Int
     public ListinoProdottiManager() {
         super(ListinoProdotti.class);
     }
-    
+
 }
