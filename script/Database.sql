@@ -1,5 +1,10 @@
-CREATE DATABASE  IF NOT EXISTS `sagra` /*!40100 DEFAULT CHARACTER SET utf8 */;
+﻿CREATE DATABASE  IF NOT EXISTS `sagra` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `sagra`;
+-- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
+--
+-- Host: localhost    Database: sagra
+-- ------------------------------------------------------
+-- Server version	5.6.22-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -11,6 +16,11 @@ USE `sagra`;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+
+--
+-- Table structure for table `casse`
+--
+
 DROP TABLE IF EXISTS `casse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -21,11 +31,20 @@ CREATE TABLE `casse` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `casse`
+--
+
 LOCK TABLES `casse` WRITE;
 /*!40000 ALTER TABLE `casse` DISABLE KEYS */;
 INSERT INTO `casse` VALUES (1,'Cassa 1'),(2,'Cassa 2'),(3,'Cassa 3');
 /*!40000 ALTER TABLE `casse` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `categorieprodotti`
+--
+
 DROP TABLE IF EXISTS `categorieprodotti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -38,11 +57,20 @@ CREATE TABLE `categorieprodotti` (
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `categorieprodotti`
+--
+
 LOCK TABLES `categorieprodotti` WRITE;
 /*!40000 ALTER TABLE `categorieprodotti` DISABLE KEYS */;
 INSERT INTO `categorieprodotti` VALUES (1,'Primi piatti',10),(2,'Secondi Piatti',20),(3,'Contorni',30),(4,'Bevande',40),(5,'Bar',5);
 /*!40000 ALTER TABLE `categorieprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `commesse`
+--
+
 DROP TABLE IF EXISTS `commesse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -66,13 +94,22 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `commesse`
+--
 
 LOCK TABLES `commesse` WRITE;
 /*!40000 ALTER TABLE `commesse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `commesse` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `giorni`
+--
+
 DROP TABLE IF EXISTS `giorni`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -87,11 +124,20 @@ CREATE TABLE `giorni` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `giorni`
+--
+
 LOCK TABLES `giorni` WRITE;
 /*!40000 ALTER TABLE `giorni` DISABLE KEYS */;
-INSERT INTO `giorni` VALUES (1,'2015-05-29',15.00,0),(2,'2015-05-30',0.00,1),(3,'2015-05-31',0.00,1),(4,'2015-06-01',15.00,1),(5,'2015-06-02',0.00,1);
+INSERT INTO `giorni` VALUES (1,'2015-06-05',15.00,0),(2,'2015-06-06',0.00,1),(3,'2015-06-07',0.00,1),(4,'2015-06-08',15.00,1),(5,'2015-06-09',0.00,1);
 /*!40000 ALTER TABLE `giorni` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `listinoprodotti`
+--
+
 DROP TABLE IF EXISTS `listinoprodotti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -106,11 +152,20 @@ CREATE TABLE `listinoprodotti` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2002 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `listinoprodotti`
+--
+
 LOCK TABLES `listinoprodotti` WRITE;
 /*!40000 ALTER TABLE `listinoprodotti` DISABLE KEYS */;
 INSERT INTO `listinoprodotti` VALUES (1000,1,'Penne all\'arrabbiata','',5.00),(1001,1,'Bigoli in salsa','',4.50),(1002,1,'Bigoli al sugo d\'anitra','',5.00),(1003,1,'Gnocchi al ragù','',4.00),(2000,2,'Grigliata mista','Grigliata di 2 ossetti, una salciccia, una fetta di pancetta e 2 fette di pokenta',8.30),(2001,2,'Ossetti','Grigliata di 3 ossetti con 2 fette di polenta',8.00);
 /*!40000 ALTER TABLE `listinoprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `logcasse`
+--
+
 DROP TABLE IF EXISTS `logcasse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -125,10 +180,19 @@ CREATE TABLE `logcasse` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `logcasse`
+--
+
 LOCK TABLES `logcasse` WRITE;
 /*!40000 ALTER TABLE `logcasse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `logcasse` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `logordini`
+--
+
 DROP TABLE IF EXISTS `logordini`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -141,10 +205,19 @@ CREATE TABLE `logordini` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `logordini`
+--
+
 LOCK TABLES `logordini` WRITE;
 /*!40000 ALTER TABLE `logordini` DISABLE KEYS */;
 /*!40000 ALTER TABLE `logordini` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `operatori`
+--
+
 DROP TABLE IF EXISTS `operatori`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -156,11 +229,20 @@ CREATE TABLE `operatori` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `operatori`
+--
+
 LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
-INSERT INTO `operatori` VALUES (3,'Paperino'),(1,'Pippo'),(2,'Pluto');
+INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto'),(3,'Paperino');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `operazionicassa`
+--
+
 DROP TABLE IF EXISTS `operazionicassa`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -171,11 +253,20 @@ CREATE TABLE `operazionicassa` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `operazionicassa`
+--
+
 LOCK TABLES `operazionicassa` WRITE;
 /*!40000 ALTER TABLE `operazionicassa` DISABLE KEYS */;
 INSERT INTO `operazionicassa` VALUES ('FND','Fondo Cassa'),('VER','Versamento');
 /*!40000 ALTER TABLE `operazionicassa` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `prodottigiornaliera`
+--
+
 DROP TABLE IF EXISTS `prodottigiornaliera`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -193,11 +284,20 @@ CREATE TABLE `prodottigiornaliera` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `prodottigiornaliera`
+--
+
 LOCK TABLES `prodottigiornaliera` WRITE;
 /*!40000 ALTER TABLE `prodottigiornaliera` DISABLE KEYS */;
 INSERT INTO `prodottigiornaliera` VALUES (1,1000,999,0,0,0.00,0,NULL),(1,1001,999,0,0,0.00,0,NULL),(1,1002,999,0,0,0.00,0,NULL),(1,1003,999,0,0,0.00,0,NULL),(1,2000,999,0,0,0.00,0,NULL),(1,2001,999,0,0,0.00,0,NULL),(2,1000,999,0,0,0.00,0,NULL),(2,1001,999,0,0,0.00,0,NULL),(2,1002,999,0,0,0.00,0,NULL),(2,1003,999,0,0,0.00,0,NULL),(2,2000,999,0,0,0.00,0,NULL),(2,2001,999,0,0,0.00,0,NULL),(3,1000,999,0,0,0.00,0,NULL),(3,1001,999,0,0,0.00,0,NULL),(3,1002,999,0,0,0.00,0,NULL),(3,1003,999,0,0,0.00,0,NULL),(3,2000,999,0,0,0.00,0,NULL),(3,2001,999,0,0,0.00,0,NULL),(4,1000,999,0,0,0.00,0,NULL),(4,1001,999,0,0,0.00,0,NULL),(4,1002,999,0,0,0.00,0,NULL),(4,1003,999,0,0,0.00,0,NULL),(4,2000,999,0,0,0.00,0,NULL),(4,2001,999,0,0,0.00,0,NULL),(5,1000,999,0,0,0.00,0,NULL),(5,1001,999,0,0,0.00,0,NULL),(5,1002,999,0,0,0.00,0,NULL),(5,1003,999,0,0,0.00,0,NULL),(5,2000,999,0,0,0.00,0,NULL),(5,2001,999,0,0,0.00,0,NULL);
 /*!40000 ALTER TABLE `prodottigiornaliera` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `righecommesse`
+--
+
 DROP TABLE IF EXISTS `righecommesse`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -211,13 +311,22 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=68 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `righecommesse`
+--
 
 LOCK TABLES `righecommesse` WRITE;
 /*!40000 ALTER TABLE `righecommesse` DISABLE KEYS */;
 /*!40000 ALTER TABLE `righecommesse` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `sconti`
+--
+
 DROP TABLE IF EXISTS `sconti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -229,11 +338,20 @@ CREATE TABLE `sconti` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `sconti`
+--
+
 LOCK TABLES `sconti` WRITE;
 /*!40000 ALTER TABLE `sconti` DISABLE KEYS */;
 INSERT INTO `sconti` VALUES (1,'Sconto operatori sagra',100.00),(2,'Sconto venerdi\'',10.00),(3,'Sconto Lunedi\'',10.00);
 /*!40000 ALTER TABLE `sconti` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `statiordine`
+--
+
 DROP TABLE IF EXISTS `statiordine`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -246,11 +364,20 @@ CREATE TABLE `statiordine` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `statiordine`
+--
+
 LOCK TABLES `statiordine` WRITE;
 /*!40000 ALTER TABLE `statiordine` DISABLE KEYS */;
 INSERT INTO `statiordine` VALUES (1,1,'Emissione commessa'),(2,10,'Preso in carico'),(3,20,'Consegnato');
 /*!40000 ALTER TABLE `statiordine` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `variantiprodotti`
+--
+
 DROP TABLE IF EXISTS `variantiprodotti`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!40101 SET character_set_client = utf8 */;
@@ -263,11 +390,20 @@ CREATE TABLE `variantiprodotti` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `variantiprodotti`
+--
+
 LOCK TABLES `variantiprodotti` WRITE;
 /*!40000 ALTER TABLE `variantiprodotti` DISABLE KEYS */;
 INSERT INTO `variantiprodotti` VALUES (1,'Senza Formaggio',1),(2,'Pomodoro',1),(3,'In bianco',1);
 /*!40000 ALTER TABLE `variantiprodotti` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary table structure for view `vistalistinoreale`
+--
+
 DROP TABLE IF EXISTS `vistalistinoreale`;
 /*!50001 DROP VIEW IF EXISTS `vistalistinoreale`*/;
 SET @saved_cs_client     = @@character_set_client;
@@ -284,6 +420,11 @@ SET character_set_client = utf8;
   `quantitaWarning` tinyint NOT NULL
 ) ENGINE=MyISAM */;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `vistalistinoreale`
+--
+
 /*!50001 DROP TABLE IF EXISTS `vistalistinoreale`*/;
 /*!50001 DROP VIEW IF EXISTS `vistalistinoreale`*/;
 /*!50001 SET @saved_cs_client          = @@character_set_client */;
@@ -308,3 +449,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
+-- Dump completed on 2015-05-16 16:16:42

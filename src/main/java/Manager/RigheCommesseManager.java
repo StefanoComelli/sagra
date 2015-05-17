@@ -105,6 +105,16 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
     /**
      *
      * @param id
+     * @param qta
+     */
+    public void SettaQuantita(int id, int qta) {
+        RigheCommesse riga = get(id);
+        riga.setQuantita(qta);
+        update(id, riga);
+    }
+   /**
+     *
+     * @param id
      */
     public void incQuantita(int id) {
         DeltaQuantita(id, 1);
@@ -113,9 +123,27 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
     /**
      *
      * @param id
+     * @param qta
+     */
+    public void incQuantita(int id, int qta) {
+        DeltaQuantita(id, qta);
+    }
+
+    /**
+     *
+     * @param id
      */
     public void decQuantita(int id) {
         DeltaQuantita(id, -1);
+    }
+
+    /**
+     *
+     * @param id
+     * @param qta
+     */
+    public void decQuantita(int id, int qta) {
+        DeltaQuantita(id, -qta);
     }
 
     /**

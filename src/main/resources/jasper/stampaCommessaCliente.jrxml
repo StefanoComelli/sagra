@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
+<!-- 2015-05-16T17:36:49 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stampaCommessaCliente" pageWidth="421" pageHeight="595" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f939f55a-2e25-4ba3-b1f2-d05e52074a1c">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<parameter name="cliente" class="java.lang.String">
+		<parameterDescription><![CDATA[Nome:]]></parameterDescription>
+	</parameter>
+	<parameter name="coperti" class="java.lang.Integer"/>
+	<parameter name="cassa" class="java.lang.String"/>
+	<parameter name="cassiere" class="java.lang.String"/>
+	<parameter name="totale" class="java.lang.Float"/>
+	<parameter name="sconto" class="java.lang.Float"/>
+	<parameter name="netto" class="java.lang.Float"/>
+	<parameter name="scontoDaApplicare" class="java.lang.Float"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="prodotto" class="java.lang.String">
+		<fieldDescription><![CDATA[prodotto]]></fieldDescription>
+	</field>
+	<field name="prezzo" class="java.lang.Float"/>
+	<field name="quantita" class="java.lang.Integer"/>
+	<field name="variante" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="38" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="270" height="20" uuid="50b82c0d-83b0-4084-9146-13950d9c9438"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Sagra del Rosario di S.Andrea]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="270" y="0" width="110" height="20" uuid="953fb17d-f332-4a3e-be81-9529eef7b7ce"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="69" splitType="Stretch">
+			<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.HorizontalRowLayout"/>
+			<textField>
+				<reportElement x="0" y="0" width="77" height="65" uuid="68c3ef4d-4b29-4e47-a1c7-a503d9b00d33"/>
+				<textFieldExpression><![CDATA[$P{cliente}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="77" y="0" width="76" height="65" uuid="eb42e10a-186b-4543-aa91-d1d4920dc528"/>
+				<text><![CDATA[Coperti:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="153" y="0" width="76" height="65" uuid="75e19bed-173f-4bec-9966-57a08ae0a51f"/>
+				<textFieldExpression><![CDATA[$P{coperti}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="229" y="0" width="76" height="65" uuid="ddfef7bc-89ca-4837-96d7-c7dc78c3e0f9"/>
+				<textFieldExpression><![CDATA[$P{cassiere}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="305" y="0" width="76" height="65" uuid="8b7a3e8d-6a06-4cb9-8a76-6b490ef13777"/>
+				<textFieldExpression><![CDATA[$P{cassa}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="20" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="19" uuid="0f565856-d19f-4f05-9d14-d3555f56469a"/>
+				<text><![CDATA[prodotto]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="0" width="81" height="18" uuid="85781a98-2999-44cc-b851-f8c806106ac5"/>
+				<text><![CDATA[prezzo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="181" y="2" width="84" height="17" uuid="da499351-4f71-44db-8aea-adc9565e48a2"/>
+				<text><![CDATA[quantita]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="265" y="3" width="100" height="14" uuid="34cf59e5-3341-4f0a-97d2-c561daf84fa0"/>
+				<text><![CDATA[variante]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="23" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="1e431233-47e3-4434-b4f8-9e4bcbdbeb83"/>
+				<textFieldExpression><![CDATA[$F{prodotto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="81" height="21" uuid="569abcc0-df24-4dff-9e0f-c69a094ab44c"/>
+				<textFieldExpression><![CDATA[$F{prezzo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="2" width="85" height="17" uuid="69c63424-4f5a-4610-9cd7-64b53663db37"/>
+				<textFieldExpression><![CDATA[$F{quantita}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="265" y="2" width="115" height="18" uuid="923366fd-4598-4af2-ae5a-e85f92ac537a"/>
+				<textFieldExpression><![CDATA[$F{variante}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="17" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="21" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="63" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="30" uuid="5471628d-f459-44ac-8d42-0de03fb02617"/>
+				<textFieldExpression><![CDATA[$P{totale}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="100" y="0" width="100" height="30" uuid="c4afb5fb-67c1-42d5-ac3b-0edd35d8f4cd"/>
+				<textFieldExpression><![CDATA[$P{sconto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="200" y="0" width="100" height="30" uuid="d51f775b-1537-4380-ab2d-459903b7c943"/>
+				<textFieldExpression><![CDATA[$P{netto}]]></textFieldExpression>
+			</textField>
+		</band>
+	</summary>
+</jasperReport>
