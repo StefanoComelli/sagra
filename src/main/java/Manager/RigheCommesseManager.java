@@ -112,7 +112,8 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         riga.setQuantita(qta);
         update(id, riga);
     }
-   /**
+
+    /**
      *
      * @param id
      */

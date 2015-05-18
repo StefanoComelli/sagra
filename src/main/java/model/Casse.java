@@ -27,8 +27,8 @@ public class Casse extends AbstractData<Integer> {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {

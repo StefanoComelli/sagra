@@ -19,6 +19,8 @@ public class JrTestataOrdine {
     private float totale;
     private float sconto;
     private float netto;
+    private boolean asporto;
+    private int id;
 
     /**
      * @return the data
@@ -67,6 +69,7 @@ public class JrTestataOrdine {
      * @return
      */
     public HashMap getHashMap() {
+
         HashMap parameters = new HashMap();
 
         parameters.put("data", this.data);
@@ -78,6 +81,8 @@ public class JrTestataOrdine {
         parameters.put("totale", totale);
         parameters.put("sconto", sconto);
         parameters.put("netto", netto);
+        parameters.put("asporto", asporto);
+        parameters.put("id", id);
         return parameters;
     }
 
@@ -163,6 +168,34 @@ public class JrTestataOrdine {
      */
     public void setNetto(float netto) {
         this.netto = netto;
+    }
+
+    /**
+     * @return the asporto
+     */
+    public boolean isAsporto() {
+        return asporto;
+    }
+
+    /**
+     * @param asporto the asporto to set
+     */
+    public void setAsporto(boolean asporto) {
+        this.asporto = asporto;
+    }
+
+    /**
+     * @return the id
+     */
+    public int getId() {
+        return id;
+    }
+
+    /**
+     * @param id the id to set
+     */
+    public void setId(int id) {
+        this.id = id;
     }
 
 }

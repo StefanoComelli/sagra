@@ -1,4 +1,4 @@
-﻿CREATE DATABASE  IF NOT EXISTS `sagra` /*!40100 DEFAULT CHARACTER SET utf8 */;
+CREATE DATABASE  IF NOT EXISTS `sagra` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `sagra`;
 -- MySQL dump 10.13  Distrib 5.6.17, for Win32 (x86)
 --
@@ -89,12 +89,13 @@ CREATE TABLE `commesse` (
   `note` varchar(80) DEFAULT NULL,
   `coperti` int(10) NOT NULL DEFAULT '0' COMMENT 'Numero coperti',
   `descSconto` text,
+  `asporto` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`idCommessa`),
   KEY `idx_commesse_idCassa` (`idCassa`),
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=82 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=85 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -235,7 +236,7 @@ CREATE TABLE `operatori` (
 
 LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
-INSERT INTO `operatori` VALUES (1,'Pippo'),(2,'Pluto'),(3,'Paperino');
+INSERT INTO `operatori` VALUES (3,'Paperino'),(1,'Pippo'),(2,'Pluto');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -311,7 +312,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=110 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -449,4 +450,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-16 16:16:42
+-- Dump completed on 2015-05-17 17:39:19

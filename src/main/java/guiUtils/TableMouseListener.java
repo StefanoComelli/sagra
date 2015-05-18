@@ -19,16 +19,16 @@ public class TableMouseListener extends MouseAdapter {
     private final JTable table;
 
     /**
-     * 
-     * @param table 
+     *
+     * @param table
      */
     public TableMouseListener(JTable table) {
         this.table = table;
     }
 
     /**
-     * 
-     * @param event 
+     *
+     * @param event
      */
     @Override
     public void mousePressed(MouseEvent event) {
