@@ -17,8 +17,6 @@
             <version>4.3.8.Final</version>
         </dependency>
         <dependency>
-<<<<<<< HEAD
-=======
             <groupId>commons-beanutils</groupId>
             <artifactId>commons-beanutils</artifactId>
             <version>1.9.2</version>
@@ -47,19 +45,15 @@
             <version>2.1.7</version>
         </dependency>
         <dependency>
->>>>>>> 5a05c28af0259587f18e3af97cb6b503327fe9aa
             <groupId>net.sf.jasperreports</groupId>
             <artifactId>jasperreports</artifactId>
             <version>6.0.4</version>
         </dependency>
-<<<<<<< HEAD
-=======
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
             <version>3.11</version>
         </dependency>
->>>>>>> 5a05c28af0259587f18e3af97cb6b503327fe9aa
     </dependencies>
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
