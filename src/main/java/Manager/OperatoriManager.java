@@ -35,10 +35,10 @@ public class OperatoriManager extends AbstractManager<Operatori, Integer> {
         Criteria cr = session.createCriteria(Operatori.class);
         cr.addOrder(Order.asc("operatore"));
         Transaction tx = null;
-        List<Operatori> pojos = null;
+        List<Operatori> operatori = null;
         try {
             tx = session.beginTransaction();
-            pojos = cr.list();
+            operatori = cr.list();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
@@ -48,6 +48,6 @@ public class OperatoriManager extends AbstractManager<Operatori, Integer> {
         } finally {
             session.close();
         }
-        return pojos;
+        return operatori;
     }
 }

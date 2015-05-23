@@ -62,12 +62,12 @@ public class Cassa {
         listinoMgr = new ListinoRealeManager();
 
         VariantiManager variantiMgr = new VariantiManager();
-        varianti = variantiMgr.getAll();
+        varianti = variantiMgr.getAllSorted();
         ScontiManager scontiMgr = new ScontiManager();
         sconti = scontiMgr.getAll();
 
         CategorieProdottiManager categorieProdottiManager = new CategorieProdottiManager();
-        categorie = categorieProdottiManager.getAll();
+        categorie = categorieProdottiManager.getAllSorted();
 
         RefreshListino();
 

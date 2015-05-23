@@ -8,6 +8,7 @@ import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
 
@@ -38,6 +39,7 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         Session session = getFactory().openSession();
         Criteria cr = session.createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
+        cr.addOrder(Order.asc("idProdotto"));
         Transaction tx = null;
         try {
             tx = session.beginTransaction();
