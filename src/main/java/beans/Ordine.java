@@ -70,6 +70,16 @@ public class Ordine {
 
     /**
      *
+     * @param idOrdine
+     */
+    public Ordine(int idOrdine) {
+        commessaMgr = new CommesseManager();
+        this.commessa = (Commesse) commessaMgr.get(idOrdine);
+        righeMgr = new RigheCommesseManager();
+    }
+
+    /**
+     *
      */
     public void ChiudiOrdine() {
     }

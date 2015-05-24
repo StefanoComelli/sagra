@@ -12,6 +12,9 @@ import guiUtils.TableMouseListener;
 import guiUtils.BetterTableCellRenderer;
 import jasper.JrRigaOrdineFactory;
 import jasper.JrTestataOrdine;
+import java.awt.Color;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -24,6 +27,8 @@ import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
+import org.apache.commons.lang.math.NumberUtils;
+import utils.IdOrdine;
 import utils.Sconto;
 import utils.Valuta;
 
@@ -32,29 +37,29 @@ import utils.Valuta;
  * @author Stefano
  */
 public class CassaGui extends javax.swing.JFrame {
-
+    
     private final Cassa cassa;
     private Ordine ordine;
-
+    
     private final int TBL_LISTINO_CATEGORIA = 0;
     private final int TBL_LISTINO_PRODOTTO = 1;
     private final int TBL_LISTINO_PREZZO = 2;
     private final int TBL_LISTINO_DESCRIZIONE = 3;
     private final int TBL_LISTINO_ID_CATEGORIA = 4;
     private final int TBL_LISTINO_ID_PRODOTTO = 5;
-
+    
     private final int TBL_RIGHE_PRODOTTO = 0;
     private final int TBL_RIGHE_PREZZO = 1;
     private final int TBL_RIGHE_QUANTITA = 2;
     private final int TBL_RIGHE_NOTE = 3;
     private final int TBL_RIGHE_ID_PRODOTTO = 4;
     private final int TBL_RIGHE_ID = 5;
-
+    
     private int cListino;
     private int rListino;
     private int cOrdine;
     private int rOrdine;
-
+    
     private float percScontoDaApplicare;
     private float scontoApplicato;
     private float totale;
@@ -104,13 +109,14 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void Annulla() {
-
+        
         if (ordine != null) {
             if (ChiediConferma("Annulla Ordine")) {
                 ordine.AnnullaOrdine();
                 ordine = null;
                 SvuotaSconto();
                 RefreshOrdine();
+                jTxtOrdine.setText("");
             }
         }
     }
@@ -152,17 +158,57 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void SetupGui() {
 
+        // titolo
         setTitle(cassa.getGiorno().getTitolo());
+
+        // sconto
         Sconto scontoGiorno = new Sconto(cassa.getGiorno().getScontoGiorno());
         jTxtScontoGiorno.setText(scontoGiorno.toString());
+
+        // Listino
         jTblListino.setComponentPopupMenu(jPopListino);
         jTblListino.addMouseListener(new TableMouseListener(jTblListino));
+        jTblListino.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
 
+        // Ordine
         jTblOrdine.setComponentPopupMenu(jPopOrdine);
         jTblOrdine.addMouseListener(new TableMouseListener(jTblOrdine));
-
         jTblOrdine.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
-        jTblListino.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
+
+        // Contanti
+        jTxtContanti.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                RefreshContanti();
+            }
+            
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+            
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+        });
+
+        // Lettura Ordine
+        jTxtOrdine.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                LeggeOrdine();
+            }
+            
+            @Override
+            public void keyTyped(KeyEvent e) {
+            }
+            
+            @Override
+            public void keyPressed(KeyEvent e) {
+            }
+        });
+
+        // focus
+        jTxtOrdine.requestFocusInWindow();
     }
 
     /**
@@ -189,11 +235,11 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void EliminaRiga() {
-
+        
         if (ChiediConferma("Elimina riga")) {
             int id = getIdRigaOrdine();
             RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+            
             rigaMgr.delete(id);
             RefreshOrdine();
         }
@@ -206,7 +252,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void ModificaVariante(String variante) {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+        
         rigaMgr.CambiaVariante(id, variante);
         RefreshOrdine();
     }
@@ -217,7 +263,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void incQuantita() {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+        
         rigaMgr.incQuantita(id);
         RefreshOrdine();
     }
@@ -228,7 +274,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void SettaQuantita(int qta) {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+        
         rigaMgr.SettaQuantita(id, qta);
         RefreshOrdine();
     }
@@ -239,7 +285,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void decQuantita() {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+        
         rigaMgr.decQuantita(id);
         RefreshOrdine();
     }
@@ -251,7 +297,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void decQuantita(int qta) {
         int id = getIdRigaOrdine();
         RigheCommesseManager rigaMgr = new RigheCommesseManager();
-
+        
         rigaMgr.decQuantita(id, qta);
         RefreshOrdine();
     }
@@ -261,28 +307,28 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void AggiungiDaListino() {
         RigheCommesse riga = new RigheCommesse();
-
+        
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
-
+        
         prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
         riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
         riga.setPrezzoListino(prezzo.getValore());
         riga.setQuantita(1);
         riga.setIdCommessa(ordine.getCommessa().getId());
-
+        
         RigheCommesseManager mgrRiga = new RigheCommesseManager();
         mgrRiga.insert(riga);
-
+        
         RefreshOrdine();
-
+        
     }
 
     /**
      *
      */
     private void RefreshOrdine() {
-
+        
         if (ordine != null) {
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
             GuiUtils.EmptyJtable(jTblOrdine);
@@ -304,7 +350,7 @@ public class CassaGui extends javax.swing.JFrame {
             } else {
                 rOrdine = -1;
             }
-
+            
             RefreshConto();
         } else {
             GuiUtils.EmptyJtable(jTblOrdine);
@@ -316,21 +362,61 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void RefreshConto() {
-        int idCommessa = ordine.getCommessa().getId();
+        try {
+            
+            int idCommessa = ordine.getCommessa().getId();
+            
+            Valuta vTotale;
+            totale = ordine.getRigheMgr().getTotale(idCommessa);
+            vTotale = new Valuta(totale);
+            jTxtTotale.setText(vTotale.toString());
+            
+            percScontoDaApplicare = getScontoDaApplicare();
+            scontoApplicato = vTotale.getValore() / 100 * percScontoDaApplicare;
+            Valuta vScontoOrdine = new Valuta(scontoApplicato);
+            netto = totale - scontoApplicato;
+            Valuta vNnetto = new Valuta(netto);
+            
+            jTxtScontoOrdine.setText(vScontoOrdine.toString());
+            jTxtNetto.setText(vNnetto.toString());
+            RefreshContanti();
+        } catch (Exception e) {
+            jTxtTotale.setText("");
+            jTxtNetto.setText("");
+            jTxtScontoOrdine.setText("");
+            jTxtContanti.setText("");
+            jTxtResto.setText("");
+        }
+    }
 
-        Valuta vTotale;
-        totale = ordine.getRigheMgr().getTotale(idCommessa);
-        vTotale = new Valuta(totale);
-        jTxtTotale.setText(vTotale.toString());
-
-        percScontoDaApplicare = getScontoDaApplicare();
-        scontoApplicato = vTotale.getValore() / 100 * percScontoDaApplicare;
-        Valuta vScontoOrdine = new Valuta(scontoApplicato);
-        netto = totale - scontoApplicato;
-        Valuta vNnetto = new Valuta(netto);
-
-        jTxtScontoOrdine.setText(vScontoOrdine.toString());
-        jTxtNetto.setText(vNnetto.toString());
+    /**
+     *
+     */
+    private void RefreshContanti() {
+        try {
+            String sContante = jTxtContanti.getText();
+            Valuta vContante;
+            if (!sContante.contains("€")) {
+                vContante = new Valuta(Float.parseFloat(sContante));
+            } else {
+                vContante = new Valuta((Object) sContante);
+            }
+            Valuta vNetto = new Valuta((Object) jTxtNetto.getText());
+            float resto;
+            resto = vContante.getValore() - vNetto.getValore();
+            Valuta vResto = new Valuta(resto);
+            jTxtResto.setText(vResto.toString());
+            jTxtContanti.setText(vContante.toString());
+            if (resto >= 0) {
+                jTxtResto.setForeground(Color.black);
+            } else {
+                jTxtResto.setForeground(Color.red);
+            }
+            
+        } catch (Exception e) {
+            jTxtContanti.setText("");
+            jTxtResto.setText("");
+        }
     }
 
     /**
@@ -346,17 +432,17 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void RefreshListino() {
-
+        
         boolean flgFiltro = false;
         int idCategoriaFiltro;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
-
+        
         IdDescr idCategoria = new IdDescr((String) jCmbCategoria.getSelectedItem());
         idCategoriaFiltro = idCategoria.getId();
         if (idCategoriaFiltro != 0) {
             flgFiltro = true;
         }
-
+        
         GuiUtils.EmptyJtable(jTblListino);
         for (ListinoReale prodotto : cassa.getListino()) {
             boolean flgAdd = true;
@@ -365,14 +451,42 @@ public class CassaGui extends javax.swing.JFrame {
                     flgAdd = false;
                 }
             }
-
+            
             if (flgAdd) {
                 model.addRow(prodotto.getRow());
             }
         }
         jTblListino.requestFocus();
         jTblListino.changeSelection(rListino, cListino, false, false);
+        
+    }
 
+    /**
+     *
+     * @param idOrdine
+     */
+    private void LeggeOrdine() {
+        int barcode;
+        
+        try {
+            String sOrdine = jTxtOrdine.getText();
+            
+            if (!sOrdine.isEmpty() && NumberUtils.isNumber(sOrdine)) {
+                barcode = Integer.parseInt(jTxtOrdine.getText());
+                IdOrdine idOrdine = new IdOrdine();
+                idOrdine.setBarcode(barcode);
+                if (idOrdine.isOk() && ordine == null) {
+                    ordine = new Ordine(idOrdine.getId());
+                    if (ordine != null) {
+                        RefreshOrdine();
+                        StatoBottoni();
+                    }
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        
     }
 
     /**
@@ -386,7 +500,7 @@ public class CassaGui extends javax.swing.JFrame {
             scontoDaApplicare = new Sconto((float) scontoGiorno.getId());
         } else if (jTxtScontoGiorno.getText() != null && !jTxtScontoGiorno.getText().isEmpty()) {
             scontoDaApplicare = new Sconto(jTxtScontoGiorno.getText());
-
+            
         } else {
             scontoDaApplicare = new Sconto(0);
         }
@@ -409,9 +523,10 @@ public class CassaGui extends javax.swing.JFrame {
     private void StampaOrdine() {
         AggiornaOrdine();
         try {
-
+            
+            IdOrdine idOrdine;
             JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("src/main/resources/jasper/stampaCommessaCliente.jasper");
-
+            
             JrTestataOrdine jrTestata = new JrTestataOrdine();
             jrTestata.setCassa(ordine.getCassa().getDescrizione());
             jrTestata.setCassiere(ordine.getOperatore().getOperatore());
@@ -422,16 +537,20 @@ public class CassaGui extends javax.swing.JFrame {
             jrTestata.setScontoDaApplicare(percScontoDaApplicare);
             jrTestata.setTotale(totale);
             jrTestata.setAsporto(jChkAsporto.isSelected());
-            jrTestata.setId(ordine.getCommessa().getId());
-
+            jrTestata.setTipoSconto((String) jCmbSconti.getSelectedItem());
+            jrTestata.setTavolo(jTxtTavolo.getText());
+            idOrdine = new IdOrdine();
+            idOrdine.setId(ordine.getCommessa().getId());
+            jrTestata.setId(idOrdine.getBarcode());
+            
             JrRigaOrdineFactory jrFactory = new JrRigaOrdineFactory(ordine);
-
+            
             Map parameters = jrTestata.getHashMap();
-
+            
             JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters,
                     new JRBeanCollectionDataSource(jrFactory.getBeanCollection()));
             jasperPrint.setName("titolo");
-
+            
             JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
             e.printStackTrace();
@@ -444,11 +563,11 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private boolean ControlloOrdine() {
         boolean esito = true;
-
+        
         if ((int) jSpinCoperti.getValue() == 0) {
             esito = ChiediConferma("Numero coperti corretto?");
         }
-
+        
         return esito;
     }
 
@@ -456,38 +575,38 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void StatoBottoni() {
-
+        
         boolean flgOrdineOk;
         boolean flgOrdineSel;
         boolean flgListinoSel;
         boolean flgOrdineRigheOk;
-
+        
         int quantita;
-
+        
         flgOrdineOk = ordine != null;
         flgListinoSel = jTblListino.getSelectedRowCount() != 0;
         flgOrdineSel = jTblOrdine.getSelectedRowCount() != 0;
         flgOrdineRigheOk = flgOrdineOk && jTblOrdine.getRowCount() > 0;
-
+        
         if (flgOrdineSel) {
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
             quantita = (int) model.getValueAt(rOrdine, TBL_RIGHE_QUANTITA);
         } else {
             quantita = 0;
         }
-
+        
         jBtnElimina.setEnabled(flgOrdineSel);
         jBtnAggiungi.setEnabled(flgListinoSel && flgOrdineOk);
         jMenuAggiungi.setEnabled(flgListinoSel && flgOrdineOk);
-
+        
         jBtnConfermaVariante.setEnabled(flgOrdineSel);
         jBtnEliminaVariante.setEnabled(flgOrdineSel);
         jCmbVarianti.setEnabled(flgOrdineSel);
         jBtnInc.setEnabled(flgOrdineSel);
         jBtnDec.setEnabled(flgOrdineSel);
-
+        
         jBtnQta.setEnabled(flgOrdineSel);
-
+        
         jBtnAnnullaFiltro.setEnabled(jCmbCategoria.getSelectedItem() != null);
         if (!flgOrdineSel) {
             jCmbVarianti.setSelectedItem(null);
@@ -495,7 +614,7 @@ public class CassaGui extends javax.swing.JFrame {
             jBtnDec.setEnabled(quantita > 1);
             jMenuDec.setEnabled(quantita > 1);
         }
-
+        
         if (!flgOrdineOk) {
             jTxtCliente.setText("");
             jTxtTavolo.setText("");
@@ -562,6 +681,7 @@ public class CassaGui extends javax.swing.JFrame {
         jBtnConfermaOrdine = new javax.swing.JButton();
         jBtnAnnullaOrdine = new javax.swing.JButton();
         jBtnStampa = new javax.swing.JButton();
+        jTxtOrdine = new javax.swing.JTextField();
         jPanelSconto = new javax.swing.JPanel();
         jLblScontoGiorno = new javax.swing.JLabel();
         jTxtScontoGiorno = new javax.swing.JTextField();
@@ -897,10 +1017,11 @@ public class CassaGui extends javax.swing.JFrame {
         jPanelOrdineLayout.setHorizontalGroup(
             jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOrdineLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTxtOrdine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBtnNuovoOrdine)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jBtnConfermaOrdine)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jBtnConfermaOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBtnStampa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -913,8 +1034,9 @@ public class CassaGui extends javax.swing.JFrame {
                     .addComponent(jBtnNuovoOrdine)
                     .addComponent(jBtnConfermaOrdine)
                     .addComponent(jBtnAnnullaOrdine)
-                    .addComponent(jBtnStampa))
-                .addGap(0, 1, Short.MAX_VALUE))
+                    .addComponent(jBtnStampa)
+                    .addComponent(jTxtOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         jPanelSconto.setBorder(javax.swing.BorderFactory.createTitledBorder("Sconto"));
@@ -941,27 +1063,24 @@ public class CassaGui extends javax.swing.JFrame {
         jPanelScontoLayout.setHorizontalGroup(
             jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelScontoLayout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLblScontoGiorno)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLblSconti)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, 363, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanelScontoLayout.setVerticalGroup(
             jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelScontoLayout.createSequentialGroup()
-                .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLblSconti)
-                        .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLblScontoGiorno)
-                        .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGroup(jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLblSconti)
+                    .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLblScontoGiorno))
+                .addGap(0, 4, Short.MAX_VALUE))
         );
 
         jLblCoperti.setText("Coperti:");
@@ -1015,9 +1134,9 @@ public class CassaGui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jPanelOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelSconto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1053,10 +1172,6 @@ public class CassaGui extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLblOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 452, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(101, 101, 101)
-                                .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLblCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1069,14 +1184,18 @@ public class CassaGui extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jChkAsporto)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jChkAsporto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLblOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(101, 101, 101)))
+                        .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jPanelSconto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPanelOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1092,10 +1211,10 @@ public class CassaGui extends javax.swing.JFrame {
                     .addComponent(jLblCoperti)
                     .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jChkAsporto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLblOrdine)
-                    .addComponent(jLblListino))
+                    .addComponent(jLblListino)
+                    .addComponent(jLblOrdine))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBtnAggiungi)
@@ -1112,14 +1231,12 @@ public class CassaGui extends javax.swing.JFrame {
                         .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBtnEsce)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(18, 18, 18)
-                        .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
         );
 
         pack();
@@ -1151,7 +1268,8 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
-
+        
+        jTxtOrdine.setText("");
         String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                 "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
         if (!cliente.isEmpty()) {
@@ -1278,7 +1396,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
         RefreshOrdine();
         StatoBottoni();
-
+        
     }//GEN-LAST:event_jCmbScontiActionPerformed
 
     /**
@@ -1287,7 +1405,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jCmbScontiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCmbScontiMouseClicked
         RefreshOrdine();
-
+        
     }//GEN-LAST:event_jCmbScontiMouseClicked
 
     /**
@@ -1297,6 +1415,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnAnnullaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaOrdineActionPerformed
         Annulla();
         StatoBottoni();
+        jTxtOrdine.requestFocusInWindow();
     }//GEN-LAST:event_jBtnAnnullaOrdineActionPerformed
 
     /**
@@ -1411,6 +1530,7 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtCliente;
     private javax.swing.JTextField jTxtContanti;
     private javax.swing.JTextField jTxtNetto;
+    private javax.swing.JTextField jTxtOrdine;
     private javax.swing.JTextField jTxtResto;
     private javax.swing.JTextField jTxtScontoGiorno;
     private javax.swing.JTextField jTxtScontoOrdine;

@@ -95,7 +95,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -131,7 +131,7 @@ CREATE TABLE `giorni` (
 
 LOCK TABLES `giorni` WRITE;
 /*!40000 ALTER TABLE `giorni` DISABLE KEYS */;
-INSERT INTO `giorni` VALUES (1,'2015-06-05',15.00,1),(2,'2015-06-06',0.00,1),(3,'2015-06-07',0.00,1),(4,'2015-06-08',15.00,1),(5,'2015-06-09',0.00,1);
+INSERT INTO `giorni` VALUES (1,'2015-06-05',10.00,1),(2,'2015-06-06',0.00,1),(3,'2015-06-07',0.00,1),(4,'2015-06-08',10.00,1),(5,'2015-06-09',0.00,1);
 /*!40000 ALTER TABLE `giorni` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,7 +312,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -450,4 +450,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-23 11:53:39
+-- Dump completed on 2015-05-24 19:11:37

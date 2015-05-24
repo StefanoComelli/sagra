@@ -1,6 +1,5 @@
 package jasper;
 
-import beans.Ordine;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -21,6 +20,8 @@ public class JrTestataOrdine {
     private float netto;
     private boolean asporto;
     private int id;
+    private String tipoSconto;
+    private String tavolo;
 
     /**
      * @return the data
@@ -196,6 +197,34 @@ public class JrTestataOrdine {
      */
     public void setId(int id) {
         this.id = id;
+    }
+
+    /**
+     * @return the tipoSconto
+     */
+    public String getTipoSconto() {
+        return tipoSconto;
+    }
+
+    /**
+     * @param tipoSconto the tipoSconto to set
+     */
+    public void setTipoSconto(String tipoSconto) {
+        this.tipoSconto = tipoSconto;
+    }
+
+    /**
+     * @return the tavolo
+     */
+    public String getTavolo() {
+        return tavolo;
+    }
+
+    /**
+     * @param tavolo the tavolo to set
+     */
+    public void setTavolo(String tavolo) {
+        this.tavolo = tavolo;
     }
 
 }
