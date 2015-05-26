@@ -1268,7 +1268,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
-        
+
         jTxtOrdine.setText("");
         String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                 "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
@@ -1294,9 +1294,16 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
+      if (evt.getClickCount() > 1)
+      {
+        AggiungiDaListino();
+      }
+      else
+      {
         cListino = jTblListino.getSelectedColumn();
         rListino = jTblListino.getSelectedRow();
-        StatoBottoni();
+      }
+      StatoBottoni();
     }//GEN-LAST:event_jTblListinoMouseClicked
 
     /**
