@@ -1294,7 +1294,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
-      if (evt.getClickCount() > 1)
+      if (evt.getClickCount() == 2)
       {
         AggiungiDaListino();
       }
