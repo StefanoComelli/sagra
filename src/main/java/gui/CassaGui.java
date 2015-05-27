@@ -307,21 +307,20 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void AggiungiDaListino() {
         RigheCommesse riga = new RigheCommesse();
-        
+
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
-        
+
         prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
         riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
         riga.setPrezzoListino(prezzo.getValore());
         riga.setQuantita(1);
         riga.setIdCommessa(ordine.getCommessa().getId());
-        
+
         RigheCommesseManager mgrRiga = new RigheCommesseManager();
         mgrRiga.insert(riga);
-        
+
         RefreshOrdine();
-        
     }
 
     /**
@@ -1294,14 +1293,11 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblListinoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTblListinoMouseClicked
+      cListino = jTblListino.getSelectedColumn();
+      rListino = jTblListino.getSelectedRow();
       if (evt.getClickCount() == 2)
       {
         AggiungiDaListino();
-      }
-      else
-      {
-        cListino = jTblListino.getSelectedColumn();
-        rListino = jTblListino.getSelectedRow();
       }
       StatoBottoni();
     }//GEN-LAST:event_jTblListinoMouseClicked
