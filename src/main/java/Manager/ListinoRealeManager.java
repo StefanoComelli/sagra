@@ -1,13 +1,12 @@
 package Manager;
 
 import abstr.AbstractManager;
-import static abstr.AbstractManager.getFactory;
+import database.DbConnection;
 import java.util.List;
 import keys.ListinoRealeKey;
 import model.ListinoReale;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -23,9 +22,11 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public ListinoRealeManager() {
-        super(ListinoReale.class);
+    public ListinoRealeManager(DbConnection dbConnection) {
+        super(dbConnection, ListinoReale.class);
     }
 
     /**
@@ -60,8 +61,7 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
     private List<ListinoReale> getByDateAndCat(Integer idGiorno, Integer idCategoriaProdotto) {
 
         List<ListinoReale> listinoReale = null;
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(ListinoReale.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(ListinoReale.class);
         cr.add(Restrictions.eq("id.idGiorno", idGiorno));
         if (idCategoriaProdotto != 0) {
             cr.add(Restrictions.eq("categoriaProdotto.id", idCategoriaProdotto));
@@ -71,7 +71,7 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             listinoReale = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -79,8 +79,6 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return listinoReale;
     }

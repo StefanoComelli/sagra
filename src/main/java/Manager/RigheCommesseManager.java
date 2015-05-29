@@ -1,12 +1,11 @@
 package Manager;
 
 import abstr.AbstractManager;
-import static abstr.AbstractManager.getFactory;
+import database.DbConnection;
 import java.util.List;
 import model.RigheCommesse;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -23,8 +22,8 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
     /**
      * CategorieProdottiManager
      */
-    public RigheCommesseManager() {
-        super(RigheCommesse.class);
+    public RigheCommesseManager(DbConnection dbConnection) {
+        super(dbConnection, RigheCommesse.class);
     }
 
     /**
@@ -36,13 +35,12 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
         List<RigheCommesse> righe = null;
 
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(RigheCommesse.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
         cr.addOrder(Order.asc("idProdotto"));
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             righe = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -50,8 +48,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
 
         if (righe == null || righe.isEmpty()) {
@@ -69,12 +65,11 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
         List<RigheCommesse> righe;
 
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(RigheCommesse.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             righe = cr.list();
             if (righe != null) {
                 for (RigheCommesse riga : righe) {
@@ -87,8 +82,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
 
     }
@@ -170,12 +163,11 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         List<RigheCommesse> righe = null;
         float totale = 0;
 
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(RigheCommesse.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             righe = cr.list();
             for (RigheCommesse riga : righe) {
                 totale += riga.getPrezzoListino() * riga.getQuantita();
@@ -186,8 +178,6 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
 
         if (righe == null || righe.isEmpty()) {

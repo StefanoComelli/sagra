@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManagerGiorno;
+import database.DbConnection;
 import model.Commesse;
 import org.jboss.logging.Logger;
 
@@ -14,8 +15,10 @@ public class CommesseManager extends AbstractManagerGiorno<Commesse, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public CommesseManager() {
-        super(Commesse.class);
+    public CommesseManager(DbConnection dbConnection) {
+        super(dbConnection, Commesse.class);
     }
 }

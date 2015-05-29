@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import keys.LogOrdiniKey;
 import model.LogOrdini;
 import org.jboss.logging.Logger;
@@ -15,9 +16,11 @@ public class LogOrdiniManager extends AbstractManager<LogOrdini, LogOrdiniKey> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public LogOrdiniManager() {
-        super(LogOrdini.class);
+    public LogOrdiniManager(DbConnection dbConnection) {
+        super(dbConnection, LogOrdini.class);
     }
 
 }

@@ -1,12 +1,11 @@
 package Manager;
 
 import abstr.AbstractManager;
-import static abstr.AbstractManager.getFactory;
+import database.DbConnection;
 import java.util.List;
 import model.StatiOrdine;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -22,9 +21,11 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public StatiOrdineManager() {
-        super(StatiOrdine.class);
+    public StatiOrdineManager(DbConnection dbConnection) {
+        super(dbConnection, StatiOrdine.class);
     }
 
     /**
@@ -32,13 +33,12 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
      * @return
      */
     public List<StatiOrdine> getElencoStati() {
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(StatiOrdine.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(StatiOrdine.class);
         cr.addOrder(Order.asc("ordineSequenziale"));
         Transaction tx = null;
         List<StatiOrdine> pojos = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             pojos = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -46,8 +46,6 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return pojos;
     }
@@ -60,8 +58,7 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
      */
     private StatiOrdine getStato(StatiOrdine statoOra, boolean successivo) {
         StatiOrdine statoOrdine = null;
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(StatiOrdine.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(StatiOrdine.class);
         if (successivo) {
             cr.add(Restrictions.gt("ordineSequenziale", statoOra.getOrdineSequenziale()));
             cr.addOrder(Order.asc("ordineSequenziale"));
@@ -72,7 +69,7 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
 
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);
 
             tx.commit();
@@ -81,8 +78,6 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return statoOrdine;
     }
@@ -111,13 +106,12 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
      */
     public StatiOrdine getDefault() {
         StatiOrdine statoOrdine = null;
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(StatiOrdine.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(StatiOrdine.class);
         cr.addOrder(Order.asc("ordineSequenziale"));
 
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);
 
             tx.commit();
@@ -126,8 +120,6 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return statoOrdine;
     }

@@ -1,13 +1,11 @@
 package abstr;
 
+import database.DbConnection;
 import java.io.Serializable;
 import java.util.List;
 import org.jboss.logging.Logger;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.cfg.Configuration;
 
 /**
  *
@@ -19,31 +17,19 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
 
     private static final Logger LOGGER = Logger.getLogger(AbstractManager.class);
 
-    private static SessionFactory factory;
+    private final DbConnection dbConnection;
 
-    /**
-     * @return the factory
-     */
-    public static SessionFactory getFactory() {
-        return factory;
-    }
     protected Class<Pojo> pojoClass;
 
     /**
      * AbstractManager
      *
+     * @param dbConnection
      * @param pojoClass
      */
-    protected AbstractManager(Class<Pojo> pojoClass) {
-
+    protected AbstractManager(DbConnection dbConnection, Class<Pojo> pojoClass) {
+        this.dbConnection = dbConnection;
         this.pojoClass = pojoClass;
-
-        try {
-            factory = new Configuration().configure().buildSessionFactory();
-        } catch (Throwable ex) {
-            LOGGER.error("Failed to create sessionFactory object.", ex);
-            throw new ExceptionInInitializerError(ex);
-        }
     }
 
     /**
@@ -53,20 +39,17 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public PrimaryKey insert(Pojo pojo) {
-        Session session = getFactory().openSession();
         Transaction tx = null;
         PrimaryKey id = null;
         try {
-            tx = session.beginTransaction();
-            id = (PrimaryKey) session.save(pojo);
+            tx = getDbConnection().getSession().beginTransaction();
+            id = (PrimaryKey) getDbConnection().getSession().save(pojo);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return id;
     }
@@ -79,21 +62,18 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      */
     public List<Pojo> select(String query) {
 
-        Session session = getFactory().openSession();
         Transaction tx = null;
         List<Pojo> pojos = null;
 
         try {
-            tx = session.beginTransaction();
-            pojos = session.createQuery(query).list();
+            tx = getDbConnection().getSession().beginTransaction();
+            pojos = getDbConnection().getSession().createQuery(query).list();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return pojos;
     }
@@ -107,20 +87,17 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
     public Pojo get(PrimaryKey primaryKey) {
 
         Pojo pojo = null;
-        Session session = getFactory().openSession();
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
-            pojo = (Pojo) session.get(getPojoClass(), primaryKey);
+            tx = getDbConnection().getSession().beginTransaction();
+            pojo = (Pojo) getDbConnection().getSession().get(getPojoClass(), primaryKey);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return pojo;
     }
@@ -132,21 +109,17 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
     public List<Pojo> getAll() {
 
         List<Pojo> pojos = null;
-        Session session = getFactory().openSession();
-
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
-            pojos = session.createCriteria(getPojoClass()).list();
+            tx = getDbConnection().getSession().beginTransaction();
+            pojos = getDbConnection().getSession().createCriteria(getPojoClass()).list();
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return pojos;
     }
@@ -158,21 +131,18 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @param pojoNew
      */
     public void update(PrimaryKey primaryKey, Pojo pojoNew) {
-        Session session = getFactory().openSession();
+
         Transaction tx = null;
 
         try {
-            tx = session.beginTransaction();
-            Pojo pojo = (Pojo) get(primaryKey);
-            session.update(pojoNew);
+            tx = getDbConnection().getSession().beginTransaction();
+            getDbConnection().getSession().update(pojoNew);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
     }
 
@@ -182,20 +152,17 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @param primaryKey
      */
     public void delete(PrimaryKey primaryKey) {
-        Session session = getFactory().openSession();
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             Pojo pojo = (Pojo) get(primaryKey);
-            session.delete(pojo);
+            getDbConnection().getSession().delete(pojo);
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
     }
 
@@ -211,5 +178,12 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      */
     public void setPojoClass(Class<Pojo> pojoClass) {
         this.pojoClass = pojoClass;
+    }
+
+    /**
+     * @return the dbConnection
+     */
+    public DbConnection getDbConnection() {
+        return dbConnection;
     }
 }

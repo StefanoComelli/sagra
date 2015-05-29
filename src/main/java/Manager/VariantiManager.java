@@ -1,11 +1,11 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import java.util.List;
 import model.Varianti;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.jboss.logging.Logger;
@@ -20,9 +20,11 @@ public class VariantiManager extends AbstractManager<Varianti, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public VariantiManager() {
-        super(Varianti.class);
+    public VariantiManager(DbConnection dbConnection) {
+        super(dbConnection, Varianti.class);
     }
 
     /**
@@ -30,14 +32,13 @@ public class VariantiManager extends AbstractManager<Varianti, Integer> {
      * @return
      */
     public List<Varianti> getAllSorted() {
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(Varianti.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(Varianti.class);
         cr.addOrder(Order.asc("categoriaProdotto.id"));
         cr.addOrder(Order.asc("id"));
         Transaction tx = null;
         List<Varianti> varianti = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             varianti = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -45,8 +46,6 @@ public class VariantiManager extends AbstractManager<Varianti, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
         return varianti;
     }

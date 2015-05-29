@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManagerGiorno;
+import database.DbConnection;
 import keys.ProdottiGiornalieraKey;
 import model.ProdottiGiornaliera;
 import org.jboss.logging.Logger;
@@ -15,9 +16,11 @@ public class ProdottiGiornalieraManager extends AbstractManagerGiorno<ProdottiGi
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public ProdottiGiornalieraManager() {
-        super(ProdottiGiornaliera.class);
+    public ProdottiGiornalieraManager(DbConnection dbConnection) {
+        super(dbConnection, ProdottiGiornaliera.class);
     }
 
 }

@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManagerGiorno;
+import database.DbConnection;
 import keys.LogCasseKey;
 import model.LogCasse;
 import org.jboss.logging.Logger;
@@ -15,9 +16,11 @@ public class LogCasseManager extends AbstractManagerGiorno<LogCasse, LogCasseKey
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public LogCasseManager() {
-        super(LogCasse.class);
+    public LogCasseManager(DbConnection dbConnection) {
+        super(dbConnection, LogCasse.class);
     }
 
 }

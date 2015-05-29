@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import model.Casse;
 import org.jboss.logging.Logger;
 
@@ -14,8 +15,10 @@ public class CasseManager extends AbstractManager<Casse, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public CasseManager() {
-        super(Casse.class);
+    public CasseManager(DbConnection dbConnection) {
+        super(dbConnection, Casse.class);
     }
 }

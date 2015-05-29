@@ -7,6 +7,7 @@ import Manager.ListinoRealeManager;
 import Manager.OperatoriManager;
 import Manager.ScontiManager;
 import Manager.VariantiManager;
+import database.DbConnection;
 import java.util.Date;
 import java.util.List;
 import model.Casse;
@@ -37,36 +38,39 @@ public class Cassa {
     private Ordine ordine;
     private List<CategorieProdotti> categorie;
 
+    private final DbConnection dbConnection;
+
     /**
      *
+     * @param dbConnection
      * @param giorno
      * @param cassa
      * @param operatore
      */
-    public Cassa(String giorno, String cassa, String operatore) {
-
+    public Cassa(DbConnection dbConnection, String giorno, String cassa, String operatore) {
+        this.dbConnection = dbConnection;
         IdDescr dGiorno = new IdDescr(giorno);
         IdDescr dCassa = new IdDescr(cassa);
         IdDescr dOperatore = new IdDescr(operatore);
 
-        GiorniManager giorniMgr = new GiorniManager();
+        GiorniManager giorniMgr = new GiorniManager(dbConnection);
         this.giorno = giorniMgr.get(dGiorno.getId());
         this.data = this.giorno.getData();
 
-        CasseManager casseMgr = new CasseManager();
+        CasseManager casseMgr = new CasseManager(dbConnection);
         this.cassa = casseMgr.get(dCassa.getId());
 
-        OperatoriManager operatoriMgr = new OperatoriManager();
+        OperatoriManager operatoriMgr = new OperatoriManager(dbConnection);
         this.operatore = operatoriMgr.get(dOperatore.getId());
 
-        listinoMgr = new ListinoRealeManager();
+        listinoMgr = new ListinoRealeManager(dbConnection);
 
-        VariantiManager variantiMgr = new VariantiManager();
+        VariantiManager variantiMgr = new VariantiManager(dbConnection);
         varianti = variantiMgr.getAllSorted();
-        ScontiManager scontiMgr = new ScontiManager();
+        ScontiManager scontiMgr = new ScontiManager(dbConnection);
         sconti = scontiMgr.getAll();
 
-        CategorieProdottiManager categorieProdottiManager = new CategorieProdottiManager();
+        CategorieProdottiManager categorieProdottiManager = new CategorieProdottiManager(dbConnection);
         categorie = categorieProdottiManager.getAllSorted();
 
         RefreshListino();

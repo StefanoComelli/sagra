@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import model.ListinoProdotti;
 import org.jboss.logging.Logger;
 
@@ -14,9 +15,11 @@ public class ListinoProdottiManager extends AbstractManager<ListinoProdotti, Int
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public ListinoProdottiManager() {
-        super(ListinoProdotti.class);
+    public ListinoProdottiManager(DbConnection dbConnection) {
+        super(dbConnection, ListinoProdotti.class);
     }
 
 }

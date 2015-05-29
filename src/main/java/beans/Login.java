@@ -3,6 +3,7 @@ package beans;
 import Manager.CasseManager;
 import Manager.GiorniManager;
 import Manager.OperatoriManager;
+import database.DbConnection;
 import java.util.List;
 import model.Casse;
 import model.Giorni;
@@ -19,16 +20,19 @@ public class Login {
     private List<Casse> casse;
     private List<Operatori> operatori;
     private List<Giorni> giorni;
+    private final DbConnection dbConnection;
 
     /**
      *
+     * @param dbConnection
      */
-    public Login() {
-        CasseManager casseMgr = new CasseManager();
+    public Login(DbConnection dbConnection) {
+        this.dbConnection = dbConnection;
+        CasseManager casseMgr = new CasseManager(dbConnection);
         this.casse = casseMgr.getAll();
-        OperatoriManager operatoriMgr = new OperatoriManager();
+        OperatoriManager operatoriMgr = new OperatoriManager(dbConnection);
         this.operatori = operatoriMgr.getAllSorted();
-        GiorniManager giorniMgr = new GiorniManager();
+        GiorniManager giorniMgr = new GiorniManager(dbConnection);
         //this.giorni = giorniMgr.getAll();
         this.giorni = giorniMgr.getOggi();
     }

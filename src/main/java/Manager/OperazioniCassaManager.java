@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import model.Varianti;
 import org.jboss.logging.Logger;
 
@@ -14,8 +15,10 @@ public class OperazioniCassaManager extends AbstractManager<Varianti, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public OperazioniCassaManager() {
-        super(Varianti.class);
+    public OperazioniCassaManager(DbConnection dbConnection) {
+        super(dbConnection, Varianti.class);
     }
 }

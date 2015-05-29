@@ -1,6 +1,7 @@
 package gui;
 
 import beans.Login;
+import database.DbConnection;
 import java.awt.Cursor;
 import model.Casse;
 import model.Giorni;
@@ -15,7 +16,8 @@ public class LoginGui extends javax.swing.JFrame {
 
     private static final Logger LOGGER = Logger.getLogger(LoginGui.class);
 
-    private final Login login = new Login();
+    private final DbConnection dbConnection;
+    private final Login login;
 
     /**
      *
@@ -26,7 +28,7 @@ public class LoginGui extends javax.swing.JFrame {
         String cassa = (String) jCmbCassa.getSelectedItem();
         String operatore = (String) jCmbOperatore.getSelectedItem();
         // String giorno, String cassa, String operatore
-        CassaGui cassaGui = new CassaGui(giorno, cassa, operatore);
+        CassaGui cassaGui = new CassaGui(giorno, cassa, operatore, dbConnection);
         cassaGui.setVisible(true);
         setVisible(false);
     }
@@ -73,6 +75,8 @@ public class LoginGui extends javax.swing.JFrame {
      * Creates new form TimeSheetGui
      */
     public LoginGui() {
+        dbConnection = new DbConnection();
+        login = new Login(dbConnection);
         initComponents();
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         Setup();

@@ -1,12 +1,12 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import java.util.Date;
 import java.util.List;
 import model.Giorni;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
@@ -22,9 +22,11 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public GiorniManager() {
-        super(Giorni.class);
+    public GiorniManager(DbConnection dbConnection) {
+        super(dbConnection, Giorni.class);
     }
 
     /**
@@ -36,12 +38,11 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
 
         List<Giorni> giorni = null;
 
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(Giorni.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(Giorni.class);
         cr.add(Restrictions.eq("data", data));
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             giorni = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -49,8 +50,6 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
 
         if (giorni == null || giorni.isEmpty()) {
@@ -68,13 +67,12 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
 
         List<Giorni> giorni = null;
 
-        Session session = getFactory().openSession();
-        Criteria cr = session.createCriteria(Giorni.class);
+        Criteria cr = getDbConnection().getSession().createCriteria(Giorni.class);
         cr.add(Restrictions.eq("flgAperto", true));
         cr.addOrder(Order.asc("data"));
         Transaction tx = null;
         try {
-            tx = session.beginTransaction();
+            tx = getDbConnection().getSession().beginTransaction();
             giorni = cr.list();
             tx.commit();
         } catch (HibernateException e) {
@@ -82,8 +80,6 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
                 tx.rollback();
             }
             LOGGER.error(e);
-        } finally {
-            session.close();
         }
 
         if (giorni == null || giorni.isEmpty()) {

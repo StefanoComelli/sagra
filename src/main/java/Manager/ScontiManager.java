@@ -1,6 +1,7 @@
 package Manager;
 
 import abstr.AbstractManager;
+import database.DbConnection;
 import model.Sconti;
 import org.jboss.logging.Logger;
 
@@ -14,8 +15,10 @@ public class ScontiManager extends AbstractManager<Sconti, Integer> {
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
-    public ScontiManager() {
-        super(Sconti.class);
+    public ScontiManager(DbConnection dbConnection) {
+        super(dbConnection, Sconti.class);
     }
 }

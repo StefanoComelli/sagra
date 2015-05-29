@@ -2,6 +2,7 @@ package model;
 
 import Manager.ListinoProdottiManager;
 import abstr.AbstractData;
+import database.DbConnection;
 import org.jboss.logging.Logger;
 import utils.IdDescr;
 import utils.Valuta;
@@ -18,6 +19,15 @@ public class RigheCommesse extends AbstractData<Integer> {
     private String varianti;
     private float prezzoListino;
     private int idCommessa;
+    private final DbConnection dbConnection;
+
+    /**
+     * 
+     * @param dbConnection 
+     */
+    public RigheCommesse(DbConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
 
     /**
      * @return the varianti
@@ -30,8 +40,12 @@ public class RigheCommesse extends AbstractData<Integer> {
         }
     }
 
+    /**
+     * 
+     * @return 
+     */
     private ListinoProdotti getProdotto() {
-        ListinoProdottiManager mgrProdotto = new ListinoProdottiManager();
+        ListinoProdottiManager mgrProdotto = new ListinoProdottiManager(dbConnection);
         return mgrProdotto.get(idProdotto);
     }
 

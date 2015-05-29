@@ -3,6 +3,7 @@ package beans;
 import Manager.CommesseManager;
 import Manager.RigheCommesseManager;
 import Manager.StatiOrdineManager;
+import database.DbConnection;
 import java.util.List;
 import model.Casse;
 import model.Commesse;
@@ -34,13 +35,16 @@ public class Ordine {
     private StatiOrdine statoOrdine;
 
     private String cliente;
+    private final DbConnection dbConnection;
 
     /**
      *
+     * @param dbConnection
      * @param cassa
      * @param cliente
      */
-    public Ordine(Cassa cassa, String cliente) {
+    public Ordine(DbConnection dbConnection, Cassa cassa, String cliente) {
+        this.dbConnection = dbConnection;
         this.cassa = cassa.getCassa();
         this.operatore = cassa.getOperatore();
         this.giorno = cassa.getGiorno();
@@ -48,11 +52,11 @@ public class Ordine {
         this.varianti = cassa.getVarianti();
         this.sconti = cassa.getSconti();
 
-        commessaMgr = new CommesseManager();
+        commessaMgr = new CommesseManager(dbConnection);
         this.commessa = new Commesse();
 
-        StatiOrdineManager statiOrdineMgr = new StatiOrdineManager();
-        righeMgr = new RigheCommesseManager();
+        StatiOrdineManager statiOrdineMgr = new StatiOrdineManager(dbConnection);
+        righeMgr = new RigheCommesseManager(dbConnection);
         statiOrdine = statiOrdineMgr.getElencoStati();
         statoOrdine = statiOrdineMgr.getDefault();
         this.commessa.setStatoOrdine(statoOrdine);
@@ -70,12 +74,14 @@ public class Ordine {
 
     /**
      *
+     * @param dbConnection
      * @param idOrdine
      */
-    public Ordine(int idOrdine) {
-        commessaMgr = new CommesseManager();
+    public Ordine(DbConnection dbConnection, int idOrdine) {
+        this.dbConnection = dbConnection;
+        commessaMgr = new CommesseManager(dbConnection);
         this.commessa = (Commesse) commessaMgr.get(idOrdine);
-        righeMgr = new RigheCommesseManager();
+        righeMgr = new RigheCommesseManager(dbConnection);
     }
 
     /**

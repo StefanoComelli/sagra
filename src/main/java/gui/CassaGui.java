@@ -3,6 +3,7 @@ package gui;
 import Manager.RigheCommesseManager;
 import beans.Cassa;
 import beans.Ordine;
+import database.DbConnection;
 import javax.swing.table.DefaultTableModel;
 import model.CategorieProdotti;
 import model.ListinoReale;
@@ -111,8 +112,8 @@ public class CassaGui extends javax.swing.JFrame {
     private final int TBL_RIGHE_ID_PRODOTTO = 4;
     private final int TBL_RIGHE_ID = 5;
 
-    private int cListino;
-    private int rListino;
+    private int cListino = -1;
+    private int rListino = -1;
     private int cOrdine;
     private int rOrdine;
 
@@ -121,18 +122,24 @@ public class CassaGui extends javax.swing.JFrame {
     private float totale;
     private float netto;
 
+    private final DbConnection dbConnection;
+
     private final StatoFinestra statoFinestra;
+    private final RigheCommesseManager mgrRiga;
 
     /**
      *
      * @param giorno
      * @param cassa
      * @param operatore
+     * @param dbConnection
      */
-    public CassaGui(String giorno, String cassa, String operatore) {
+    public CassaGui(String giorno, String cassa, String operatore, DbConnection dbConnection) {
 
+        this.dbConnection = dbConnection;
+        mgrRiga = new RigheCommesseManager(dbConnection);
         statoFinestra = new StatoFinestra(this);
-        this.cassa = new Cassa(giorno, cassa, operatore);
+        this.cassa = new Cassa(dbConnection, giorno, cassa, operatore);
         initComponents();
         SetupGui();
         SetupCategorie();
@@ -296,9 +303,8 @@ public class CassaGui extends javax.swing.JFrame {
     private void EliminaRiga() {
         if (ChiediConferma("Elimina riga")) {
             int id = getIdRigaOrdine();
-            RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-            rigaMgr.delete(id);
+            mgrRiga.delete(id);
             RefreshOrdine();
         }
     }
@@ -309,9 +315,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void ModificaVariante(String variante) {
         int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.CambiaVariante(id, variante);
+        mgrRiga.CambiaVariante(id, variante);
         RefreshOrdine();
     }
 
@@ -320,9 +325,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void incQuantita() {
         int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.incQuantita(id);
+        mgrRiga.incQuantita(id);
         RefreshOrdine();
     }
 
@@ -331,9 +335,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void SettaQuantita(int qta) {
         int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.SettaQuantita(id, qta);
+        mgrRiga.SettaQuantita(id, qta);
         RefreshOrdine();
     }
 
@@ -342,9 +345,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void decQuantita() {
         int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.decQuantita(id);
+        mgrRiga.decQuantita(id);
         RefreshOrdine();
     }
 
@@ -354,9 +356,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void decQuantita(int qta) {
         int id = getIdRigaOrdine();
-        RigheCommesseManager rigaMgr = new RigheCommesseManager();
 
-        rigaMgr.decQuantita(id, qta);
+        mgrRiga.decQuantita(id, qta);
         RefreshOrdine();
     }
 
@@ -364,7 +365,7 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void AggiungiDaListino() {
-        RigheCommesse riga = new RigheCommesse();
+        RigheCommesse riga = new RigheCommesse(dbConnection);
 
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
@@ -375,7 +376,6 @@ public class CassaGui extends javax.swing.JFrame {
         riga.setQuantita(1);
         riga.setIdCommessa(ordine.getCommessa().getId());
 
-        RigheCommesseManager mgrRiga = new RigheCommesseManager();
         mgrRiga.insert(riga);
 
         RefreshOrdine();
@@ -498,6 +498,7 @@ public class CassaGui extends javax.swing.JFrame {
         }
 
         GuiUtils.EmptyJtable(jTblListino);
+
         for (ListinoReale prodotto : cassa.getListino()) {
             boolean flgAdd = true;
             if (flgFiltro) {
@@ -511,7 +512,9 @@ public class CassaGui extends javax.swing.JFrame {
             }
         }
         jTblListino.requestFocus();
-        jTblListino.changeSelection(rListino, cListino, false, false);
+        if (rListino == -1 || cListino == -1) {
+            jTblListino.changeSelection(rListino, cListino, false, false);
+        }
     }
 
     /**
@@ -529,7 +532,7 @@ public class CassaGui extends javax.swing.JFrame {
                 IdOrdine idOrdine = new IdOrdine();
                 idOrdine.setBarcode(barcode);
                 if (idOrdine.isOk() && ordine == null) {
-                    ordine = new Ordine(idOrdine.getId());
+                    ordine = new Ordine(dbConnection, idOrdine.getId());
                     if (ordine != null) {
                         RefreshOrdine();
                         StatoBottoni();
@@ -880,6 +883,11 @@ public class CassaGui extends javax.swing.JFrame {
         jCmbCategoria.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 jCmbCategoriaItemStateChanged(evt);
+            }
+        });
+        jCmbCategoria.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCmbCategoriaActionPerformed(evt);
             }
         });
 
@@ -1284,9 +1292,7 @@ public class CassaGui extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                    .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
 
         pack();
@@ -1299,6 +1305,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
+               dbConnection.Dispose();
                 System.exit(0);
             } else {
                 statoFinestra.Sblocca();
@@ -1313,6 +1320,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
+               dbConnection.Dispose();
                 System.exit(0);
             } else {
                 statoFinestra.Sblocca();
@@ -1330,7 +1338,7 @@ public class CassaGui extends javax.swing.JFrame {
             String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                     "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
             if (!cliente.isEmpty()) {
-                ordine = new Ordine(this.cassa, cliente);
+                ordine = new Ordine(dbConnection, this.cassa, cliente);
                 jTxtCliente.setText(cliente);
             }
             StatoBottoni();
@@ -1374,6 +1382,8 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
         if (statoFinestra.Blocca()) {
             jCmbCategoria.setSelectedIndex(-1);
+            rListino = -1;
+            cListino = -1;
             RefreshListino();
             StatoBottoni();
             statoFinestra.Sblocca();
@@ -1386,6 +1396,8 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jCmbCategoriaItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_jCmbCategoriaItemStateChanged
         if (statoFinestra.Blocca()) {
+            rListino = -1;
+            cListino = -1;
             RefreshListino();
             StatoBottoni();
             statoFinestra.Sblocca();
@@ -1600,6 +1612,13 @@ public class CassaGui extends javax.swing.JFrame {
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jBtnStampaActionPerformed
+
+    private void jCmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbCategoriaActionPerformed
+        if (statoFinestra.Blocca()) {
+            StatoBottoni();
+            statoFinestra.Sblocca();
+        }
+    }//GEN-LAST:event_jCmbCategoriaActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAggiungi;
