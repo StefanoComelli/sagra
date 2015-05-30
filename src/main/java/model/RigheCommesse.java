@@ -22,8 +22,15 @@ public class RigheCommesse extends AbstractData<Integer> {
     private final DbConnection dbConnection;
 
     /**
-     * 
-     * @param dbConnection 
+     *
+     */
+    public RigheCommesse() {
+        dbConnection = null;
+    }
+
+    /**
+     *
+     * @param dbConnection
      */
     public RigheCommesse(DbConnection dbConnection) {
         this.dbConnection = dbConnection;
@@ -41,12 +48,16 @@ public class RigheCommesse extends AbstractData<Integer> {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     private ListinoProdotti getProdotto() {
-        ListinoProdottiManager mgrProdotto = new ListinoProdottiManager(dbConnection);
-        return mgrProdotto.get(idProdotto);
+        if (dbConnection != null) {
+            ListinoProdottiManager mgrProdotto = new ListinoProdottiManager(dbConnection);
+            return mgrProdotto.get(idProdotto);
+        } else {
+            return null;
+        }
     }
 
     /**
