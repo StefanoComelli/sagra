@@ -21,8 +21,10 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
+import model.Commesse;
 import model.RigheCommesse;
 import model.Sconti;
+import model.StatiOrdine;
 import model.Varianti;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
@@ -32,6 +34,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.commons.lang.math.NumberUtils;
 import utils.IdOrdine;
+import utils.MathUtils;
 import utils.Sconto;
 import utils.Valuta;
 
@@ -146,6 +149,7 @@ public class CassaGui extends javax.swing.JFrame {
         SetupSconti();
         RefreshListino();
         PopolaVarianti();
+        PopolaStati();
         StatoBottoni();
     }
 
@@ -175,10 +179,20 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
+    private void Svuota() {
+        ordine = null;
+        SvuotaSconto();
+        RefreshOrdine();
+        jTxtOrdine.setText("");
+    }
+
+    /**
+     *
+     */
     private void Annulla() {
         if (ordine != null) {
-            if (ChiediConferma("Annulla Ordine")) {
-                ordine.AnnullaOrdine();
+            if (ChiediConferma("Cancella Ordine")) {
+                ordine.CancellaOrdine();
                 ordine = null;
                 SvuotaSconto();
                 RefreshOrdine();
@@ -199,11 +213,23 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void AggiornaOrdine() {
         if (ControlloOrdine()) {
-            ordine.getCommessa().setNomeCliente(jTxtCliente.getText());
-            ordine.getCommessa().setCoperti((int) jSpinCoperti.getValue());
+            Commesse commessa = ordine.getCommessa();
+            commessa.setNomeCliente(jTxtCliente.getText());
+            commessa.setCoperti((int) jSpinCoperti.getValue());
             IdDescr sconto = new IdDescr((String) jCmbSconti.getSelectedItem());
-            ordine.getCommessa().setDescSconto(sconto.getDescr());
-            ordine.getCommessa().setAsporto(jChkAsporto.isSelected());
+            commessa.setDescSconto(sconto.getDescr());
+            commessa.setAsporto(jChkAsporto.isSelected());
+            if (jTxtTavolo.getText().isEmpty()) {
+                commessa.setTavoloCliente("____");
+            } else {
+                commessa.setTavoloCliente(jTxtTavolo.getText());
+            }
+
+            commessa.setTotale(totale);
+            commessa.setTotalePagato(netto);
+            commessa.setScontoApplicato(scontoApplicato);
+            commessa.setAsporto(jChkAsporto.isSelected());
+            commessa.setDescSconto(jCmbSconti.getSelectedItem().toString());
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
         }
     }
@@ -241,21 +267,16 @@ public class CassaGui extends javax.swing.JFrame {
         jTblOrdine.addMouseListener(new TableMouseListener(jTblOrdine));
         jTblOrdine.setDefaultRenderer(Object.class, new BetterTableCellRenderer());
 
-        // Contanti
-        jTxtContanti.addKeyListener(new KeyAdapter() {
-            @Override
-            public void keyReleased(KeyEvent e) {
-                RefreshContanti();
-            }
+        // focus
+        jTxtOrdine.requestFocusInWindow();
 
-            @Override
-            public void keyTyped(KeyEvent e) {
-            }
+        SetupListener();
+    }
 
-            @Override
-            public void keyPressed(KeyEvent e) {
-            }
-        });
+    /**
+     *
+     */
+    private void SetupListener() {
 
         // Lettura Ordine
         jTxtOrdine.addKeyListener(new KeyAdapter() {
@@ -273,8 +294,6 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
-        // focus
-        jTxtOrdine.requestFocusInWindow();
     }
 
     /**
@@ -365,7 +384,7 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void AggiungiDaListino() {
-        RigheCommesse riga = new RigheCommesse(dbConnection);
+        RigheCommesse riga = new RigheCommesse();
 
         Valuta prezzo;
         DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
@@ -392,7 +411,7 @@ public class CassaGui extends javax.swing.JFrame {
             List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
             if (righe != null) {
                 for (RigheCommesse riga : righe) {
-                    model.addRow(riga.getRow());
+                    model.addRow(riga.getRow(dbConnection));
                 }
                 jTblOrdine.requestFocus();
                 if (jTblOrdine.getRowCount() > 0) {
@@ -429,7 +448,7 @@ public class CassaGui extends javax.swing.JFrame {
             percScontoDaApplicare = getScontoDaApplicare();
             scontoApplicato = vTotale.getValore() / 100 * percScontoDaApplicare;
             Valuta vScontoOrdine = new Valuta(scontoApplicato);
-            netto = totale - scontoApplicato;
+            netto = MathUtils.Arrotonda(totale - scontoApplicato);
             Valuta vNnetto = new Valuta(netto);
 
             jTxtScontoOrdine.setText(vScontoOrdine.toString());
@@ -538,6 +557,8 @@ public class CassaGui extends javax.swing.JFrame {
                         StatoBottoni();
                     }
                 }
+            } else {
+                Svuota();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -574,6 +595,15 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
+    private void PopolaStati() {
+        for (StatiOrdine statoOrdine : cassa.getStatiOrdine()) {
+            // jCmbStati.addItem(statoOrdine.toString());
+        }
+    }
+
+    /**
+     *
+     */
     private void StampaOrdine() {
         AggiornaOrdine();
         try {
@@ -597,7 +627,7 @@ public class CassaGui extends javax.swing.JFrame {
             idOrdine.setId(ordine.getCommessa().getId());
             jrTestata.setId(idOrdine.getBarcode());
 
-            JrRigaOrdineFactory jrFactory = new JrRigaOrdineFactory(ordine);
+            JrRigaOrdineFactory jrFactory = new JrRigaOrdineFactory(dbConnection, ordine);
 
             Map parameters = jrTestata.getHashMap();
 
@@ -675,8 +705,8 @@ public class CassaGui extends javax.swing.JFrame {
         }
         jChkAsporto.setEnabled(flgOrdineOk);
         jBtnNuovoOrdine.setEnabled(!flgOrdineOk);
-        jBtnAnnullaOrdine.setEnabled(flgOrdineOk);
-        jBtnConfermaOrdine.setEnabled(flgOrdineRigheOk);
+        jBtnCancellaOrdine.setEnabled(flgOrdineOk);
+        jBtnPulisciOrdine.setEnabled(flgOrdineRigheOk);
         jBtnStampa.setEnabled(flgOrdineRigheOk);
         jTxtCliente.setEnabled(flgOrdineOk);
         jTxtTavolo.setEnabled(flgOrdineOk);
@@ -729,10 +759,11 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtContanti = new javax.swing.JTextField();
         jLblResto = new javax.swing.JLabel();
         jTxtResto = new javax.swing.JTextField();
+        jBtnCalcola = new javax.swing.JButton();
         jPanelOrdine = new javax.swing.JPanel();
         jBtnNuovoOrdine = new javax.swing.JButton();
-        jBtnConfermaOrdine = new javax.swing.JButton();
-        jBtnAnnullaOrdine = new javax.swing.JButton();
+        jBtnPulisciOrdine = new javax.swing.JButton();
+        jBtnCancellaOrdine = new javax.swing.JButton();
         jBtnStampa = new javax.swing.JButton();
         jTxtOrdine = new javax.swing.JTextField();
         jPanelSconto = new javax.swing.JPanel();
@@ -825,6 +856,7 @@ public class CassaGui extends javax.swing.JFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTblOrdine.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_ALL_COLUMNS);
         jTblOrdine.getTableHeader().setReorderingAllowed(false);
         jTblOrdine.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -865,6 +897,7 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
         jTblListino.setToolTipText("Listino");
+        jTblListino.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_NEXT_COLUMN);
         jTblListino.setEnabled(false);
         jTblListino.getTableHeader().setReorderingAllowed(false);
         jTblListino.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -905,7 +938,8 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
-        jBtnAggiungi.setText("<- Aggiungi");
+        jBtnAggiungi.setFont(new java.awt.Font("Tahoma", 1, 11)); // NOI18N
+        jBtnAggiungi.setText("<==");
         jBtnAggiungi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnAggiungiActionPerformed(evt);
@@ -943,11 +977,12 @@ public class CassaGui extends javax.swing.JFrame {
         jPanelVariantiLayout.setHorizontalGroup(
             jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelVariantiLayout.createSequentialGroup()
-                .addComponent(jBtnConfermaVariante)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 305, Short.MAX_VALUE)
-                .addComponent(jBtnEliminaVariante))
-            .addGroup(jPanelVariantiLayout.createSequentialGroup()
-                .addComponent(jCmbVarianti, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanelVariantiLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanelVariantiLayout.createSequentialGroup()
+                        .addComponent(jBtnConfermaVariante)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jBtnEliminaVariante, javax.swing.GroupLayout.PREFERRED_SIZE, 78, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jCmbVarianti, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanelVariantiLayout.setVerticalGroup(
@@ -991,14 +1026,21 @@ public class CassaGui extends javax.swing.JFrame {
 
         jTxtResto.setEditable(false);
 
+        jBtnCalcola.setText("Calcola");
+        jBtnCalcola.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBtnCalcolaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelContoLayout = new javax.swing.GroupLayout(jPanelConto);
         jPanelConto.setLayout(jPanelContoLayout);
         jPanelContoLayout.setHorizontalGroup(
             jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelContoLayout.createSequentialGroup()
                 .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addGroup(jPanelContoLayout.createSequentialGroup()
-                        .addComponent(jLblTotale)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContoLayout.createSequentialGroup()
+                        .addComponent(jLblTotale, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jTxtTotale, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelContoLayout.createSequentialGroup()
@@ -1014,11 +1056,14 @@ public class CassaGui extends javax.swing.JFrame {
                 .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanelContoLayout.createSequentialGroup()
                         .addComponent(jTxtResto, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap())
+                        .addGap(18, 18, 18)
+                        .addComponent(jBtnCalcola)
+                        .addGap(0, 151, Short.MAX_VALUE))
                     .addGroup(jPanelContoLayout.createSequentialGroup()
                         .addComponent(jTxtScontoOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 62, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jTxtNetto, javax.swing.GroupLayout.DEFAULT_SIZE, 78, Short.MAX_VALUE))))
+                        .addGap(18, 18, 18)
+                        .addComponent(jTxtNetto)))
+                .addContainerGap())
         );
         jPanelContoLayout.setVerticalGroup(
             jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1036,8 +1081,9 @@ public class CassaGui extends javax.swing.JFrame {
                         .addComponent(jTxtContanti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jTxtResto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jLblResto)))
-                .addGap(0, 3, Short.MAX_VALUE))
+                        .addComponent(jLblResto)
+                        .addComponent(jBtnCalcola)))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         jPanelOrdine.setBorder(javax.swing.BorderFactory.createTitledBorder("Ordine"));
@@ -1049,21 +1095,21 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
-        jBtnConfermaOrdine.setText("Conferma");
-        jBtnConfermaOrdine.addActionListener(new java.awt.event.ActionListener() {
+        jBtnPulisciOrdine.setText("Pulisci");
+        jBtnPulisciOrdine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnConfermaOrdineActionPerformed(evt);
+                jBtnPulisciOrdineActionPerformed(evt);
             }
         });
 
-        jBtnAnnullaOrdine.setText("Annulla");
-        jBtnAnnullaOrdine.addActionListener(new java.awt.event.ActionListener() {
+        jBtnCancellaOrdine.setText("Cancella");
+        jBtnCancellaOrdine.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBtnAnnullaOrdineActionPerformed(evt);
+                jBtnCancellaOrdineActionPerformed(evt);
             }
         });
 
-        jBtnStampa.setText("Stampa");
+        jBtnStampa.setText("Conferma e Stampa");
         jBtnStampa.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBtnStampaActionPerformed(evt);
@@ -1075,26 +1121,27 @@ public class CassaGui extends javax.swing.JFrame {
         jPanelOrdineLayout.setHorizontalGroup(
             jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOrdineLayout.createSequentialGroup()
-                .addComponent(jTxtOrdine)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jTxtOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
                 .addComponent(jBtnNuovoOrdine)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBtnConfermaOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jBtnPulisciOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBtnStampa)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jBtnAnnullaOrdine))
+                .addComponent(jBtnCancellaOrdine)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanelOrdineLayout.setVerticalGroup(
             jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelOrdineLayout.createSequentialGroup()
                 .addGroup(jPanelOrdineLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBtnNuovoOrdine)
-                    .addComponent(jBtnConfermaOrdine)
-                    .addComponent(jBtnAnnullaOrdine)
+                    .addComponent(jBtnPulisciOrdine)
+                    .addComponent(jBtnCancellaOrdine)
                     .addComponent(jBtnStampa)
                     .addComponent(jTxtOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(0, 1, Short.MAX_VALUE))
         );
 
         jPanelSconto.setBorder(javax.swing.BorderFactory.createTitledBorder("Sconto"));
@@ -1121,14 +1168,14 @@ public class CassaGui extends javax.swing.JFrame {
         jPanelScontoLayout.setHorizontalGroup(
             jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanelScontoLayout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLblScontoGiorno)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jTxtScontoGiorno, javax.swing.GroupLayout.PREFERRED_SIZE, 31, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jLblSconti)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jCmbSconti, javax.swing.GroupLayout.PREFERRED_SIZE, 272, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jCmbSconti, 0, 366, Short.MAX_VALUE)
+                .addContainerGap())
         );
         jPanelScontoLayout.setVerticalGroup(
             jPanelScontoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1192,44 +1239,12 @@ public class CassaGui extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanelOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanelVarianti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(71, 71, 71))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBtnQta)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSpinQta, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(jBtnDec, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(jBtnInc))
-                            .addComponent(jScrollOrdine))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(jLblFiltro)
-                                    .addComponent(jBtnAggiungi))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(jBtnAnnullaFiltro))))
-                            .addComponent(jBtnEsce, javax.swing.GroupLayout.Alignment.TRAILING)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                                 .addComponent(jLblCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1242,54 +1257,91 @@ public class CassaGui extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jChkAsporto)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jChkAsporto))
+                            .addComponent(jPanelOrdine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jLblOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(101, 101, 101)))
-                        .addComponent(jLblListino, javax.swing.GroupLayout.PREFERRED_SIZE, 366, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
+                                .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jBtnQta)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jSpinQta, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jBtnDec, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBtnInc))
+                            .addComponent(jLblOrdine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollOrdine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 587, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnAggiungi)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLblFiltro)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jCmbCategoria, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jBtnAnnullaFiltro))
+                    .addComponent(jLblListino, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 569, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollListino, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jBtnEsce))
+                .addGap(20, 20, 20))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanelSconto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanelOrdine, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLblCliente)
-                    .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLblTavolo)
-                    .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLblFiltro)
-                    .addComponent(jBtnAnnullaFiltro)
-                    .addComponent(jLblCoperti)
-                    .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jChkAsporto))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLblListino)
-                    .addComponent(jLblOrdine))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBtnAggiungi)
+                    .addComponent(jPanelOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 306, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBtnElimina)
+                            .addComponent(jBtnAnnullaFiltro)
+                            .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLblFiltro))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(jBtnAggiungi)
+                                .addGap(202, 202, 202)
+                                .addComponent(jBtnElimina))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jLblListino)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 365, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jBtnEsce)
+                                .addGap(0, 5, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLblCliente)
+                            .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLblTavolo)
+                            .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLblCoperti)
+                            .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jChkAsporto))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLblOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 367, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jBtnQta)
                             .addComponent(jSpinQta, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jBtnDec)
-                            .addComponent(jBtnInc)))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jScrollListino, javax.swing.GroupLayout.PREFERRED_SIZE, 307, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnEsce)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addComponent(jBtnInc))
+                        .addGap(16, 16, 16)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanelVarianti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1305,7 +1357,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
-               dbConnection.Dispose();
+                dbConnection.Dispose();
                 System.exit(0);
             } else {
                 statoFinestra.Sblocca();
@@ -1320,7 +1372,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
-               dbConnection.Dispose();
+                dbConnection.Dispose();
                 System.exit(0);
             } else {
                 statoFinestra.Sblocca();
@@ -1374,21 +1426,6 @@ public class CassaGui extends javax.swing.JFrame {
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jTblListinoMouseClicked
-
-    /**
-     *
-     * @param evt
-     */
-    private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
-        if (statoFinestra.Blocca()) {
-            jCmbCategoria.setSelectedIndex(-1);
-            rListino = -1;
-            cListino = -1;
-            RefreshListino();
-            StatoBottoni();
-            statoFinestra.Sblocca();
-        }
-    }//GEN-LAST:event_jBtnAnnullaFiltroMouseClicked
 
     /**
      *
@@ -1480,14 +1517,6 @@ public class CassaGui extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jBtnAnnullaFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBtnAnnullaFiltroActionPerformed
-
-    /**
-     *
-     * @param evt
-     */
     private void jMenuEliminaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuEliminaActionPerformed
         if (statoFinestra.Blocca()) {
             EliminaRiga();
@@ -1523,14 +1552,14 @@ public class CassaGui extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jBtnAnnullaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaOrdineActionPerformed
+    private void jBtnCancellaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCancellaOrdineActionPerformed
         if (statoFinestra.Blocca()) {
             Annulla();
             StatoBottoni();
             jTxtOrdine.requestFocusInWindow();
             statoFinestra.Sblocca();
         }
-    }//GEN-LAST:event_jBtnAnnullaOrdineActionPerformed
+    }//GEN-LAST:event_jBtnCancellaOrdineActionPerformed
 
     /**
      *
@@ -1560,13 +1589,19 @@ public class CassaGui extends javax.swing.JFrame {
      *
      * @param evt
      */
-    private void jBtnConfermaOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnConfermaOrdineActionPerformed
+    private void jBtnPulisciOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPulisciOrdineActionPerformed
         if (statoFinestra.Blocca()) {
-            Conferma();
-            StatoBottoni();
-            statoFinestra.Sblocca();
+            if (statoFinestra.Blocca()) {
+                if (ChiediConferma("Pulisci Ordine")) {
+                    ordine = null;
+                    SvuotaSconto();
+                    RefreshOrdine();
+                    jTxtOrdine.setText("");
+                }
+                statoFinestra.Sblocca();
+            }
         }
-    }//GEN-LAST:event_jBtnConfermaOrdineActionPerformed
+    }//GEN-LAST:event_jBtnPulisciOrdineActionPerformed
 
     /**
      *
@@ -1620,11 +1655,45 @@ public class CassaGui extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jCmbCategoriaActionPerformed
 
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnCalcolaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnCalcolaActionPerformed
+        if (statoFinestra.Blocca()) {
+            RefreshContanti();
+            statoFinestra.Sblocca();
+        }
+    }//GEN-LAST:event_jBtnCalcolaActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnAnnullaFiltroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBtnAnnullaFiltroActionPerformed
+
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnAnnullaFiltroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBtnAnnullaFiltroMouseClicked
+        if (statoFinestra.Blocca()) {
+            jCmbCategoria.setSelectedIndex(-1);
+            rListino = -1;
+            cListino = -1;
+            RefreshListino();
+            StatoBottoni();
+            statoFinestra.Sblocca();
+        }
+    }//GEN-LAST:event_jBtnAnnullaFiltroMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAggiungi;
     private javax.swing.JButton jBtnAnnullaFiltro;
-    private javax.swing.JButton jBtnAnnullaOrdine;
-    private javax.swing.JButton jBtnConfermaOrdine;
+    private javax.swing.JButton jBtnCalcola;
+    private javax.swing.JButton jBtnCancellaOrdine;
     private javax.swing.JButton jBtnConfermaVariante;
     private javax.swing.JButton jBtnDec;
     private javax.swing.JButton jBtnElimina;
@@ -1632,6 +1701,7 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JButton jBtnEsce;
     private javax.swing.JButton jBtnInc;
     private javax.swing.JButton jBtnNuovoOrdine;
+    private javax.swing.JButton jBtnPulisciOrdine;
     private javax.swing.JButton jBtnQta;
     private javax.swing.JButton jBtnStampa;
     private javax.swing.JCheckBox jChkAsporto;

@@ -1,5 +1,6 @@
 package jasper;
 
+import database.DbConnection;
 import model.RigheCommesse;
 import utils.IdDescr;
 
@@ -14,12 +15,16 @@ public class JrRigaOrdine {
     private int quantita;
     private String variante;
 
+    private final DbConnection dbConnection;
+
     /**
      *
+     * @param dbConnection
      * @param riga
      */
-    public JrRigaOrdine(RigheCommesse riga) {
-        IdDescr idProdotto = riga.getIdDescrProdotto();
+    public JrRigaOrdine(DbConnection dbConnection, RigheCommesse riga) {
+        this.dbConnection = dbConnection;
+        IdDescr idProdotto = riga.getIdDescrProdotto(dbConnection);
         this.prodotto = idProdotto.getDescr();
         this.prezzo = riga.getPrezzoListino();
         this.quantita = riga.getQuantita();

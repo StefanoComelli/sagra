@@ -19,22 +19,6 @@ public class RigheCommesse extends AbstractData<Integer> {
     private String varianti;
     private float prezzoListino;
     private int idCommessa;
-    private final DbConnection dbConnection;
-
-    /**
-     *
-     */
-    public RigheCommesse() {
-        dbConnection = null;
-    }
-
-    /**
-     *
-     * @param dbConnection
-     */
-    public RigheCommesse(DbConnection dbConnection) {
-        this.dbConnection = dbConnection;
-    }
 
     /**
      * @return the varianti
@@ -51,7 +35,7 @@ public class RigheCommesse extends AbstractData<Integer> {
      *
      * @return
      */
-    private ListinoProdotti getProdotto() {
+    private ListinoProdotti getProdotto(DbConnection dbConnection) {
         if (dbConnection != null) {
             ListinoProdottiManager mgrProdotto = new ListinoProdottiManager(dbConnection);
             return mgrProdotto.get(idProdotto);
@@ -97,24 +81,28 @@ public class RigheCommesse extends AbstractData<Integer> {
 
     /**
      *
+     * @param dbConnection
      * @return
      */
-    public IdDescr getIdDescrProdotto() {
-        return new IdDescr(this.getProdotto().getId(), this.getProdotto().getNomeProdotto());
+    public IdDescr getIdDescrProdotto(DbConnection dbConnection) {
+        ListinoProdotti prodotto = this.getProdotto(dbConnection);
+        return new IdDescr(prodotto.getId(), prodotto.getNomeProdotto());
     }
 
     /**
      *
+     * @param dbConnection
      * @return
      */
-    public Object[] getRow() {
+    public Object[] getRow(DbConnection dbConnection) {
+        ListinoProdotti prodotto = this.getProdotto(dbConnection);
         Valuta prezzo = new Valuta(prezzoListino);
         return new Object[]{
-            this.getProdotto().getNomeProdotto(),
+            prodotto.getNomeProdotto(),
             prezzo.toString(),
             getQuantita(),
             getVarianti(),
-            this.getProdotto().getId(),
+            prodotto.getId(),
             getId()
         };
     }

@@ -2,6 +2,7 @@ package jasper;
 
 import java.util.Collection;
 import beans.Ordine;
+import database.DbConnection;
 import java.util.ArrayList;
 import java.util.List;
 import model.RigheCommesse;
@@ -13,19 +14,22 @@ import model.RigheCommesse;
 public class JrRigaOrdineFactory {
 
     private final Collection<JrRigaOrdine> data;
+    private final DbConnection dbConnection;
 
     /**
      *
+     * @param dbConnection
      * @param ordine
      */
-    public JrRigaOrdineFactory(Ordine ordine) {
+    public JrRigaOrdineFactory(DbConnection dbConnection, Ordine ordine) {
+        this.dbConnection = dbConnection;
         data = new ArrayList<>();
         int idCommessa = ordine.getCommessa().getId();
         List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
 
         if (righe != null) {
             for (RigheCommesse riga : righe) {
-                JrRigaOrdine jRiga = new JrRigaOrdine(riga);
+                JrRigaOrdine jRiga = new JrRigaOrdine(dbConnection, riga);
                 data.add(jRiga);
             }
         }

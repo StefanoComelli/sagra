@@ -6,6 +6,7 @@ import Manager.GiorniManager;
 import Manager.ListinoRealeManager;
 import Manager.OperatoriManager;
 import Manager.ScontiManager;
+import Manager.StatiOrdineManager;
 import Manager.VariantiManager;
 import database.DbConnection;
 import java.util.Date;
@@ -16,6 +17,7 @@ import model.Giorni;
 import model.ListinoReale;
 import model.Operatori;
 import model.Sconti;
+import model.StatiOrdine;
 import model.Varianti;
 import org.jboss.logging.Logger;
 import utils.IdDescr;
@@ -27,17 +29,17 @@ import utils.IdDescr;
 public class Cassa {
 
     private static final Logger LOGGER = Logger.getLogger(Cassa.class);
-    private Casse cassa;
-    private Date data;
-    private Giorni giorno;
+    private final Casse cassa;
+    private final Date data;
+    private final Giorni giorno;
     private List<ListinoReale> listino;
-    private Operatori operatore;
-    private List<Varianti> varianti;
-    private ListinoRealeManager listinoMgr;
-    private List<Sconti> sconti;
+    private final Operatori operatore;
+    private final List<Varianti> varianti;
+    private final ListinoRealeManager listinoMgr;
+    private final List<Sconti> sconti;
     private Ordine ordine;
-    private List<CategorieProdotti> categorie;
-
+    private final List<CategorieProdotti> categorie;
+    private final List<StatiOrdine> statiOrdine;
     private final DbConnection dbConnection;
 
     /**
@@ -73,6 +75,8 @@ public class Cassa {
         CategorieProdottiManager categorieProdottiManager = new CategorieProdottiManager(dbConnection);
         categorie = categorieProdottiManager.getAllSorted();
 
+        StatiOrdineManager statiOrdineMgr = new StatiOrdineManager(dbConnection);
+        statiOrdine = statiOrdineMgr.getElencoStati();
         RefreshListino();
 
     }
@@ -92,24 +96,10 @@ public class Cassa {
     }
 
     /**
-     * @param data the data to set
-     */
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    /**
      * @return the giorno
      */
     public Giorni getGiorno() {
         return giorno;
-    }
-
-    /**
-     * @param giorno the giorno to set
-     */
-    public void setGiorno(Giorni giorno) {
-        this.giorno = giorno;
     }
 
     /**
@@ -120,24 +110,10 @@ public class Cassa {
     }
 
     /**
-     * @param listino the listino to set
-     */
-    public void setListino(List<ListinoReale> listino) {
-        this.listino = listino;
-    }
-
-    /**
      * @return the listinoMgr
      */
     public ListinoRealeManager getListinoMgr() {
         return listinoMgr;
-    }
-
-    /**
-     * @param listinoMgr the listinoMgr to set
-     */
-    public void setListinoMgr(ListinoRealeManager listinoMgr) {
-        this.listinoMgr = listinoMgr;
     }
 
     /**
@@ -148,24 +124,10 @@ public class Cassa {
     }
 
     /**
-     * @param operatore the operatore to set
-     */
-    public void setOperatore(Operatori operatore) {
-        this.operatore = operatore;
-    }
-
-    /**
      * @return the varianti
      */
     public List<Varianti> getVarianti() {
         return varianti;
-    }
-
-    /**
-     * @param varianti the varianti to set
-     */
-    public void setVarianti(List<Varianti> varianti) {
-        this.varianti = varianti;
     }
 
     /**
@@ -176,24 +138,10 @@ public class Cassa {
     }
 
     /**
-     * @param sconti the sconti to set
-     */
-    public void setSconti(List<Sconti> sconti) {
-        this.sconti = sconti;
-    }
-
-    /**
      * @return the ordine
      */
     public Ordine getOrdine() {
         return ordine;
-    }
-
-    /**
-     * @param ordine the ordine to set
-     */
-    public void setOrdine(Ordine ordine) {
-        this.ordine = ordine;
     }
 
     /**
@@ -204,13 +152,6 @@ public class Cassa {
     }
 
     /**
-     * @param cassa the cassa to set
-     */
-    public void setCassa(Casse cassa) {
-        this.cassa = cassa;
-    }
-
-    /**
      * @return the categorie
      */
     public List<CategorieProdotti> getCategorie() {
@@ -218,9 +159,10 @@ public class Cassa {
     }
 
     /**
-     * @param categorie the categorie to set
+     * @return the statiOrdine
      */
-    public void setCategorie(List<CategorieProdotti> categorie) {
-        this.categorie = categorie;
+    public List<StatiOrdine> getStatiOrdine() {
+        return statiOrdine;
     }
+
 }

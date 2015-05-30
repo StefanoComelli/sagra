@@ -80,11 +80,12 @@ CREATE TABLE `commesse` (
   `idCassa` int(10) unsigned NOT NULL,
   `idOperatore` int(11) NOT NULL,
   `idStatoOrdine` int(10) NOT NULL,
+  `totale` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Totale commessa',
+  `scontoApplicato` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Sconto totale applicato',
   `totalePagato` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Totale commessa',
   `totaleContanti` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Totale contanti',
-  `totaleResto` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Resto',
-  `scontoApplicato` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Sconto totale applicato',
   `nomeCliente` text NOT NULL COMMENT 'Nome del cliente',
+  `totaleResto` decimal(10,2) unsigned NOT NULL DEFAULT '0.00' COMMENT 'Resto',
   `tavoloCliente` text CHARACTER SET ascii NOT NULL COMMENT 'Tavolo cliente',
   `note` varchar(80) DEFAULT NULL,
   `coperti` int(10) NOT NULL DEFAULT '0' COMMENT 'Numero coperti',
@@ -95,7 +96,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=24 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -236,7 +237,7 @@ CREATE TABLE `operatori` (
 
 LOCK TABLES `operatori` WRITE;
 /*!40000 ALTER TABLE `operatori` DISABLE KEYS */;
-INSERT INTO `operatori` VALUES (3,'Paperino'),(1,'Pippo'),(2,'Pluto');
+INSERT INTO `operatori` VALUES (3,'Alberto'),(2,'Alessio'),(5,'Enzo'),(8,'Fabio'),(6,'Lorena'),(7,'Marco'),(1,'Marisa'),(9,'Nicoletta'),(4,'Stefano');
 /*!40000 ALTER TABLE `operatori` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -312,7 +313,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=160 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -450,4 +451,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-05-24 19:11:37
+-- Dump completed on 2015-05-30 15:01:55

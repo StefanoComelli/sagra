@@ -73,4 +73,5 @@ public class Valuta {
         NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.ITALY);
         return numberFormat.format(valore);
     }
+
 }

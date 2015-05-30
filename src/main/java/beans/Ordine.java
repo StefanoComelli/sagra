@@ -93,7 +93,7 @@ public class Ordine {
     /**
      *
      */
-    public void AnnullaOrdine() {
+    public void CancellaOrdine() {
         int idCommessa = commessa.getId();
         righeMgr.deleteByCommessa(idCommessa);
         commessaMgr.delete(idCommessa);

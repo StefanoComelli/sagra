@@ -13,6 +13,7 @@ public class Commesse extends AbstractData<Integer> {
     private static final Logger LOGGER = Logger.getLogger(Commesse.class);
     private Casse cassa;
     private Operatori operatore;
+    private float totale;
     private float totalePagato;
     private float totaleContanti;
     private float totaleResto;
@@ -235,6 +236,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setAsporto(boolean asporto) {
         this.asporto = asporto;
+    }
+
+    /**
+     * @return the totale
+     */
+    public float getTotale() {
+        return totale;
+    }
+
+    /**
+     * @param totale the totale to set
+     */
+    public void setTotale(float totale) {
+        this.totale = totale;
     }
 
 }

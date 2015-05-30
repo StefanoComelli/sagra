@@ -23,6 +23,9 @@
         <property name="totalePagato" type="float">
             <column name="totalePagato" not-null="true" />
         </property> 
+        <property name="totale" type="float">
+            <column name="totale" not-null="true" />
+        </property> 
         <property name="totaleContanti" type="float">
             <column name="totaleContanti" not-null="true" />
         </property> 
