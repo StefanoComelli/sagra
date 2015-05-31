@@ -7,7 +7,6 @@ import java.util.List;
 import model.Giorni;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
@@ -40,15 +39,9 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
 
         Criteria cr = getDbConnection().getSession().createCriteria(Giorni.class);
         cr.add(Restrictions.eq("data", data));
-        Transaction tx = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             giorni = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
 
@@ -70,15 +63,9 @@ public class GiorniManager extends AbstractManager<Giorni, Integer> {
         Criteria cr = getDbConnection().getSession().createCriteria(Giorni.class);
         cr.add(Restrictions.eq("flgAperto", true));
         cr.addOrder(Order.asc("data"));
-        Transaction tx = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             giorni = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
 

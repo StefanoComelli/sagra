@@ -62,7 +62,7 @@ public class Ordine {
         this.commessa.setStatoOrdine(statoOrdine);
         this.commessa.setNomeCliente(cliente);
         this.cliente = cliente;
-        this.commessa.setTavoloCliente("a1");
+        this.commessa.setTavoloCliente("_");
         this.commessa.setCassa(this.cassa);
         this.commessa.setGiorno(giorno);
         this.commessa.setOperatore(operatore);

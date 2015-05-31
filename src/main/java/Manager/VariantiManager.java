@@ -6,7 +6,6 @@ import java.util.List;
 import model.Varianti;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.jboss.logging.Logger;
 
@@ -35,16 +34,11 @@ public class VariantiManager extends AbstractManager<Varianti, Integer> {
         Criteria cr = getDbConnection().getSession().createCriteria(Varianti.class);
         cr.addOrder(Order.asc("categoriaProdotto.id"));
         cr.addOrder(Order.asc("id"));
-        Transaction tx = null;
+
         List<Varianti> varianti = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             varianti = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return varianti;

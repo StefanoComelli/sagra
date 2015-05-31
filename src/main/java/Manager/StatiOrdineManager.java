@@ -6,7 +6,6 @@ import java.util.List;
 import model.StatiOrdine;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
@@ -35,16 +34,11 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
     public List<StatiOrdine> getElencoStati() {
         Criteria cr = getDbConnection().getSession().createCriteria(StatiOrdine.class);
         cr.addOrder(Order.asc("ordineSequenziale"));
-        Transaction tx = null;
+
         List<StatiOrdine> pojos = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             pojos = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojos;
@@ -67,16 +61,9 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
             cr.addOrder(Order.desc("ordineSequenziale"));
         }
 
-        Transaction tx = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);
-
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return statoOrdine;
@@ -109,16 +96,9 @@ public class StatiOrdineManager extends AbstractManager<StatiOrdine, Integer> {
         Criteria cr = getDbConnection().getSession().createCriteria(StatiOrdine.class);
         cr.addOrder(Order.asc("ordineSequenziale"));
 
-        Transaction tx = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             statoOrdine = (StatiOrdine) cr.list().get(0);
-
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return statoOrdine;

@@ -22,6 +22,8 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
     /**
      * CategorieProdottiManager
+     *
+     * @param dbConnection
      */
     public RigheCommesseManager(DbConnection dbConnection) {
         super(dbConnection, RigheCommesse.class);
@@ -39,15 +41,10 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
         cr.addOrder(Order.asc("idProdotto"));
-        Transaction tx = null;
+
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             righe = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
 
@@ -166,18 +163,12 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
         Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
-        Transaction tx = null;
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             righe = cr.list();
             for (RigheCommesse riga : righe) {
                 totale += riga.getPrezzoListino() * riga.getQuantita();
             }
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
 

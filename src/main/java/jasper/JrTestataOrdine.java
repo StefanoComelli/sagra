@@ -84,6 +84,7 @@ public class JrTestataOrdine {
         parameters.put("netto", netto);
         parameters.put("asporto", asporto);
         parameters.put("id", id);
+        parameters.put("tavolo", tavolo);
         return parameters;
     }
 

@@ -32,8 +32,8 @@ import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import org.apache.commons.lang.math.NumberUtils;
+import org.jboss.logging.Logger;
 import utils.IdOrdine;
 import utils.MathUtils;
 import utils.Sconto;
@@ -130,6 +130,11 @@ public class CassaGui extends javax.swing.JFrame {
 
     private final StatoFinestra statoFinestra;
     private final RigheCommesseManager mgrRiga;
+    private static final Logger LOGGER = Logger.getLogger(CassaGui.class);
+
+    private boolean flgRistampa;
+    private String cassaRistampa;
+    private String cassiereRistampa;
 
     /**
      *
@@ -221,7 +226,7 @@ public class CassaGui extends javax.swing.JFrame {
             commessa.setDescSconto(sconto.getDescr());
             commessa.setAsporto(jChkAsporto.isSelected());
             if (jTxtTavolo.getText().isEmpty()) {
-                commessa.setTavoloCliente("____");
+                commessa.setTavoloCliente("_");
             } else {
                 commessa.setTavoloCliente(jTxtTavolo.getText());
             }
@@ -230,7 +235,9 @@ public class CassaGui extends javax.swing.JFrame {
             commessa.setTotalePagato(netto);
             commessa.setScontoApplicato(scontoApplicato);
             commessa.setAsporto(jChkAsporto.isSelected());
-            commessa.setDescSconto(jCmbSconti.getSelectedItem().toString());
+            if (jCmbSconti.getSelectedItem() != null) {
+                commessa.setDescSconto(jCmbSconti.getSelectedItem().toString());
+            }
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
         }
     }
@@ -554,7 +561,14 @@ public class CassaGui extends javax.swing.JFrame {
                 if (idOrdine.isOk() && ordine == null) {
                     ordine = new Ordine(dbConnection, idOrdine.getId());
                     if (ordine != null) {
+                        flgRistampa = true;
                         RefreshOrdine();
+                        Commesse commessa = ordine.getCommessa();
+                        jTxtCliente.setText(commessa.getNomeCliente());
+                        jTxtTavolo.setText(commessa.getTavoloCliente());
+                        jSpinCoperti.setValue(commessa.getCoperti());
+                        cassaRistampa = commessa.getCassa().getDescrizione();
+                        cassiereRistampa = commessa.getOperatore().getOperatore();
                         StatoBottoni();
                     }
                 }
@@ -562,7 +576,7 @@ public class CassaGui extends javax.swing.JFrame {
                 Svuota();
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Legge ordine", e);
         }
     }
 
@@ -613,8 +627,13 @@ public class CassaGui extends javax.swing.JFrame {
             JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("src/main/resources/jasper/stampaCommessaCliente.jasper");
 
             JrTestataOrdine jrTestata = new JrTestataOrdine();
-            jrTestata.setCassa(ordine.getCassa().getDescrizione());
-            jrTestata.setCassiere(ordine.getOperatore().getOperatore());
+            if (!flgRistampa) {
+                jrTestata.setCassa(ordine.getCassa().getDescrizione());
+                jrTestata.setCassiere(ordine.getOperatore().getOperatore());
+            } else {
+                jrTestata.setCassa(cassaRistampa);
+                jrTestata.setCassiere(cassiereRistampa);
+            }
             jrTestata.setCliente(jTxtCliente.getText());
             jrTestata.setCoperti((int) jSpinCoperti.getValue());
             jrTestata.setNetto(this.netto);
@@ -636,10 +655,9 @@ public class CassaGui extends javax.swing.JFrame {
                     new JRBeanCollectionDataSource(jrFactory.getBeanCollection()));
             jasperPrint.setName("titolo");
 
-            JasperPrintManager.printReport(jasperPrint, true);
-            //  JasperViewer.viewReport(jasperPrint, false);
+            JasperPrintManager.printReport(jasperPrint, false);
         } catch (Exception e) {
-            e.printStackTrace();
+            LOGGER.error("Stampa:", e);
         }
     }
 
@@ -1011,6 +1029,7 @@ public class CassaGui extends javax.swing.JFrame {
 
         jPanelConto.setBorder(javax.swing.BorderFactory.createTitledBorder("Conto"));
 
+        jLblTotale.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLblTotale.setText("Totale:");
 
         jTxtTotale.setEditable(false);
@@ -1042,8 +1061,8 @@ public class CassaGui extends javax.swing.JFrame {
             .addGroup(jPanelContoLayout.createSequentialGroup()
                 .addGroup(jPanelContoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanelContoLayout.createSequentialGroup()
-                        .addComponent(jLblTotale, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jLblTotale, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jTxtTotale, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanelContoLayout.createSequentialGroup()
                         .addContainerGap()
@@ -1391,7 +1410,8 @@ public class CassaGui extends javax.swing.JFrame {
             jTxtOrdine.setText("");
             String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                     "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
-            if (!cliente.isEmpty()) {
+            if (cliente != null && !cliente.isEmpty()) {
+                flgRistampa = false;
                 ordine = new Ordine(dbConnection, this.cassa, cliente);
                 jTxtCliente.setText(cliente);
             }

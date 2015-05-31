@@ -7,7 +7,6 @@ import keys.ListinoRealeKey;
 import model.ListinoReale;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
-import org.hibernate.Transaction;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
@@ -68,16 +67,9 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
         }
         cr.addOrder(Order.asc("id.idProdotto"));
 
-        Transaction tx = null;
-
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             listinoReale = cr.list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return listinoReale;
