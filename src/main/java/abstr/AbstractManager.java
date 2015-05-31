@@ -61,18 +61,11 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public List<Pojo> select(String query) {
-
-        Transaction tx = null;
         List<Pojo> pojos = null;
 
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             pojos = getDbConnection().getSession().createQuery(query).list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojos;
@@ -85,18 +78,11 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public Pojo get(PrimaryKey primaryKey) {
-
         Pojo pojo = null;
-        Transaction tx = null;
 
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             pojo = (Pojo) getDbConnection().getSession().get(getPojoClass(), primaryKey);
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojo;
@@ -107,18 +93,11 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @return
      */
     public List<Pojo> getAll() {
-
         List<Pojo> pojos = null;
-        Transaction tx = null;
 
         try {
-            tx = getDbConnection().getSession().beginTransaction();
             pojos = getDbConnection().getSession().createCriteria(getPojoClass()).list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojos;
@@ -131,7 +110,6 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      * @param pojoNew
      */
     public void update(PrimaryKey primaryKey, Pojo pojoNew) {
-
         Transaction tx = null;
 
         try {
@@ -153,6 +131,7 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
      */
     public void delete(PrimaryKey primaryKey) {
         Transaction tx = null;
+
         try {
             tx = getDbConnection().getSession().beginTransaction();
             Pojo pojo = (Pojo) get(primaryKey);

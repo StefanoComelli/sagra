@@ -63,18 +63,11 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
      * @return
      */
     public List<Pojo> select(String query) {
-
-        Transaction tx = null;
         List<Pojo> pojos = null;
 
         try {
-            tx = dbConnection.getSession().beginTransaction();
             pojos = dbConnection.getSession().createQuery(query).list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojos;
@@ -89,16 +82,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
     public Pojo get(PrimaryKey primaryKey) {
 
         Pojo pojo = null;
-        Transaction tx = null;
 
         try {
-            tx = dbConnection.getSession().beginTransaction();
             pojo = (Pojo) dbConnection.getSession().get(getPojoClass(), primaryKey);
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojo;
@@ -109,18 +96,11 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
      * @return
      */
     public List<Pojo> getAll() {
-
         List<Pojo> pojos = null;
-        Transaction tx = null;
 
         try {
-            tx = dbConnection.getSession().beginTransaction();
             pojos = dbConnection.getSession().createCriteria(getPojoClass()).list();
-            tx.commit();
         } catch (HibernateException e) {
-            if (tx != null) {
-                tx.rollback();
-            }
             LOGGER.error(e);
         }
         return pojos;
@@ -133,7 +113,6 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
      * @param pojoNew
      */
     public void update(PrimaryKey primaryKey, Pojo pojoNew) {
-
         Transaction tx = null;
 
         try {

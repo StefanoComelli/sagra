@@ -16,7 +16,8 @@ public class DbConnection {
     private static final Logger LOGGER = Logger.getLogger(DbConnection.class);
 
     /**
-     * @return the session
+     *
+     * @return
      */
     public Session getSession() {
         return session;

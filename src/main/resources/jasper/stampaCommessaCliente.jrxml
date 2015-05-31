@@ -1,17 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- Created with Jaspersoft Studio version 6.0.4.final using JasperReports Library version 6.0.4  -->
-<!-- 2015-05-24T19:06:46 -->
+<!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
+<!-- 2015-05-31T12:17:36 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stampaCommessaCliente" pageWidth="421" pageHeight="595" whenNoDataType="BlankPage" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f939f55a-2e25-4ba3-b1f2-d05e52074a1c">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
-    <property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
     <parameter name="cliente" class="java.lang.String">
         <parameterDescription><![CDATA[Nome:]]></parameterDescription>
     </parameter>
@@ -48,12 +40,13 @@
                 </textElement>
                 <text><![CDATA[Sagra del Rosario di S.Andrea]]></text>
             </staticText>
-            <textField pattern="MMMMM dd, yyyy">
+            <textField pattern="dd/MM/yyyy">
                 <reportElement x="269" y="24" width="110" height="20" uuid="953fb17d-f332-4a3e-be81-9529eef7b7ce"/>
                 <textElement verticalAlignment="Middle">
                     <font size="10"/>
                 </textElement>
-                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[
+new java.util.Date()]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="245" y="44" width="63" height="16" uuid="8b7a3e8d-6a06-4cb9-8a76-6b490ef13777"/>
@@ -98,8 +91,7 @@
             </textField>
             <textField>
                 <reportElement x="311" y="60" width="68" height="16" uuid="de0aedbd-b513-424f-8c21-df9e21eaa293">
-                    <printWhenExpression><![CDATA[!$P{asporto} && $P{tavolo}!=null
-]]></printWhenExpression>
+                    <printWhenExpression><![CDATA[!$P{asporto} && $P{tavolo}!=null]]></printWhenExpression>
                 </reportElement>
                 <textFieldExpression><![CDATA[$P{tavolo}]]></textFieldExpression>
             </textField>

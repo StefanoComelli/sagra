@@ -28,6 +28,7 @@ import model.StatiOrdine;
 import model.Varianti;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperPrintManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
@@ -635,7 +636,8 @@ public class CassaGui extends javax.swing.JFrame {
                     new JRBeanCollectionDataSource(jrFactory.getBeanCollection()));
             jasperPrint.setName("titolo");
 
-            JasperViewer.viewReport(jasperPrint, false);
+            JasperPrintManager.printReport(jasperPrint, true);
+            //  JasperViewer.viewReport(jasperPrint, false);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -1291,7 +1293,7 @@ public class CassaGui extends javax.swing.JFrame {
                         .addComponent(jPanelConto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jPanelSconto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBtnEsce))
-                .addGap(20, 20, 20))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1303,7 +1305,7 @@ public class CassaGui extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jBtnAnnullaFiltro)
                             .addComponent(jCmbCategoria, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLblFiltro))
@@ -1590,7 +1592,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnPulisciOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPulisciOrdineActionPerformed
-        if (statoFinestra.Blocca()) {
+        if (ordine != null) {
             if (statoFinestra.Blocca()) {
                 if (ChiediConferma("Pulisci Ordine")) {
                     ordine = null;
