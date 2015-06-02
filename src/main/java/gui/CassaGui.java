@@ -157,6 +157,7 @@ public class CassaGui extends javax.swing.JFrame {
         PopolaVarianti();
         PopolaStati();
         StatoBottoni();
+        jTxtOrdine.requestFocusInWindow();
     }
 
     /**
@@ -569,6 +570,7 @@ public class CassaGui extends javax.swing.JFrame {
                         jSpinCoperti.setValue(commessa.getCoperti());
                         cassaRistampa = commessa.getCassa().getDescrizione();
                         cassiereRistampa = commessa.getOperatore().getOperatore();
+                        jChkAsporto.setSelected(commessa.isAsporto());
                         StatoBottoni();
                     }
                 }
@@ -668,7 +670,7 @@ public class CassaGui extends javax.swing.JFrame {
     private boolean ControlloOrdine() {
         boolean esito = true;
 
-        if ((int) jSpinCoperti.getValue() == 0) {
+        if ((int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
             esito = ChiediConferma("Numero coperti corretto?");
         }
         return esito;
@@ -1619,10 +1621,16 @@ public class CassaGui extends javax.swing.JFrame {
                     SvuotaSconto();
                     RefreshOrdine();
                     jTxtOrdine.setText("");
+                    jTxtCliente.setText("");
+                    jSpinCoperti.setValue(0);
+                    jTxtTavolo.setText("");
+                    jChkAsporto.setSelected(false);
+                    StatoBottoni();
                 }
                 statoFinestra.Sblocca();
             }
         }
+        jTxtOrdine.requestFocusInWindow();
     }//GEN-LAST:event_jBtnPulisciOrdineActionPerformed
 
     /**
