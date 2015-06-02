@@ -3,6 +3,7 @@ package gui;
 import Manager.RigheCommesseManager;
 import beans.Cassa;
 import beans.Ordine;
+import beans.StatoCassa;
 import database.DbConnection;
 import javax.swing.table.DefaultTableModel;
 import model.CategorieProdotti;
@@ -99,7 +100,10 @@ public class CassaGui extends javax.swing.JFrame {
 
     }
 
+    private final StatoCassa statoCassa;
     private final Cassa cassa;
+
+    private boolean flgOrdineDaSalvare;
     private Ordine ordine;
 
     private final int TBL_LISTINO_CATEGORIA = 0;
@@ -149,6 +153,7 @@ public class CassaGui extends javax.swing.JFrame {
         mgrRiga = new RigheCommesseManager(dbConnection);
         statoFinestra = new StatoFinestra(this);
         this.cassa = new Cassa(dbConnection, giorno, cassa, operatore);
+        statoCassa = new StatoCassa(dbConnection, this.cassa.getCassa(), this.cassa.getGiorno());
         initComponents();
         SetupGui();
         SetupCategorie();
@@ -156,6 +161,7 @@ public class CassaGui extends javax.swing.JFrame {
         RefreshListino();
         PopolaVarianti();
         PopolaStati();
+
         StatoBottoni();
         jTxtOrdine.requestFocusInWindow();
     }
@@ -181,6 +187,21 @@ public class CassaGui extends javax.swing.JFrame {
                 JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE,
                 null, options, options[1]);
         return n == JOptionPane.YES_OPTION;
+    }
+
+    /**
+     *
+     */
+    private void PulisciOrdine() {
+        ordine = null;
+        SvuotaSconto();
+
+        flgOrdineDaSalvare = false;
+        jTxtCliente.setText("");
+        jSpinCoperti.setValue(0);
+        jTxtTavolo.setText("");
+        jChkAsporto.setSelected(false);
+
     }
 
     /**
@@ -508,6 +529,9 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtTotale.setText("");
         jTxtScontoOrdine.setText("");
         jTxtNetto.setText("");
+        jTxtContanti.setText("");
+        jTxtResto.setText("");
+
     }
 
     /**
@@ -557,6 +581,7 @@ public class CassaGui extends javax.swing.JFrame {
 
             if (!sOrdine.isEmpty() && NumberUtils.isNumber(sOrdine)) {
                 barcode = Integer.parseInt(jTxtOrdine.getText());
+                PulisciOrdine();
                 IdOrdine idOrdine = new IdOrdine();
                 idOrdine.setBarcode(barcode);
                 if (idOrdine.isOk() && ordine == null) {
@@ -571,6 +596,7 @@ public class CassaGui extends javax.swing.JFrame {
                         cassaRistampa = commessa.getCassa().getDescrizione();
                         cassiereRistampa = commessa.getOperatore().getOperatore();
                         jChkAsporto.setSelected(commessa.isAsporto());
+                        jTxtOrdine.setText("");
                         StatoBottoni();
                     }
                 }
@@ -735,6 +761,11 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtTavolo.setEnabled(flgOrdineOk);
         jSpinCoperti.setEnabled(flgOrdineOk);
         jTblListino.setEnabled(flgOrdineOk);
+
+        statoCassa.Refresh();
+
+        setTitle(statoCassa.toString());
+
     }
 
     /**
@@ -1140,6 +1171,12 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
+        jTxtOrdine.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jTxtOrdineActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanelOrdineLayout = new javax.swing.GroupLayout(jPanelOrdine);
         jPanelOrdine.setLayout(jPanelOrdineLayout);
         jPanelOrdineLayout.setHorizontalGroup(
@@ -1381,6 +1418,10 @@ public class CassaGui extends javax.swing.JFrame {
     private void jMenuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuExitActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
+                if (flgOrdineDaSalvare) {
+                    Annulla();
+                }
+
                 dbConnection.Dispose();
                 System.exit(0);
             } else {
@@ -1396,6 +1437,9 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnEsceActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnEsceActionPerformed
         if (statoFinestra.Blocca()) {
             if (ChiediConferma("Vuoi uscire?")) {
+                if (flgOrdineDaSalvare) {
+                    Annulla();
+                }
                 dbConnection.Dispose();
                 System.exit(0);
             } else {
@@ -1416,6 +1460,7 @@ public class CassaGui extends javax.swing.JFrame {
             if (cliente != null && !cliente.isEmpty()) {
                 flgRistampa = false;
                 ordine = new Ordine(dbConnection, this.cassa, cliente);
+                flgOrdineDaSalvare = true;
                 jTxtCliente.setText(cliente);
             }
             StatoBottoni();
@@ -1582,6 +1627,7 @@ public class CassaGui extends javax.swing.JFrame {
             Annulla();
             StatoBottoni();
             jTxtOrdine.requestFocusInWindow();
+            flgOrdineDaSalvare = false;
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jBtnCancellaOrdineActionPerformed
@@ -1622,6 +1668,7 @@ public class CassaGui extends javax.swing.JFrame {
                     SvuotaSconto();
                     RefreshOrdine();
                     jTxtOrdine.setText("");
+                    flgOrdineDaSalvare = false;
                     jTxtCliente.setText("");
                     jSpinCoperti.setValue(0);
                     jTxtTavolo.setText("");
@@ -1675,6 +1722,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnStampaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStampaActionPerformed
         if (statoFinestra.Blocca()) {
             StampaOrdine();
+            flgOrdineDaSalvare = false;
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jBtnStampaActionPerformed
@@ -1719,6 +1767,10 @@ public class CassaGui extends javax.swing.JFrame {
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jBtnAnnullaFiltroMouseClicked
+
+    private void jTxtOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTxtOrdineActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jTxtOrdineActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBtnAggiungi;

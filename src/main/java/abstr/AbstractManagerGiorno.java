@@ -187,4 +187,11 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
         }
         return pojos;
     }
+
+    /**
+     * @return the dbConnection
+     */
+    public DbConnection getDbConnection() {
+        return dbConnection;
+    }
 }

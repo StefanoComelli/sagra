@@ -62,10 +62,12 @@ public class ListinoRealeManager extends AbstractManager<ListinoReale, ListinoRe
         List<ListinoReale> listinoReale = null;
         Criteria cr = getDbConnection().getSession().createCriteria(ListinoReale.class);
         cr.add(Restrictions.eq("id.idGiorno", idGiorno));
+        cr.addOrder(Order.asc("categoriaProdotto.id"));
+        cr.addOrder(Order.asc("nomeProdotto"));
+
         if (idCategoriaProdotto != 0) {
             cr.add(Restrictions.eq("categoriaProdotto.id", idCategoriaProdotto));
         }
-        cr.addOrder(Order.asc("id.idProdotto"));
 
         try {
             listinoReale = cr.list();

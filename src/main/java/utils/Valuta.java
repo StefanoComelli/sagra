@@ -25,6 +25,14 @@ public class Valuta {
      *
      * @param valore
      */
+    public Valuta(double valore) {
+        this.valore = (float) valore;
+    }
+
+    /**
+     *
+     * @param valore
+     */
     public Valuta(String valore) {
         try {
             String tmp = valore.substring(2);
