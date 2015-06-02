@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Created with Jaspersoft Studio version 6.1.0.final using JasperReports Library version 6.1.0  -->
-<!-- 2015-05-31T12:17:36 -->
+<!-- 2015-06-02T12:08:05 -->
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="stampaCommessaCliente" pageWidth="421" pageHeight="595" whenNoDataType="BlankPage" columnWidth="381" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f939f55a-2e25-4ba3-b1f2-d05e52074a1c">
     <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
     <property name="com.jaspersoft.studio.unit." value="pixel"/>
@@ -45,8 +45,7 @@
                 <textElement verticalAlignment="Middle">
                     <font size="10"/>
                 </textElement>
-                <textFieldExpression><![CDATA[
-new java.util.Date()]]></textFieldExpression>
+                <textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
             </textField>
             <textField>
                 <reportElement x="245" y="44" width="63" height="16" uuid="8b7a3e8d-6a06-4cb9-8a76-6b490ef13777"/>
@@ -233,7 +232,7 @@ new java.util.Date()]]></textFieldExpression>
                 <reportElement x="0" y="13" width="378" height="16" isRemoveLineWhenBlank="true" uuid="c18c1ad9-37eb-4438-a4a8-893ba963611e">
                     <printWhenExpression><![CDATA[$P{tipoSconto}!=null]]></printWhenExpression>
                 </reportElement>
-                <textElement>
+                <textElement textAlignment="Center">
                     <font isBold="true"/>
                 </textElement>
                 <textFieldExpression><![CDATA[$P{tipoSconto}]]></textFieldExpression>

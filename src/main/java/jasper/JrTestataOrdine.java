@@ -85,6 +85,7 @@ public class JrTestataOrdine {
         parameters.put("asporto", asporto);
         parameters.put("id", id);
         parameters.put("tavolo", tavolo);
+        parameters.put("tipoSconto", tipoSconto);
         return parameters;
     }
 

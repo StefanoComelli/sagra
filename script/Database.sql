@@ -96,7 +96,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=50 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -313,7 +313,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=198 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=213 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -346,7 +346,7 @@ CREATE TABLE `sconti` (
 
 LOCK TABLES `sconti` WRITE;
 /*!40000 ALTER TABLE `sconti` DISABLE KEYS */;
-INSERT INTO `sconti` VALUES (1,'Sconto operatori sagra',100.00),(2,'Sconto venerdi\'',10.00),(3,'Sconto Lunedi\'',10.00);
+INSERT INTO `sconti` VALUES (1,'Sconto operatori sagra',100.00),(2,'Omaggio',100.00);
 /*!40000 ALTER TABLE `sconti` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -451,4 +451,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2015-06-02 11:22:54
+-- Dump completed on 2015-06-02 12:13:14

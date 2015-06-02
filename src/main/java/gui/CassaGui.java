@@ -643,7 +643,8 @@ public class CassaGui extends javax.swing.JFrame {
             jrTestata.setScontoDaApplicare(percScontoDaApplicare);
             jrTestata.setTotale(totale);
             jrTestata.setAsporto(jChkAsporto.isSelected());
-            jrTestata.setTipoSconto((String) jCmbSconti.getSelectedItem());
+            IdDescr tipoSconto = new IdDescr((String) jCmbSconti.getSelectedItem());
+            jrTestata.setTipoSconto(tipoSconto.getDescr());
             jrTestata.setTavolo(jTxtTavolo.getText());
             idOrdine = new IdOrdine();
             idOrdine.setId(ordine.getCommessa().getId());
