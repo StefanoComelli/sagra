@@ -1489,7 +1489,7 @@ public class CassaGui extends javax.swing.JFrame {
         if (statoFinestra.Blocca()) {
             cListino = jTblListino.getSelectedColumn();
             rListino = jTblListino.getSelectedRow();
-            if (evt.getClickCount() == 2) {
+            if ((cListino != -1) && (evt.getClickCount() == 2)) {
                 AggiungiDaListino();
             }
             StatoBottoni();
