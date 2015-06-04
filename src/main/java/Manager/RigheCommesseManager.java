@@ -7,10 +7,8 @@ import model.RigheCommesse;
 import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Transaction;
-import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
-import utils.MathUtils;
 
 /**
  *
@@ -40,7 +38,37 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
 
         Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
-        cr.addOrder(Order.asc("idProdotto"));
+
+        try {
+            righe = cr.list();
+        } catch (HibernateException e) {
+            LOGGER.error(e);
+        }
+
+        if (righe == null || righe.isEmpty()) {
+            return null;
+        } else {
+            return righe;
+        }
+    }
+
+    /**
+     *
+     * @param idCommessa
+     * @param flgBevande
+     * @return
+     */
+    public List<RigheCommesse> getByCommessaStampa(int idCommessa, boolean flgBevande) {
+
+        List<RigheCommesse> righe = null;
+
+        Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
+        cr.add(Restrictions.eq("idCommessa", idCommessa));
+        if (flgBevande) {
+            cr.add(Restrictions.lt("idProdotto", 1000));
+        } else {
+            cr.add(Restrictions.ge("idProdotto", 1000));
+        }
 
         try {
             righe = cr.list();

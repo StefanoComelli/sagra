@@ -20,13 +20,14 @@ public class JrRigaOrdineFactory {
      *
      * @param dbConnection
      * @param ordine
+     * @param flgBevande
      */
-    public JrRigaOrdineFactory(DbConnection dbConnection, Ordine ordine) {
+    public JrRigaOrdineFactory(DbConnection dbConnection, Ordine ordine, boolean flgBevande) {
         this.dbConnection = dbConnection;
         data = new ArrayList<>();
         int idCommessa = ordine.getCommessa().getId();
-        List<RigheCommesse> righe = ordine.getRigheMgr().getByCommessa(idCommessa);
-
+        List<RigheCommesse> righe;
+        righe = ordine.getRigheMgr().getByCommessaStampa(idCommessa, flgBevande);
         if (righe != null) {
             for (RigheCommesse riga : righe) {
                 JrRigaOrdine jRiga = new JrRigaOrdine(dbConnection, riga);

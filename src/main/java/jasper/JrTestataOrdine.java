@@ -22,6 +22,7 @@ public class JrTestataOrdine {
     private int id;
     private String tipoSconto;
     private String tavolo;
+    private String destinazione;
 
     /**
      * @return the data
@@ -67,9 +68,10 @@ public class JrTestataOrdine {
 
     /**
      *
+     * @param flgBar
      * @return
      */
-    public HashMap getHashMap() {
+    public HashMap getHashMap(boolean flgBar) {
 
         HashMap parameters = new HashMap();
 
@@ -86,6 +88,11 @@ public class JrTestataOrdine {
         parameters.put("id", id);
         parameters.put("tavolo", tavolo);
         parameters.put("tipoSconto", tipoSconto);
+        if (flgBar) {
+            parameters.put("destinazione", "CONSEGNARE AL BAR");
+        } else {
+            parameters.put("destinazione", "CONSEGNARE AL RICEVIMENTO ORDINI");
+        }
         return parameters;
     }
 
@@ -227,6 +234,20 @@ public class JrTestataOrdine {
      */
     public void setTavolo(String tavolo) {
         this.tavolo = tavolo;
+    }
+
+    /**
+     * @return the destinazione
+     */
+    public String getDestinazione() {
+        return destinazione;
+    }
+
+    /**
+     * @param destinazione the destinazione to set
+     */
+    public void setDestinazione(String destinazione) {
+        this.destinazione = destinazione;
     }
 
 }

@@ -652,7 +652,7 @@ public class CassaGui extends javax.swing.JFrame {
         try {
 
             IdOrdine idOrdine;
-            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("src/main/resources/jasper/stampaCommessaCliente.jasper");
+            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("c://stampaCommessaCliente.jasper");
 
             JrTestataOrdine jrTestata = new JrTestataOrdine();
             if (!flgRistampa) {
@@ -676,15 +676,24 @@ public class CassaGui extends javax.swing.JFrame {
             idOrdine.setId(ordine.getCommessa().getId());
             jrTestata.setId(idOrdine.getBarcode());
 
-            JrRigaOrdineFactory jrFactory = new JrRigaOrdineFactory(dbConnection, ordine);
+            JrRigaOrdineFactory jrFactoryBevande = new JrRigaOrdineFactory(dbConnection, ordine, true);
+            JrRigaOrdineFactory jrFactoryAltro = new JrRigaOrdineFactory(dbConnection, ordine, false);
 
-            Map parameters = jrTestata.getHashMap();
+            Map paramBevande = jrTestata.getHashMap(true);
+            Map paramAltro = jrTestata.getHashMap(false);
 
-            JasperPrint jasperPrint = JasperFillManager.fillReport(report, parameters,
-                    new JRBeanCollectionDataSource(jrFactory.getBeanCollection()));
-            jasperPrint.setName("titolo");
+            JasperPrint jasperPrintBevande = JasperFillManager.fillReport(report, paramBevande,
+                    new JRBeanCollectionDataSource(jrFactoryBevande.getBeanCollection()));
+            jasperPrintBevande.setName("Bevande");
 
-            JasperPrintManager.printReport(jasperPrint, false);
+            JasperPrintManager.printReport(jasperPrintBevande, false);
+
+            JasperPrint jasperPrintAltro = JasperFillManager.fillReport(report, paramAltro,
+                    new JRBeanCollectionDataSource(jrFactoryAltro.getBeanCollection()));
+            jasperPrintBevande.setName("Altro");
+
+            JasperPrintManager.printReport(jasperPrintAltro, false);
+
         } catch (Exception e) {
             LOGGER.error("Stampa:", e);
         }
