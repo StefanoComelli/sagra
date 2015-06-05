@@ -55,16 +55,16 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
     /**
      *
      * @param idCommessa
-     * @param flgBevande
+     * @param flgBar
      * @return
      */
-    public List<RigheCommesse> getByCommessaStampa(int idCommessa, boolean flgBevande) {
+    public List<RigheCommesse> getByCommessaStampa(int idCommessa, boolean flgBar) {
 
         List<RigheCommesse> righe = null;
 
         Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
         cr.add(Restrictions.eq("idCommessa", idCommessa));
-        if (flgBevande) {
+        if (flgBar) {
             cr.add(Restrictions.lt("idProdotto", 1000));
         } else {
             cr.add(Restrictions.ge("idProdotto", 1000));

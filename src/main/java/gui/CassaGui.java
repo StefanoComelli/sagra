@@ -676,23 +676,27 @@ public class CassaGui extends javax.swing.JFrame {
             idOrdine.setId(ordine.getCommessa().getId());
             jrTestata.setId(idOrdine.getBarcode());
 
-            JrRigaOrdineFactory jrFactoryBevande = new JrRigaOrdineFactory(dbConnection, ordine, true);
-            JrRigaOrdineFactory jrFactoryAltro = new JrRigaOrdineFactory(dbConnection, ordine, false);
+            JrRigaOrdineFactory jrFactoryBar = new JrRigaOrdineFactory(dbConnection, ordine, true);
+            JrRigaOrdineFactory jrFactoryCucina = new JrRigaOrdineFactory(dbConnection, ordine, false);
 
-            Map paramBevande = jrTestata.getHashMap(true);
-            Map paramAltro = jrTestata.getHashMap(false);
+            if (!jrFactoryBar.isEmpty()) {
+                Map paramBar = jrTestata.getHashMap(true);
 
-            JasperPrint jasperPrintBevande = JasperFillManager.fillReport(report, paramBevande,
-                    new JRBeanCollectionDataSource(jrFactoryBevande.getBeanCollection()));
-            jasperPrintBevande.setName("Bevande");
+                JasperPrint jasperPrintBevande = JasperFillManager.fillReport(report, paramBar,
+                        new JRBeanCollectionDataSource(jrFactoryBar.getBeanCollection()));
+                jasperPrintBevande.setName("Bar");
 
-            JasperPrintManager.printReport(jasperPrintBevande, false);
+                JasperPrintManager.printReport(jasperPrintBevande, false);
+            }
 
-            JasperPrint jasperPrintAltro = JasperFillManager.fillReport(report, paramAltro,
-                    new JRBeanCollectionDataSource(jrFactoryAltro.getBeanCollection()));
-            jasperPrintBevande.setName("Altro");
+            if (!jrFactoryCucina.isEmpty()) {
+                Map paramAltro = jrTestata.getHashMap(false);
+                JasperPrint jasperPrintCucina = JasperFillManager.fillReport(report, paramAltro,
+                        new JRBeanCollectionDataSource(jrFactoryCucina.getBeanCollection()));
+                jasperPrintCucina.setName("Cucina");
 
-            JasperPrintManager.printReport(jasperPrintAltro, false);
+                JasperPrintManager.printReport(jasperPrintCucina, false);
+            }
 
         } catch (Exception e) {
             LOGGER.error("Stampa:", e);
