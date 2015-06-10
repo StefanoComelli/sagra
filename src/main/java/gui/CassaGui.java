@@ -1615,7 +1615,6 @@ public class CassaGui extends javax.swing.JFrame {
     private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
         if (statoFinestra.Blocca()) {
             RefreshOrdine();
-            StatoBottoni();
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jCmbScontiActionPerformed
