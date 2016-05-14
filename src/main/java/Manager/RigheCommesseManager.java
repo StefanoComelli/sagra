@@ -105,7 +105,10 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }

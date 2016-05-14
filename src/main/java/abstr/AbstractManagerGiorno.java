@@ -49,7 +49,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }
@@ -121,7 +124,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }
@@ -141,7 +147,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }
@@ -181,7 +190,10 @@ public abstract class AbstractManagerGiorno<Pojo, PrimaryKey extends Serializabl
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }

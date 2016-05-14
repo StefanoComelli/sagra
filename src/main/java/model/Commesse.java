@@ -3,6 +3,7 @@ package model;
 import abstr.AbstractData;
 import java.util.Set;
 import org.jboss.logging.Logger;
+import java.util.Calendar;
 
 /**
  *
@@ -27,6 +28,7 @@ public class Commesse extends AbstractData<Integer> {
     private int coperti;
     private String descSconto;
     private boolean asporto;
+    private Calendar orario;
 
     /**
      * @return the cassa
@@ -250,6 +252,20 @@ public class Commesse extends AbstractData<Integer> {
      */
     public void setTotale(float totale) {
         this.totale = totale;
+    }
+
+    /**
+     * @return the orario
+     */
+    public Calendar getOrario() {
+        return orario;
+    }
+
+    /**
+     * @param orario the orario to set
+     */
+    public void setOrario(Calendar orario) {
+        this.orario = orario;
     }
 
 }

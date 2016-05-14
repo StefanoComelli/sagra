@@ -47,7 +47,10 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }
@@ -118,7 +121,10 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }
@@ -139,7 +145,10 @@ public abstract class AbstractManager<Pojo, PrimaryKey extends Serializable> {
             tx.commit();
         } catch (HibernateException e) {
             if (tx != null) {
-                tx.rollback();
+                try {
+                    tx.rollback();
+                } catch (Exception er) {
+                }
             }
             LOGGER.error(e);
         }

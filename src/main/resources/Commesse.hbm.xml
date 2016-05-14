@@ -60,5 +60,8 @@
         <property name="asporto" type="boolean">
             <column name="asporto" not-null="true" />
         </property> 
+        <property name="orario" type="calendar">
+            <column name="orario" not-null="false" />
+        </property> 
     </class>
 </hibernate-mapping>
