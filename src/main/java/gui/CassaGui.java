@@ -19,8 +19,10 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -90,7 +92,6 @@ public class CassaGui extends javax.swing.JFrame {
                 component.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
                 return true;
             }
-
         }
 
         /**
@@ -205,7 +206,7 @@ public class CassaGui extends javax.swing.JFrame {
         jSpinCoperti.setValue(0);
         jTxtTavolo.setText("");
         jChkAsporto.setSelected(false);
-
+        jTxtOrario.setText("");
     }
 
     /**
@@ -216,6 +217,7 @@ public class CassaGui extends javax.swing.JFrame {
         SvuotaSconto();
         RefreshOrdine();
         jTxtOrdine.setText("");
+        jTxtOrario.setText("");
     }
 
     /**
@@ -244,6 +246,7 @@ public class CassaGui extends javax.swing.JFrame {
      *
      */
     private void AggiornaOrdine() {
+
         if (ControlloOrdine()) {
             Commesse commessa = ordine.getCommessa();
             commessa.setNomeCliente(jTxtCliente.getText());
@@ -263,9 +266,9 @@ public class CassaGui extends javax.swing.JFrame {
             commessa.setAsporto(jChkAsporto.isSelected());
             if (jCmbSconti.getSelectedItem() != null) {
                 commessa.setDescSconto(jCmbSconti.getSelectedItem().toString());
-            } 
+            }
             commessa.setStatoOrdine(2);
-            
+
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
         }
     }
@@ -575,7 +578,6 @@ public class CassaGui extends javax.swing.JFrame {
         jTxtNetto.setText("");
         jTxtContanti.setText("");
         jTxtResto.setText("");
-
     }
 
     /**
@@ -641,6 +643,9 @@ public class CassaGui extends javax.swing.JFrame {
                         cassiereRistampa = commessa.getOperatore().getOperatore();
                         jChkAsporto.setSelected(commessa.isAsporto());
                         jTxtOrdine.setText("");
+                        Date date = commessa.getOrario().getTime();
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
+                        jTxtOrario.setText(dateFormat.format(date));
                         StatoBottoni();
                     }
                 }
@@ -792,7 +797,6 @@ public class CassaGui extends javax.swing.JFrame {
         jBtnConfermaVariante.setEnabled(flgOrdineSel);
         jBtnEliminaVariante.setEnabled(flgOrdineSel);
         jCmbVarianti.setEnabled(flgOrdineSel);
-        // jBtnQta1.setEnabled(flgOrdineSel);
         StatoBottoniAdd(flgOrdineSel);
         jBtnDec.setEnabled(flgOrdineSel);
 
@@ -810,6 +814,7 @@ public class CassaGui extends javax.swing.JFrame {
             jTxtCliente.setText("");
             jTxtTavolo.setText("");
             jSpinCoperti.setValue(0);
+            jTxtOrario.setText("");
         }
         jChkAsporto.setEnabled(flgOrdineOk);
         jBtnNuovoOrdine.setEnabled(!flgOrdineOk);
@@ -847,7 +852,6 @@ public class CassaGui extends javax.swing.JFrame {
         for (javax.swing.JButton btn : lstBtnAdd) {
             btn.setEnabled(status);
         }
-
     }
 
     /**
@@ -933,6 +937,7 @@ public class CassaGui extends javax.swing.JFrame {
         jBtnQta8 = new javax.swing.JButton();
         jBtnQta9 = new javax.swing.JButton();
         jBtnQta10 = new javax.swing.JButton();
+        jTxtOrario = new javax.swing.JTextField();
         jMenuBar = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuExit = new javax.swing.JMenuItem();
@@ -1526,6 +1531,8 @@ public class CassaGui extends javax.swing.JFrame {
             }
         });
 
+        jTxtOrario.setEditable(false);
+
         jMenu1.setText("File");
 
         jMenuExit.setText("Esce");
@@ -1552,8 +1559,32 @@ public class CassaGui extends javax.swing.JFrame {
                         .addComponent(jPanelVarianti, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(71, 71, 71))
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jPanelOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 149, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jBtnQta1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta2)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta7)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta8)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta9)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBtnQta10)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLblCliente)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jTxtCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1566,11 +1597,9 @@ public class CassaGui extends javax.swing.JFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jChkAsporto))
-                            .addComponent(jPanelOrdine, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 186, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(jChkAsporto)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jTxtOrario))
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jBtnElimina, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -1595,28 +1624,7 @@ public class CassaGui extends javax.swing.JFrame {
                             .addComponent(jBtnAggiungi8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jBtnAggiungi9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jBtnAggiungi10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jBtnQta1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta3)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta4)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta5)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta7)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta9)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jBtnQta10)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLblFiltro)
@@ -1680,7 +1688,8 @@ public class CassaGui extends javax.swing.JFrame {
                             .addComponent(jTxtTavolo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLblCoperti)
                             .addComponent(jSpinCoperti, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jChkAsporto))
+                            .addComponent(jChkAsporto)
+                            .addComponent(jTxtOrario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jLblOrdine, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1763,6 +1772,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
         if (statoFinestra.Blocca()) {
             jTxtOrdine.setText("");
+            jTxtOrario.setText("");
             String cliente = (String) JOptionPane.showInputDialog(this, "Cliente ?",
                     "Ordine", JOptionPane.PLAIN_MESSAGE, null, null, "");
             if (cliente != null && !cliente.isEmpty()) {
@@ -2009,6 +2019,7 @@ public class CassaGui extends javax.swing.JFrame {
                     jSpinCoperti.setValue(0);
                     jTxtTavolo.setText("");
                     jChkAsporto.setSelected(false);
+                    jTxtOrario.setText("");
                     StatoBottoni();
                 }
                 statoFinestra.Sblocca();
@@ -2249,7 +2260,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jTblOrdineKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTblOrdineKeyTyped
-       
+
         boolean flgOrdineOk;
         boolean flgOrdineSel;
 
@@ -2337,6 +2348,7 @@ public class CassaGui extends javax.swing.JFrame {
     private javax.swing.JTextField jTxtCliente;
     private javax.swing.JTextField jTxtContanti;
     private javax.swing.JTextField jTxtNetto;
+    private javax.swing.JTextField jTxtOrario;
     private javax.swing.JTextField jTxtOrdine;
     private javax.swing.JTextField jTxtResto;
     private javax.swing.JTextField jTxtScontoGiorno;

@@ -17,9 +17,6 @@
         <many-to-one name="operatore" class="model.Operatori" fetch="select" lazy="false">
             <column name="idOperatore"  not-null="true" />
         </many-to-one>
-        <!--many-to-one name="statoOrdine" class="model.StatiOrdine" fetch="select" lazy="false">
-            <column name="idStatoOrdine"  not-null="true" />
-        </many-to-one -->
         <property name="statoOrdine" type="integer">
             <column name="idStatoOrdine" not-null="true" />
         </property>
