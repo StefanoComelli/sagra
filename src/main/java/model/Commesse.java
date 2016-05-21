@@ -24,7 +24,8 @@ public class Commesse extends AbstractData<Integer> {
     private String note;
     private Set<LogOrdini> logOrdine;
     private Giorni giorno;
-    private StatiOrdine statoOrdine;
+    //private StatiOrdine statoOrdine;
+    private int statoOrdine;
     private int coperti;
     private String descSconto;
     private boolean asporto;
@@ -187,14 +188,14 @@ public class Commesse extends AbstractData<Integer> {
     /**
      * @return the statoOrdine
      */
-    public StatiOrdine getStatoOrdine() {
+    public int getStatoOrdine() {
         return statoOrdine;
     }
 
     /**
      * @param statoOrdine the statoOrdine to set
      */
-    public void setStatoOrdine(StatiOrdine statoOrdine) {
+    public void setStatoOrdine(int statoOrdine) {
         this.statoOrdine = statoOrdine;
     }
 

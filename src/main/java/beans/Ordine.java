@@ -59,7 +59,7 @@ public class Ordine {
         righeMgr = new RigheCommesseManager(dbConnection);
         statiOrdine = statiOrdineMgr.getElencoStati();
         statoOrdine = statiOrdineMgr.getDefault();
-        this.commessa.setStatoOrdine(statoOrdine);
+        this.commessa.setStatoOrdine(1);
         this.commessa.setNomeCliente(cliente);
         this.cliente = cliente;
         this.commessa.setTavoloCliente("_");

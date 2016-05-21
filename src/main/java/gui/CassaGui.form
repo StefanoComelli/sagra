@@ -141,23 +141,17 @@
                           <Component id="jScrollOrdine" alignment="0" pref="587" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="103" alignment="1" groupAlignment="0" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="jBtnAggiungi1" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jBtnAggiungi2" alignment="1" min="-2" max="-2" attributes="0"/>
-                                      <Component id="jBtnAggiungi3" alignment="1" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Component id="jBtnAggiungi4" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jBtnAggiungi5" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jBtnAggiungi6" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="jBtnAggiungi7" alignment="1" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="jBtnAggiungi8" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBtnAggiungi9" min="-2" max="-2" attributes="0"/>
-                          <Component id="jBtnAggiungi10" min="-2" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="jBtnAggiungi1" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi2" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi3" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi4" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi5" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi6" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi7" alignment="0" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi8" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi9" max="32767" attributes="0"/>
+                          <Component id="jBtnAggiungi10" alignment="0" max="32767" attributes="0"/>
                       </Group>
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   </Group>
@@ -269,7 +263,7 @@
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace max="-2" attributes="0"/>
                       <Component id="jBtnEsce" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" pref="35" max="32767" attributes="0"/>
+                      <EmptySpace type="unrelated" max="32767" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
                       <EmptySpace max="32767" attributes="0"/>
