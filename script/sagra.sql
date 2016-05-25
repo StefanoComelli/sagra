@@ -81,7 +81,7 @@ CREATE TABLE `commesse` (
   KEY `idx_commesse_idOperatore` (`idOperatore`),
   KEY `idx_commesse_giorno` (`idGiorno`),
   KEY `idx_stato_ordine` (`idStatoOrdine`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
 
 /*Data for the table `commesse` */
 
@@ -163,16 +163,13 @@ insert  into `listinoprodotti`(`idProdotto`,`idCategoriaProdotto`,`nomeProdotto`
 (1004,1,'Gnocchi Pomodoro','4.00',NULL),
 (1005,1,'Gnocchi Ragù','4.00',''),
 (1006,1,'Gnocchi Boscaiola','4.00',NULL),
-(1007,1,'Penne Arrabbiata','4.00',''),
-(1008,1,'Spaghetti in salsa','4.00',''),
+(1008,1,'Bigoli in salsa','4.00',''),
 (1009,1,'Bigoli al sugo d\'anitra','4.50',''),
-(1010,1,'Bis di Primi','5.00',NULL),
 (1011,1,'Lasagne alla Bolognese','3.00','Pasticcio'),
 (2000,2,'Costine e Salsiccia','5.50','Grigliata di 2 ossetti, una salciccia, una fetta di pancetta e 2 fette di pokenta'),
 (2001,2,'Costine','5.50','Grigliata di 3 ossetti con 2 fette di polenta'),
 (2002,2,'Salsicce','5.50',NULL),
 (2003,2,'Bistecca di Puledro','7.00',NULL),
-(2004,2,'Spezzatino di Cavallo','6.50',NULL),
 (2005,2,'Galletto alla Griglia','5.50',NULL),
 (2006,2,'Piatto Freddo','5.00','Affettati misti'),
 (2007,2,'Formaggio','3.00',NULL),
@@ -681,7 +678,7 @@ CREATE TABLE `righecommesse` (
   PRIMARY KEY (`idRiga`),
   KEY `idx_righecommesse_idProdotto` (`idProdotto`),
   KEY `idxCommessa` (`idCommessa`)
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 /*Data for the table `righecommesse` */
 
