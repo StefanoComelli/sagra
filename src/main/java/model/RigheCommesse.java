@@ -18,6 +18,7 @@ public class RigheCommesse extends AbstractData<Integer> {
     private int quantita;
     private String varianti;
     private float prezzoListino;
+    private float prezzoNetto;
     private int idCommessa;
 
     /**
@@ -141,5 +142,20 @@ public class RigheCommesse extends AbstractData<Integer> {
      */
     public void DeltaQuantita(int deltaQuantita) {
         this.quantita = this.quantita + deltaQuantita;
+    }
+
+    /**
+     * @return the prezzo
+     */
+    public float getPrezzoNetto() {
+        return prezzoNetto;
+    }
+
+    /**
+     *
+     * @param prezzoNetto
+     */
+    public void setPrezzoNetto(float prezzoNetto) {
+        this.prezzoNetto = prezzoNetto;
     }
 }

@@ -23,5 +23,8 @@
         <property name="prezzoListino" type="float">
             <column name="prezzoListino" not-null="true" />
         </property> 
+        <property name="prezzoNetto" type="float">
+            <column name="prezzoNetto" not-null="true" />
+        </property>     
     </class>
 </hibernate-mapping>

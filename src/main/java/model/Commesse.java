@@ -1,9 +1,12 @@
 package model;
 
 import abstr.AbstractData;
+import java.text.SimpleDateFormat;
 import java.util.Set;
 import org.jboss.logging.Logger;
 import java.util.Calendar;
+import java.util.Date;
+import utils.StatoOrdine;
 
 /**
  *
@@ -268,4 +271,17 @@ public class Commesse extends AbstractData<Integer> {
         this.orario = orario;
     }
 
+    /**
+     *
+     * @return
+     */
+    public String getStatus() {
+        String testo;
+        StatoOrdine stOrdine = new StatoOrdine(getStatoOrdine());
+        Date date = getOrario().getTime();
+        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM");
+        testo = dateFormat.format(date) + " " + stOrdine.toString();
+        return testo;
+
+    }
 }

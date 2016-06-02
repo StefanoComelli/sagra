@@ -210,4 +210,37 @@ public class RigheCommesseManager extends AbstractManager<RigheCommesse, Integer
         }
     }
 
+    /**
+     *
+     * @param idCommessa
+     * @param totLordo
+     * @param totNetto
+     */
+    public void setPrezziReali(int idCommessa, float totLordo, float totNetto) {
+
+        List<RigheCommesse> righe;
+        float prezzoNetto;
+        float delta = totNetto - totLordo;
+
+        if (delta != 0) {
+            Criteria cr = getDbConnection().getSession().createCriteria(RigheCommesse.class);
+            cr.add(Restrictions.eq("idCommessa", idCommessa));
+            try {
+                righe = cr.list();
+                for (RigheCommesse riga : righe) {
+                    if (totNetto == 0) {
+                        prezzoNetto = 0;
+                    } else {
+                        prezzoNetto = riga.getPrezzoListino() * riga.getQuantita();
+                        prezzoNetto += delta * prezzoNetto / totLordo;
+                    }
+                    riga.setPrezzoNetto(prezzoNetto);
+                    update(riga.getId(), riga);
+
+                }
+            } catch (HibernateException e) {
+                LOGGER.error(e);
+            }
+        }
+    }
 }

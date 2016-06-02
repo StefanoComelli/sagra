@@ -19,10 +19,8 @@ import java.awt.Component;
 import java.awt.Cursor;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import javax.swing.JOptionPane;
@@ -197,6 +195,16 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
+    private void Blocca(String titolo) {
+        Object[] options = {"Ok"};
+        JOptionPane.showOptionDialog(this, titolo, "Errore",
+                JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE,
+                null, options, options[0]);
+    }
+
+    /**
+     *
+     */
     private void PulisciOrdine() {
         ordine = null;
         SvuotaSconto();
@@ -269,6 +277,7 @@ public class CassaGui extends javax.swing.JFrame {
             }
             commessa.setStatoOrdine(2);
 
+            ordine.getRigheMgr().setPrezziReali(ordine.getCommessa().getId(), totale, netto);
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
         }
     }
@@ -460,7 +469,7 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
-    private void AggiungiDaListino() {
+    private void AggiungiDaListino(int qta) {
         RigheCommesse riga = new RigheCommesse();
 
         Valuta prezzo;
@@ -469,7 +478,7 @@ public class CassaGui extends javax.swing.JFrame {
         prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
         riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
         riga.setPrezzoListino(prezzo.getValore());
-        riga.setQuantita(1);
+        riga.setQuantita(qta);
         riga.setIdCommessa(ordine.getCommessa().getId());
 
         mgrRiga.insert(riga);
@@ -643,9 +652,7 @@ public class CassaGui extends javax.swing.JFrame {
                         cassiereRistampa = commessa.getOperatore().getOperatore();
                         jChkAsporto.setSelected(commessa.isAsporto());
                         jTxtOrdine.setText("");
-                        Date date = commessa.getOrario().getTime();
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm dd/MM/yy");
-                        jTxtOrario.setText(dateFormat.format(date));
+                        jTxtOrario.setText(commessa.getStatus());
                         StatoBottoni();
                     }
                 }
@@ -759,7 +766,11 @@ public class CassaGui extends javax.swing.JFrame {
     private boolean ControlloOrdine() {
         boolean esito = true;
 
-        if ((int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
+        if ("".equals(jTxtTavolo.getText()) && !jChkAsporto.isSelected()) {
+            Blocca("Inserire il tavolo");
+            esito = false;
+        }
+        if (esito && (int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
             esito = ChiediConferma("Numero coperti corretto?");
         }
         return esito;
@@ -1808,7 +1819,7 @@ public class CassaGui extends javax.swing.JFrame {
             cListino = jTblListino.getSelectedColumn();
             rListino = jTblListino.getSelectedRow();
             if ((cListino != -1) && (evt.getClickCount() == 2)) {
-                AggiungiDaListino();
+                AggiungiDaListino(1);
             }
             StatoBottoni();
             statoFinestra.Sblocca();
@@ -1835,7 +1846,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jMenuAggiungiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jMenuAggiungiMouseClicked
         if (statoFinestra.Blocca()) {
-            AggiungiDaListino();
+            AggiungiDaListino(1);
             StatoBottoni();
             statoFinestra.Sblocca();
         }
@@ -1847,7 +1858,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jMenuAggiungiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuAggiungiActionPerformed
         if (statoFinestra.Blocca()) {
-            AggiungiDaListino();
+            AggiungiDaListino(1);
             StatoBottoni();
             statoFinestra.Sblocca();
         }
@@ -1861,9 +1872,10 @@ public class CassaGui extends javax.swing.JFrame {
     private void Quantita(boolean inserisci, int qta) {
         if (qta >= 1 && statoFinestra.Blocca()) {
             if (inserisci) {
-                AggiungiDaListino();
+                AggiungiDaListino(qta);
+            } else {
+                SettaQuantita(qta);
             }
-            SettaQuantita(qta);
             StatoBottoni();
             statoFinestra.Sblocca();
         }

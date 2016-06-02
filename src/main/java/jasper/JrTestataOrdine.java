@@ -91,8 +91,9 @@ public class JrTestataOrdine {
         if (flgBar) {
             parameters.put("destinazione", "CONSEGNARE AL BAR");
         } else {
-            parameters.put("destinazione", "CONSEGNARE AL RICEVIMENTO ORDINI");
+            parameters.put("destinazione", "ATTENDERE AL VOSTRO TAVOLO");
         }
+
         return parameters;
     }
 
