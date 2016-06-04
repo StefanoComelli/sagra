@@ -50,11 +50,15 @@ public class IdOrdine {
     }
 
     /**
-     * 
-     * @return 
+     *
+     * @return
      */
     @Override
     public String toString() {
-        return String.valueOf(id);
+        if (id == 0) {
+            return "";
+        } else {
+            return " - Ultimo Ordine: " + String.valueOf(id + PREFIX);
+        }
     }
 }

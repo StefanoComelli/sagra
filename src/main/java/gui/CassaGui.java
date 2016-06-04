@@ -140,7 +140,7 @@ public class CassaGui extends javax.swing.JFrame {
     private String cassaRistampa;
     private String cassiereRistampa;
 
-    private String ultimoOrdine;
+    private IdOrdine ultimoOrdine;
 
     private Collection<javax.swing.JButton> lstBtnAdd;
     private Collection<javax.swing.JButton> lstBtnInsAdd;
@@ -159,6 +159,7 @@ public class CassaGui extends javax.swing.JFrame {
         statoFinestra = new StatoFinestra(this);
         this.cassa = new Cassa(dbConnection, giorno, cassa, operatore);
         statoCassa = new StatoCassa(dbConnection, this.cassa.getCassa(), this.cassa.getGiorno());
+        ultimoOrdine = new IdOrdine();
         initComponents();
         SetupGui();
         SetupCategorie();
@@ -169,7 +170,7 @@ public class CassaGui extends javax.swing.JFrame {
 
         StatoBottoni();
         jTxtOrdine.requestFocusInWindow();
-        ultimoOrdine = "";
+
     }
 
     /**
@@ -226,7 +227,7 @@ public class CassaGui extends javax.swing.JFrame {
     private void Svuota() {
         ordine = null;
         SvuotaSconto();
-        RefreshOrdine();
+        RefreshOrdine(false);
         jTxtOrdine.setText("");
         jTxtOrario.setText("");
     }
@@ -240,7 +241,7 @@ public class CassaGui extends javax.swing.JFrame {
                 ordine.CancellaOrdine();
                 ordine = null;
                 SvuotaSconto();
-                RefreshOrdine();
+                RefreshOrdine(false);
                 jTxtOrdine.setText("");
             }
         }
@@ -298,7 +299,7 @@ public class CassaGui extends javax.swing.JFrame {
         if (ControlloOrdine()) {
             AggiornaOrdine();
             SvuotaSconto();
-            RefreshOrdine();
+            RefreshOrdine(false);
         }
     }
 
@@ -419,7 +420,7 @@ public class CassaGui extends javax.swing.JFrame {
             int id = getIdRigaOrdine();
 
             mgrRiga.delete(id);
-            RefreshOrdine();
+            RefreshOrdine(false);
         }
     }
 
@@ -431,7 +432,7 @@ public class CassaGui extends javax.swing.JFrame {
         int id = getIdRigaOrdine();
 
         mgrRiga.CambiaVariante(id, variante);
-        RefreshOrdine();
+        RefreshOrdine(true);
     }
 
     /**
@@ -441,7 +442,7 @@ public class CassaGui extends javax.swing.JFrame {
         int id = getIdRigaOrdine();
 
         mgrRiga.incQuantita(id);
-        RefreshOrdine();
+        RefreshOrdine(true);
     }
 
     /**
@@ -451,7 +452,7 @@ public class CassaGui extends javax.swing.JFrame {
         int id = getIdRigaOrdine();
 
         mgrRiga.SettaQuantita(id, qta);
-        RefreshOrdine();
+        RefreshOrdine(true);
     }
 
     /**
@@ -461,7 +462,7 @@ public class CassaGui extends javax.swing.JFrame {
         int id = getIdRigaOrdine();
 
         mgrRiga.decQuantita(id);
-        RefreshOrdine();
+        RefreshOrdine(true);
     }
 
     /**
@@ -472,33 +473,41 @@ public class CassaGui extends javax.swing.JFrame {
         int id = getIdRigaOrdine();
 
         mgrRiga.decQuantita(id, qta);
-        RefreshOrdine();
+        RefreshOrdine(true);
     }
 
     /**
      *
      */
     private void AggiungiDaListino(int qta) {
-        RigheCommesse riga = new RigheCommesse();
 
-        Valuta prezzo;
-        DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
+        if (ordine != null) {
+            RigheCommesse riga = new RigheCommesse();
 
-        prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
-        riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
-        riga.setPrezzoListino(prezzo.getValore());
-        riga.setQuantita(qta);
-        riga.setIdCommessa(ordine.getCommessa().getId());
+            Valuta prezzo;
+            DefaultTableModel model = (DefaultTableModel) jTblListino.getModel();
 
-        mgrRiga.insert(riga);
+            rListino = jTblListino.getSelectedRow();
 
-        RefreshOrdine();
+            prezzo = new Valuta(model.getValueAt(rListino, TBL_LISTINO_PREZZO));
+            riga.setIdProdotto((Integer) model.getValueAt(rListino, TBL_LISTINO_ID_PRODOTTO));
+            riga.setPrezzoListino(prezzo.getValore());
+            riga.setQuantita(qta);
+            riga.setIdCommessa(ordine.getCommessa().getId());
+
+            mgrRiga.insert(riga);
+
+            RefreshOrdine(false);
+
+            jTblListino.changeSelection(rListino, cListino, true, false);
+        }
+
     }
 
     /**
      *
      */
-    private void RefreshOrdine() {
+    private void RefreshOrdine(boolean riPosiziona) {
         if (ordine != null) {
             DefaultTableModel model = (DefaultTableModel) jTblOrdine.getModel();
             GuiUtils.EmptyJtable(jTblOrdine);
@@ -509,10 +518,16 @@ public class CassaGui extends javax.swing.JFrame {
                     model.addRow(riga.getRow(dbConnection));
                 }
                 jTblOrdine.requestFocus();
+                //if (riposiziona)
                 if (jTblOrdine.getRowCount() > 0) {
-                    if (rOrdine >= jTblOrdine.getRowCount()) {
+                    if (riPosiziona) {
+                        if (rOrdine >= jTblOrdine.getRowCount()) {
+                            rOrdine = jTblOrdine.getRowCount() - 1;
+                        }
+                    } else {
                         rOrdine = jTblOrdine.getRowCount() - 1;
                     }
+
                     jTblOrdine.changeSelection(rOrdine, cOrdine, false, false);
                 } else {
                     rOrdine = -1;
@@ -652,7 +667,7 @@ public class CassaGui extends javax.swing.JFrame {
                     ordine = new Ordine(dbConnection, idOrdine.getId());
                     if (ordine != null) {
                         flgRistampa = true;
-                        RefreshOrdine();
+                        RefreshOrdine(false);
                         Commesse commessa = ordine.getCommessa();
                         jTxtCliente.setText(commessa.getNomeCliente());
                         jTxtTavolo.setText(commessa.getTavoloCliente());
@@ -741,7 +756,7 @@ public class CassaGui extends javax.swing.JFrame {
                 jrTestata.setTavolo(jTxtTavolo.getText());
                 idOrdine = new IdOrdine();
                 idOrdine.setId(ordine.getCommessa().getId());
-                ultimoOrdine = idOrdine.toString();
+                ultimoOrdine = idOrdine;
                 jrTestata.setId(idOrdine.getBarcode());
 
                 JrRigaOrdineFactory jrFactoryBar = new JrRigaOrdineFactory(dbConnection, ordine, true);
@@ -784,9 +799,9 @@ public class CassaGui extends javax.swing.JFrame {
             Blocca("Inserire il tavolo");
             esito = false;
         }
-        if (esito && (int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
-            esito = ChiediConferma("Numero coperti corretto?");
-        }
+//        if (esito && (int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
+//            esito = ChiediConferma("Numero coperti corretto?");
+//        }
         return esito;
     }
 
@@ -859,7 +874,7 @@ public class CassaGui extends javax.swing.JFrame {
 
         statoCassa.Refresh();
 
-        setTitle(statoCassa.toString());// + " Ultimo ordine:" + ultimoOrdine.toString());
+        setTitle(statoCassa.toString() + ultimoOrdine.toString());
 
     }
 
@@ -1980,7 +1995,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jCmbScontiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbScontiActionPerformed
         if (statoFinestra.Blocca()) {
-            RefreshOrdine();
+            RefreshOrdine(true);
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jCmbScontiActionPerformed
@@ -1991,7 +2006,7 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jCmbScontiMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCmbScontiMouseClicked
         if (statoFinestra.Blocca()) {
-            RefreshOrdine();
+            RefreshOrdine(true);
             statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jCmbScontiMouseClicked
@@ -2044,7 +2059,7 @@ public class CassaGui extends javax.swing.JFrame {
                 if (ChiediConferma("Pulisci Ordine")) {
                     ordine = null;
                     SvuotaSconto();
-                    RefreshOrdine();
+                    RefreshOrdine(false);
                     jTxtOrdine.setText("");
                     flgOrdineDaSalvare = false;
                     jTxtCliente.setText("");
@@ -2106,12 +2121,13 @@ public class CassaGui extends javax.swing.JFrame {
                 flgRistampa = true;
             }
             StatoBottoni();
+            statoFinestra.Sblocca();
         }
     }//GEN-LAST:event_jBtnStampaActionPerformed
 
     /**
-     * 
-     * @param evt 
+     *
+     * @param evt
      */
     private void jCmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbCategoriaActionPerformed
         if (statoFinestra.Blocca()) {
