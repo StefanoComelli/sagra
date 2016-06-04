@@ -140,6 +140,8 @@ public class CassaGui extends javax.swing.JFrame {
     private String cassaRistampa;
     private String cassiereRistampa;
 
+    private String ultimoOrdine;
+
     private Collection<javax.swing.JButton> lstBtnAdd;
     private Collection<javax.swing.JButton> lstBtnInsAdd;
 
@@ -167,6 +169,7 @@ public class CassaGui extends javax.swing.JFrame {
 
         StatoBottoni();
         jTxtOrdine.requestFocusInWindow();
+        ultimoOrdine = "";
     }
 
     /**
@@ -253,9 +256,11 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
-    private void AggiornaOrdine() {
+    private boolean AggiornaOrdine() {
 
-        if (ControlloOrdine()) {
+        boolean risultatoControllo = ControlloOrdine();
+
+        if (risultatoControllo) {
             Commesse commessa = ordine.getCommessa();
             commessa.setNomeCliente(jTxtCliente.getText());
             commessa.setCoperti((int) jSpinCoperti.getValue());
@@ -275,11 +280,15 @@ public class CassaGui extends javax.swing.JFrame {
             if (jCmbSconti.getSelectedItem() != null) {
                 commessa.setDescSconto(jCmbSconti.getSelectedItem().toString());
             }
-            commessa.setStatoOrdine(2);
+            if (commessa.getStatoOrdine() == 1) {
+                commessa.setStatoOrdine(2);
+            }
 
             ordine.getRigheMgr().setPrezziReali(ordine.getCommessa().getId(), totale, netto);
             ordine.getCommessaMgr().update(ordine.getCommessa().getId(), ordine.getCommessa());
+
         }
+        return risultatoControllo;
     }
 
     /**
@@ -703,60 +712,65 @@ public class CassaGui extends javax.swing.JFrame {
     /**
      *
      */
-    private void StampaOrdine() {
-        AggiornaOrdine();
-        try {
+    private boolean StampaOrdine() {
+        boolean esito;
+        esito = AggiornaOrdine();
+        if (esito) {
+            try {
 
-            IdOrdine idOrdine;
-            JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("c://stampaCommessaCliente.jasper");
+                IdOrdine idOrdine;
+                JasperReport report = (JasperReport) JRLoader.loadObjectFromFile("c://stampaCommessaCliente.jasper");
 
-            JrTestataOrdine jrTestata = new JrTestataOrdine();
-            if (!flgRistampa) {
-                jrTestata.setCassa(ordine.getCassa().getDescrizione());
-                jrTestata.setCassiere(ordine.getOperatore().getOperatore());
-            } else {
-                jrTestata.setCassa(cassaRistampa);
-                jrTestata.setCassiere(cassiereRistampa);
+                JrTestataOrdine jrTestata = new JrTestataOrdine();
+                if (!flgRistampa) {
+                    jrTestata.setCassa(ordine.getCassa().getDescrizione());
+                    jrTestata.setCassiere(ordine.getOperatore().getOperatore());
+                } else {
+                    jrTestata.setCassa(cassaRistampa);
+                    jrTestata.setCassiere(cassiereRistampa);
+                }
+                jrTestata.setCliente(jTxtCliente.getText());
+                jrTestata.setCoperti((int) jSpinCoperti.getValue());
+                jrTestata.setNetto(this.netto);
+                jrTestata.setSconto(this.scontoApplicato);
+                jrTestata.setScontoDaApplicare(percScontoDaApplicare);
+                jrTestata.setTotale(totale);
+                jrTestata.setAsporto(jChkAsporto.isSelected());
+                IdDescr tipoSconto = new IdDescr((String) jCmbSconti.getSelectedItem());
+                jrTestata.setTipoSconto(tipoSconto.getDescr());
+                jrTestata.setTavolo(jTxtTavolo.getText());
+                idOrdine = new IdOrdine();
+                idOrdine.setId(ordine.getCommessa().getId());
+                ultimoOrdine = idOrdine.toString();
+                jrTestata.setId(idOrdine.getBarcode());
+
+                JrRigaOrdineFactory jrFactoryBar = new JrRigaOrdineFactory(dbConnection, ordine, true);
+                JrRigaOrdineFactory jrFactoryCucina = new JrRigaOrdineFactory(dbConnection, ordine, false);
+
+                if (!jrFactoryBar.isEmpty()) {
+                    Map paramBar = jrTestata.getHashMap(true);
+
+                    JasperPrint jasperPrintBevande = JasperFillManager.fillReport(report, paramBar,
+                            new JRBeanCollectionDataSource(jrFactoryBar.getBeanCollection()));
+                    jasperPrintBevande.setName("Bar");
+
+                    JasperPrintManager.printReport(jasperPrintBevande, false);
+                }
+
+                if (!jrFactoryCucina.isEmpty()) {
+                    Map paramAltro = jrTestata.getHashMap(false);
+                    JasperPrint jasperPrintCucina = JasperFillManager.fillReport(report, paramAltro,
+                            new JRBeanCollectionDataSource(jrFactoryCucina.getBeanCollection()));
+                    jasperPrintCucina.setName("Cucina");
+
+                    JasperPrintManager.printReport(jasperPrintCucina, false);
+                }
+
+            } catch (Exception e) {
+                LOGGER.error("Stampa:", e);
             }
-            jrTestata.setCliente(jTxtCliente.getText());
-            jrTestata.setCoperti((int) jSpinCoperti.getValue());
-            jrTestata.setNetto(this.netto);
-            jrTestata.setSconto(this.scontoApplicato);
-            jrTestata.setScontoDaApplicare(percScontoDaApplicare);
-            jrTestata.setTotale(totale);
-            jrTestata.setAsporto(jChkAsporto.isSelected());
-            IdDescr tipoSconto = new IdDescr((String) jCmbSconti.getSelectedItem());
-            jrTestata.setTipoSconto(tipoSconto.getDescr());
-            jrTestata.setTavolo(jTxtTavolo.getText());
-            idOrdine = new IdOrdine();
-            idOrdine.setId(ordine.getCommessa().getId());
-            jrTestata.setId(idOrdine.getBarcode());
-
-            JrRigaOrdineFactory jrFactoryBar = new JrRigaOrdineFactory(dbConnection, ordine, true);
-            JrRigaOrdineFactory jrFactoryCucina = new JrRigaOrdineFactory(dbConnection, ordine, false);
-
-            if (!jrFactoryBar.isEmpty()) {
-                Map paramBar = jrTestata.getHashMap(true);
-
-                JasperPrint jasperPrintBevande = JasperFillManager.fillReport(report, paramBar,
-                        new JRBeanCollectionDataSource(jrFactoryBar.getBeanCollection()));
-                jasperPrintBevande.setName("Bar");
-
-                JasperPrintManager.printReport(jasperPrintBevande, false);
-            }
-
-            if (!jrFactoryCucina.isEmpty()) {
-                Map paramAltro = jrTestata.getHashMap(false);
-                JasperPrint jasperPrintCucina = JasperFillManager.fillReport(report, paramAltro,
-                        new JRBeanCollectionDataSource(jrFactoryCucina.getBeanCollection()));
-                jasperPrintCucina.setName("Cucina");
-
-                JasperPrintManager.printReport(jasperPrintCucina, false);
-            }
-
-        } catch (Exception e) {
-            LOGGER.error("Stampa:", e);
         }
+        return esito;
     }
 
     /**
@@ -800,21 +814,21 @@ public class CassaGui extends javax.swing.JFrame {
             quantita = 0;
         }
 
-        jBtnElimina.setEnabled(flgOrdineSel);
+        jBtnElimina.setEnabled(flgOrdineSel && !flgRistampa);
         // jBtnAggiungi1.setEnabled(flgListinoSel && flgOrdineOk);
-        StatoBottoniInsAdd(flgListinoSel && flgOrdineOk);
-        jMenuAggiungi.setEnabled(flgListinoSel && flgOrdineOk);
+        StatoBottoniInsAdd(flgListinoSel && flgOrdineOk && !flgRistampa);
+        jMenuAggiungi.setEnabled(flgListinoSel && flgOrdineOk && !flgRistampa);
 
-        jBtnConfermaVariante.setEnabled(flgOrdineSel);
-        jBtnEliminaVariante.setEnabled(flgOrdineSel);
-        jCmbVarianti.setEnabled(flgOrdineSel);
-        StatoBottoniAdd(flgOrdineSel);
-        jBtnDec.setEnabled(flgOrdineSel);
+        jBtnConfermaVariante.setEnabled(flgOrdineSel && !flgRistampa);
+        jBtnEliminaVariante.setEnabled(flgOrdineSel && !flgRistampa);
+        jCmbVarianti.setEnabled(flgOrdineSel && !flgRistampa);
+        StatoBottoniAdd(flgOrdineSel && !flgRistampa);
+        jBtnDec.setEnabled(flgOrdineSel && !flgRistampa);
 
-        jBtnQta.setEnabled(flgOrdineSel);
+        jBtnQta.setEnabled(flgOrdineSel && !flgRistampa);
 
         jBtnAnnullaFiltro.setEnabled(jCmbCategoria.getSelectedItem() != null);
-        if (!flgOrdineSel) {
+        if (!flgOrdineSel && !flgRistampa) {
             jCmbVarianti.setSelectedItem(null);
         } else {
             jBtnDec.setEnabled(quantita > 1);
@@ -827,19 +841,25 @@ public class CassaGui extends javax.swing.JFrame {
             jSpinCoperti.setValue(0);
             jTxtOrario.setText("");
         }
-        jChkAsporto.setEnabled(flgOrdineOk);
+        jChkAsporto.setEnabled(flgOrdineOk && !flgRistampa);
         jBtnNuovoOrdine.setEnabled(!flgOrdineOk);
-        jBtnCancellaOrdine.setEnabled(flgOrdineOk);
+        jBtnCancellaOrdine.setEnabled(flgOrdineOk && !flgRistampa);
         jBtnPulisciOrdine.setEnabled(flgOrdineRigheOk);
         jBtnStampa.setEnabled(flgOrdineRigheOk);
-        jTxtCliente.setEnabled(flgOrdineOk);
-        jTxtTavolo.setEnabled(flgOrdineOk);
-        jSpinCoperti.setEnabled(flgOrdineOk);
-        jTblListino.setEnabled(flgOrdineOk);
+        if (flgRistampa) {
+            jBtnStampa.setText("Ristampa");
+        } else {
+            jBtnStampa.setText("Conferma e Stampa");
+        }
+
+        jTxtCliente.setEnabled(flgOrdineOk && !flgRistampa);
+        jTxtTavolo.setEnabled(flgOrdineOk && !flgRistampa);
+        jSpinCoperti.setEnabled(flgOrdineOk && !flgRistampa);
+        jTblListino.setEnabled(flgOrdineOk && !flgRistampa);
 
         statoCassa.Refresh();
 
-        setTitle(statoCassa.toString());
+        setTitle(statoCassa.toString());// + " Ultimo ordine:" + ultimoOrdine.toString());
 
     }
 
@@ -2080,12 +2100,19 @@ public class CassaGui extends javax.swing.JFrame {
      */
     private void jBtnStampaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnStampaActionPerformed
         if (statoFinestra.Blocca()) {
-            StampaOrdine();
-            flgOrdineDaSalvare = false;
-            statoFinestra.Sblocca();
+            if (StampaOrdine()) {
+                flgOrdineDaSalvare = false;
+                statoFinestra.Sblocca();
+                flgRistampa = true;
+            }
+            StatoBottoni();
         }
     }//GEN-LAST:event_jBtnStampaActionPerformed
 
+    /**
+     * 
+     * @param evt 
+     */
     private void jCmbCategoriaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCmbCategoriaActionPerformed
         if (statoFinestra.Blocca()) {
             StatoBottoni();

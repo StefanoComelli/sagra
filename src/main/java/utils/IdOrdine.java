@@ -48,4 +48,13 @@ public class IdOrdine {
         this.barcode = barcode;
         id = barcode - PREFIX;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String toString() {
+        return String.valueOf(id);
+    }
 }

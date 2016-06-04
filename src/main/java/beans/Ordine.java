@@ -32,7 +32,8 @@ public class Ordine {
     private RigheCommesseManager righeMgr;
     private Commesse commessa;
     private List<StatiOrdine> statiOrdine;
-    private StatiOrdine statoOrdine;
+    //private StatiOrdine statoOrdine;
+    private int statoOrdine;
 
     private String cliente;
     private final DbConnection dbConnection;
@@ -57,8 +58,9 @@ public class Ordine {
 
         StatiOrdineManager statiOrdineMgr = new StatiOrdineManager(dbConnection);
         righeMgr = new RigheCommesseManager(dbConnection);
-        statiOrdine = statiOrdineMgr.getElencoStati();
-        statoOrdine = statiOrdineMgr.getDefault();
+//        statiOrdine = statiOrdineMgr.getElencoStati();
+//        statoOrdine = statiOrdineMgr.getDefault();
+        statoOrdine = 1;
         this.commessa.setStatoOrdine(1);
         this.commessa.setNomeCliente(cliente);
         this.cliente = cliente;
@@ -144,14 +146,14 @@ public class Ordine {
     /**
      * @return the statoOrdine
      */
-    public StatiOrdine getStatoOrdine() {
+    public int getStatoOrdine() {
         return statoOrdine;
     }
 
     /**
      * @param statoOrdine the statoOrdine to set
      */
-    public void setStatoOrdine(StatiOrdine statoOrdine) {
+    public void setStatoOrdine(int statoOrdine) {
         this.statoOrdine = statoOrdine;
     }
 

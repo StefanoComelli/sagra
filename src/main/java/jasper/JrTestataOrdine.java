@@ -90,6 +90,8 @@ public class JrTestataOrdine {
         parameters.put("tipoSconto", tipoSconto);
         if (flgBar) {
             parameters.put("destinazione", "CONSEGNARE AL BAR");
+        } else if (asporto) {
+            parameters.put("destinazione", "ATTENDERE ALLA CASSA BAR");
         } else {
             parameters.put("destinazione", "ATTENDERE AL VOSTRO TAVOLO");
         }
