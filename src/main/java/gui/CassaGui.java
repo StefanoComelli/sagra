@@ -799,9 +799,9 @@ public class CassaGui extends javax.swing.JFrame {
             Blocca("Inserire il tavolo");
             esito = false;
         }
-//        if (esito && (int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
-//            esito = ChiediConferma("Numero coperti corretto?");
-//        }
+        if (esito && (int) jSpinCoperti.getValue() == 0 && !jChkAsporto.isSelected()) {
+            esito = ChiediConferma("Numero coperti corretto?");
+        }
         return esito;
     }
 
