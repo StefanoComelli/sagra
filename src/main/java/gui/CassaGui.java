@@ -1813,9 +1813,8 @@ public class CassaGui extends javax.swing.JFrame {
 
     /**
      *
-     * @param evt
      */
-    private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
+    private void Nuovo() {
         if (statoFinestra.Blocca()) {
             jTxtOrdine.setText("");
             jTxtOrario.setText("");
@@ -1830,6 +1829,14 @@ public class CassaGui extends javax.swing.JFrame {
             StatoBottoni();
             statoFinestra.Sblocca();
         }
+    }
+
+    /**
+     *
+     * @param evt
+     */
+    private void jBtnNuovoOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnNuovoOrdineActionPerformed
+        Nuovo();
     }//GEN-LAST:event_jBtnNuovoOrdineActionPerformed
 
     /**
@@ -2054,6 +2061,7 @@ public class CassaGui extends javax.swing.JFrame {
      * @param evt
      */
     private void jBtnPulisciOrdineActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnPulisciOrdineActionPerformed
+        boolean ok = false;
         if (ordine != null) {
             if (statoFinestra.Blocca()) {
                 if (ChiediConferma("Pulisci Ordine")) {
@@ -2068,11 +2076,15 @@ public class CassaGui extends javax.swing.JFrame {
                     jChkAsporto.setSelected(false);
                     jTxtOrario.setText("");
                     StatoBottoni();
+                    ok = true;
                 }
                 statoFinestra.Sblocca();
             }
         }
         jTxtOrdine.requestFocusInWindow();
+        if (ok) {
+            Nuovo();
+        }
     }//GEN-LAST:event_jBtnPulisciOrdineActionPerformed
 
     /**
